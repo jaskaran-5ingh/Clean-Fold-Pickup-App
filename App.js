@@ -42,7 +42,7 @@ export default function App() {
 
   //Check For Auth
   const authVerify = () => {
-    // cache.store('user', null);
+    cache.store('user', null);
     cache.get('user').then(user => {
       if (user != null) {
         setAuth(true);

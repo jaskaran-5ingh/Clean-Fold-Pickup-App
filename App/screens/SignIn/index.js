@@ -47,7 +47,10 @@ export default function index({navigation}) {
       setError(false);
       setUserValid(true);
       setLoading(false);
-      setUserDetails({});
+      setUserDetails({
+    email: 'testdummy@gmail.com',
+    password: 'secret',
+  });
     };
   }, []);
 
