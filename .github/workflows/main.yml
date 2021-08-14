@@ -19,7 +19,7 @@ jobs:
       - name: Install Yarn dependencies
         run: |
           yarn
-      - name: Gradle Permessions
+      - name: Gradle Permissions
         run: |
           cd android && chmod +x ./gradlew
       - name: React Native Link
