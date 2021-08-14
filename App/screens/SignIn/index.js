@@ -72,6 +72,7 @@ export default function index({navigation}) {
         showMessage({
           message: 'Error',
           description: 'Please fill details !',
+          backgroundColor: COLORS.red,
           type: 'danger',
           icon: 'danger',
         });
@@ -83,6 +84,7 @@ export default function index({navigation}) {
           showMessage({
             message: 'Something went wrong !',
             description: 'Please try again latter',
+            backgroundColor: COLORS.red,
             type: 'danger',
             icon: 'danger',
           });
@@ -95,6 +97,7 @@ export default function index({navigation}) {
                 : response.data?.errors,
             type: response.data?.status == true ? 'success' : 'danger',
             icon: response.data?.status == true ? 'success' : 'danger',
+            position: 'right',
           });
           // Set User In Auth Context
           if (response?.data != null) {
@@ -102,7 +105,7 @@ export default function index({navigation}) {
               setUserValid(false);
               cache.store('user', response.data.details);
               authContext.setUser(response.data.details);
-              navigation.navigate('AppStackNavigator');
+              navigation.push('AppStackNavigator');
             }
           }
           setUserDetails({});
@@ -235,7 +238,7 @@ const styles = StyleSheet.create({
     ...FONTS.h1,
     color: COLORS.primary,
     opacity: 0.85,
-    marginVertical: 20,
+    marginVertical: 15,
   },
   loremIpsum: {
     ...FONTS.h5,
