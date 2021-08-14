@@ -124,7 +124,6 @@ export const FONTS = {
   h2: {
     fontFamily: 'Roboto-Bold',
     fontSize: SIZES.h2,
-    lineHeight: responsiveFontSize(3.4),
   },
   h3: {
     fontFamily: 'Roboto-Bold',
