@@ -62,19 +62,16 @@ const LoginScreen = ({navigation}) => {
 
           {/* Login Button */}
           <View style={{marginTop: 15}} />
-          {!loader ? (
-            <ButtonComponent
-              press={() => {
-                setLoader(true), console.log(email, password);
-                setTimeout(() => {
-                  navigation.push('Dashboard');
-                }, 2000);
-              }}
-              buttonText="Login"
-            />
-          ) : (
-            <ButtonLoaderContainer />
-          )}
+          <ButtonComponent
+            press={() => {
+              setLoader(true), console.log(email, password);
+              setTimeout(() => {
+                navigation.push('Dashboard');
+              }, 2000);
+            }}
+            buttonText="Login"
+            loading={loader}
+          />
         </View>
       </View>
     </SafeAreaView>
