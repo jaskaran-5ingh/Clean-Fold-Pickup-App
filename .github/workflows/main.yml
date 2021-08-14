@@ -1,4 +1,4 @@
-name: Build Android 
+name: Build Android
 on:
   push:
     branches:
@@ -14,17 +14,20 @@ jobs:
   build-android:
     needs: install-and-test
     runs-on: ubuntu-latest
-    steps: 
+    steps:
       - uses: actions/checkout@v2
       - name: Install Yarn dependencies
         run: |
           yarn
       - name: Gradle Permessions
         run: |
-         cd android && chmod +x ./gradlew
+          cd android && chmod +x ./gradlew
+      - name: React Native Link
+        run: |
+          npx react-native link
       - name: Build Android Release
         run: |
-         cd android && ./gradlew assembleRelease
+          cd android && ./gradlew assembleRelease
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
