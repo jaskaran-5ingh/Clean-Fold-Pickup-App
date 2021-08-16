@@ -3,21 +3,21 @@ import {apiClient} from './client';
 //Api endPoints
 const endPoint = {
   getDashboardData: '/get/dashboard',
-  getOrdersList: '/get/orders/list/',
+  getOrdersList: '/get/orders/list',
   getCategoryProduct: '/getCategoryProduct/1',
 };
 
 //Call Api Function
 const getDashboardData = EmployeeID => {
-  return apiClient.get(endPoint.getDashboardData + '/' + EmployeeID);
+  return apiClient.get(endPoint.getDashboardData + '/' + 2214);
 };
 
 const getPendingOrdersList = (EmployeeID = 2214) => {
-  return apiClient.get(endPoint.getOrdersList.EmployeeID + '/1');
+  return apiClient.get(endPoint.getOrdersList + '/' + EmployeeID + '/1');
 };
 
 const getDeliveredOrdersList = (EmployeeID = 2214) => {
-  return apiClient.get(endPoint.getOrdersList.EmployeeID + '/2');
+  return apiClient.get(endPoint.getOrdersList + '/' + EmployeeID + '/2');
 };
 
 const getCategoryProduct = () => {
