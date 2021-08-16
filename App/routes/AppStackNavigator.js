@@ -4,7 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {COLORS, icons} from '../constants';
 
 //Screens
-import {Dashboard} from '../screens';
+import {Dashboard, Pickup, DeliveryList} from '../screens';
 //Create object for navigation
 const Stack = createStackNavigator();
 
@@ -29,6 +29,16 @@ export default function AppStackNavigator() {
         name="Dashboard"
         component={Dashboard}
         options={{headerShown: true}}
+      />
+      <Stack.Screen
+        name="Pickup"
+        component={Pickup}
+        options={{headerShown: true, label: 'PICKUPS'}}
+      />
+      <Stack.Screen
+        name="DeliveryList"
+        component={DeliveryList}
+        options={{headerShown: true, label: 'DELIVERY'}}
       />
     </Stack.Navigator>
   );

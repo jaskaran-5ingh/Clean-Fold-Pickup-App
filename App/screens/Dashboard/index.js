@@ -23,7 +23,71 @@ import AuthContext from '../../auth/Context';
 import cache from '../../utils/cache';
 import {ErrorScreen, LoadingScreen} from '../../screens';
 
-const index = () => {
+// Components
+function Card({
+  backgroundColor = 'white',
+  icon = 'user',
+  color = 'red',
+  title = 'title',
+  qty = 0,
+  fullWidth = false,
+  onPress = () => console.log('clicked'),
+}) {
+  return (
+    <TouchableOpacity
+      onPress={onPress}
+      style={{
+        height: fullWidth ? 200 : 180,
+        width: fullWidth ? '100%' : responsiveWidth(37),
+        padding: 5,
+        backgroundColor: backgroundColor,
+        borderRadius: 10,
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+      }}>
+      <View
+        style={{
+          height: fullWidth ? 80 : 50,
+          width: fullWidth ? 80 : 50,
+          borderRadius: 0.4 * (fullWidth ? 80 : 50),
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: color,
+        }}>
+        <Icon
+          type="font-awesome"
+          color={fullWidth ? COLORS.primary : COLORS.white}
+          name={icon}
+          size={30}
+        />
+      </View>
+      <View style={{paddingHorizontal: 20}}>
+        {fullWidth != true ? (
+          <Text style={[styles.heading5, {color: color}]}>{title}</Text>
+        ) : null}
+      </View>
+      <View
+        style={{
+          backgroundColor: color,
+          alignItems: 'center',
+          justifyContent: 'center',
+          paddingVertical: 10,
+          paddingHorizontal: 30,
+          borderRadius: 5,
+        }}>
+        <Text
+          style={[
+            styles.heading5,
+            {color: fullWidth ? COLORS.primary : COLORS.white},
+          ]}>
+          {qty}
+        </Text>
+      </View>
+    </TouchableOpacity>
+  );
+}
+
+const index = ({navigation}) => {
   //Use State Hooks
 
   const defaultDashboardData = {
@@ -57,71 +121,6 @@ const index = () => {
       }
     });
   }
-
-  // Components
-  function Card({
-    backgroundColor = 'white',
-    icon = 'user',
-    color = 'red',
-    title = 'title',
-    qty = 0,
-    fullWidth = false,
-    onPress = () => {},
-  }) {
-    return (
-      <TouchableOpacity
-        onPress={onPress}
-        style={{
-          height: fullWidth ? 200 : 180,
-          width: fullWidth ? '100%' : responsiveWidth(37),
-          padding: 5,
-          backgroundColor: backgroundColor,
-          borderRadius: 10,
-          justifyContent: 'space-evenly',
-          alignItems: 'center',
-        }}>
-        <View
-          style={{
-            height: fullWidth ? 80 : 50,
-            width: fullWidth ? 80 : 50,
-            borderRadius: 0.4 * (fullWidth ? 80 : 50),
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: color,
-          }}>
-          <Icon
-            type="font-awesome"
-            color={fullWidth ? COLORS.primary : COLORS.white}
-            name={icon}
-            size={30}
-          />
-        </View>
-        <View style={{paddingHorizontal: 20}}>
-          {fullWidth != true ? (
-            <Text style={[styles.heading5, {color: color}]}>{title}</Text>
-          ) : null}
-        </View>
-        <View
-          style={{
-            backgroundColor: color,
-            alignItems: 'center',
-            justifyContent: 'center',
-            paddingVertical: 10,
-            paddingHorizontal: 30,
-            borderRadius: 5,
-          }}>
-          <Text
-            style={[
-              styles.heading5,
-              {color: fullWidth ? COLORS.primary : COLORS.white},
-            ]}>
-            {qty}
-          </Text>
-        </View>
-      </TouchableOpacity>
-    );
-  }
-
   return (
     <ImageBackground
       source={images.backgroundImage}
@@ -179,6 +178,7 @@ const index = () => {
               color={COLORS.red}
               title="PICKUPS"
               qty={dashboardData?.pending}
+              onPress={() => navigation.navigate('Pickup')}
             />
             <Card
               backgroundColor={COLORS.lightGreen}
@@ -186,6 +186,7 @@ const index = () => {
               color={COLORS.darkGreen}
               title="DELIVERY"
               qty={dashboardData?.delivered}
+              onPress={() => navigation.navigate('DeliveryList')}
             />
           </View>
           <View style={styles.largeCardContainer}>
@@ -247,7 +248,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: SIZES.padding * 3,
+    padding: SIZES.padding * 2,
   },
   innerMainContainer: {
     flexDirection: 'row',
