@@ -19,7 +19,6 @@ import {
   SIZES,
   icons,
 } from '../../constants';
-import Alerts from '../../api/alerts';
 import {ErrorScreen, LoadingScreen} from '../../screens';
 import {BottomSheet, ListItem, Button} from 'react-native-elements';
 
@@ -33,15 +32,7 @@ export default function App({navigation}) {
   //Api Function Calls
   const getAlerts = async () => {
     try {
-      const response = await Alerts.getAlerts();
-      if (response.ok !== true) setError(true);
-      setError(false);
-
-      if (response.data != null) {
-        setData(response.data?.alerts[0]);
-      }
-
-      setLoading(false);
+      console.log();
     } catch (error) {
       //Check logs for error
       console.error(error);

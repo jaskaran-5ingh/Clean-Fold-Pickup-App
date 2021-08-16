@@ -19,7 +19,6 @@ import {
   SIZES,
   icons,
 } from '../../constants';
-import Alerts from '../../api/alerts';
 import {ErrorScreen, LoadingScreen} from '../../screens';
 import {BottomSheet, ListItem, Button} from 'react-native-elements';
 
