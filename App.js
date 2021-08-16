@@ -10,8 +10,6 @@ import {AuthNavigator, AppStackNavigator, navigationTheme} from './App/routes';
 import AuthContext from './App/auth/Context';
 import cache from './App/utils/cache';
 
-import api from './App/api/auth';
-
 import {ErrorScreen} from './App/screens';
 import {COLORS} from './App/constants';
 
@@ -42,7 +40,7 @@ export default function App() {
 
   //Check For Auth
   const authVerify = () => {
-    cache.store('user', null);
+    // cache.store('user', null); //This code remove user from Async Storage
     cache.get('user').then(user => {
       if (user != null) {
         setAuth(true);
