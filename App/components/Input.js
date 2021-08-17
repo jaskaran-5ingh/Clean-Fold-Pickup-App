@@ -8,6 +8,7 @@ import {
   TextInput,
   Keyboard,
 } from 'react-native';
+import {Icon} from 'react-native-elements';
 import {COLORS, FONTS, responsiveWidth, icons} from '../constants';
 
 const Input = ({
@@ -19,6 +20,7 @@ const Input = ({
   value = null,
   onChangeText = () => {},
   maxLength,
+  leftIcon,
 }) => {
   const [showPassword, togglePassword] = useState(isPassword);
   const [icon, setIcon] = useState(icons.eye);
@@ -52,6 +54,7 @@ const Input = ({
           *
         </Text>
       </Text>
+
       <TextInput
         style={{
           height: responsiveWidth(11),
@@ -59,6 +62,8 @@ const Input = ({
           borderBottomWidth: 2,
           borderBottomColor: COLORS.primary,
           color: 'black',
+          paddingLeft: 25,
+          height: keyboardType == 'textarea' ? 100 : 'auto',
         }}
         placeholderTextColor={COLORS.gray}
         placeholder={placeholder}
@@ -69,6 +74,16 @@ const Input = ({
         onChangeText={onChangeText}
         maxLength={maxLength}
       />
+      {leftIcon ? (
+        <View style={{position: 'absolute', top: responsiveWidth(6), left: 0}}>
+          <Icon
+            type="font-awesome"
+            name={leftIcon}
+            size={20}
+            color={COLORS.primary}
+          />
+        </View>
+      ) : null}
       {isPassword ? (
         <TouchableOpacity
           onPress={handlePasswordTogle}

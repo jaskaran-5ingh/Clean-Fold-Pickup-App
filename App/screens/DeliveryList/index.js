@@ -16,7 +16,7 @@ import {showMessage} from 'react-native-flash-message';
 
 import {ErrorScreen, LoadingScreen, EmptyAnimation} from '../../screens';
 
-const index = () => {
+const index = ({navigation}) => {
   const [pendingOrders, setPendingOrders] = useState([]);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -32,7 +32,6 @@ const index = () => {
           const response = await api.getDeliveredOrdersList(user.id);
           if (response.ok !== true) setError(false);
           setPendingOrders(response?.data?.order_list);
-          console.log(response?.data);
           setLoading(false);
         }
       });
@@ -136,7 +135,9 @@ const index = () => {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => {}}
+            onPress={() =>
+              navigation.navigate('DeliveryListEdit', {orderId: item.id})
+            }
             style={[
               styles.cardBottomButton,
               {
