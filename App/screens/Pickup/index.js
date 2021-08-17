@@ -1,12 +1,20 @@
 import React, {useState, useEffect} from 'react';
-import {View, StyleSheet, TouchableOpacity, Text, FlatList} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+  FlatList,
+  Alert,
+} from 'react-native';
 import {Card, Button, Icon} from 'react-native-elements';
+import {showMessage} from 'react-native-flash-message';
 
 import {COLORS, images, FONTS} from '../../constants';
 import api from '../../api/services';
 import cache from '../../utils/cache';
 
-import {ErrorScreen, LoadingScreen} from '../../screens';
+import {ErrorScreen, LoadingScreen, EmptyAnimation} from '../../screens';
 
 const index = () => {
   const [pendingOrders, setPendingOrders] = useState([]);
@@ -22,13 +30,34 @@ const index = () => {
       setLoading(true);
       cache.get('user').then(async user => {
         if (user != null) {
-          // user.id;
-          const response = await api.getPendingOrdersList();
+          const response = await api.getPendingOrdersList(user.id);
           if (response.ok !== true) setError(false);
           setPendingOrders(response?.data?.order_list);
+          console.log(response?.data?.order_list);
           setLoading(false);
         }
       });
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async function donePickupOrder(orderId) {
+    try {
+      setLoading(true);
+      const response = await api.donePendingOrder(orderId);
+      if (response.ok !== true) setError(false);
+      getPickups();
+      showMessage({
+        message:
+          response.data?.status == true
+            ? response.data?.message
+            : 'Order Pickup Failed !',
+        type: response.data?.status == true ? 'success' : 'danger',
+        icon: response.data?.status == true ? 'success' : 'danger',
+        position: 'right',
+      });
+      setLoading(false);
     } catch (err) {
       console.error(err);
     }
@@ -61,7 +90,9 @@ const index = () => {
             padding: 5,
           }}>
           <View style={{maxWidth: '50%'}}>
-            <Text style={{...FONTS.h4, paddingBottom: 5}}>{item.user_id}</Text>
+            <Text style={{...FONTS.h4, paddingBottom: 5}}>
+              {item?.user?.name}
+            </Text>
             <Text
               style={{
                 ...FONTS.body4,
@@ -86,11 +117,20 @@ const index = () => {
         <Card.Divider />
         <View style={{flexDirection: 'row'}}>
           <TouchableOpacity
-            onPress={() => {}}
+            onPress={() => {
+              Alert.alert('Alert!', 'Are you want to change status to Done ?', [
+                {
+                  text: 'Cancel',
+                  onPress: () => console.log('Cancel Pressed'),
+                  style: 'cancel',
+                },
+                {text: 'OK', onPress: () => donePickupOrder(item.id)},
+              ]);
+            }}
             style={[
               styles.cardBottomButton,
               {
-                backgroundColor: COLORS.darkTransparent,
+                backgroundColor: COLORS.darkGreen,
               },
             ]}>
             <Text style={{fontSize: 15, color: COLORS.white}}>Done</Text>
@@ -121,7 +161,6 @@ const index = () => {
       </Card>
     );
   }
-
   return (
     <View style={{flex: 1}}>
       {loading == true ? (
@@ -148,6 +187,18 @@ const index = () => {
           keyExtractor={item => `${item.id}`}
           refreshing={loading}
           onRefresh={() => getPickups()}
+          ListEmptyComponent={() => {
+            return (
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <EmptyAnimation message="Empty Order List !" />
+              </View>
+            );
+          }}
         />
       )}
     </View>
