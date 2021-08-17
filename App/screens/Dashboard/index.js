@@ -7,6 +7,7 @@ import {
   ImageBackground,
   Image,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import {Icon} from 'react-native-elements/dist/icons/Icon';
 import {
@@ -32,14 +33,17 @@ function Card({
   qty = 0,
   fullWidth = false,
   onPress = () => console.log('clicked'),
+  qtyAvailable = true,
+  loading = false,
 }) {
   return (
     <TouchableOpacity
       onPress={onPress}
       style={{
-        height: fullWidth ? 200 : 180,
-        width: fullWidth ? '100%' : responsiveWidth(37),
+        height: fullWidth ? 200 : 160,
+        width: fullWidth ? '100%' : '48%',
         padding: 5,
+        marginTop: 15,
         backgroundColor: backgroundColor,
         borderRadius: 10,
         justifyContent: 'space-evenly',
@@ -66,23 +70,25 @@ function Card({
           <Text style={[styles.heading5, {color: color}]}>{title}</Text>
         ) : null}
       </View>
-      <View
-        style={{
-          backgroundColor: color,
-          alignItems: 'center',
-          justifyContent: 'center',
-          paddingVertical: 10,
-          paddingHorizontal: 30,
-          borderRadius: 5,
-        }}>
-        <Text
-          style={[
-            styles.heading5,
-            {color: fullWidth ? COLORS.primary : COLORS.white},
-          ]}>
-          {qty}
-        </Text>
-      </View>
+      {qtyAvailable == true ? (
+        <View
+          style={{
+            backgroundColor: color,
+            alignItems: 'center',
+            justifyContent: 'center',
+            paddingVertical: 10,
+            paddingHorizontal: 30,
+            borderRadius: 5,
+          }}>
+          <Text
+            style={[
+              styles.heading5,
+              {color: fullWidth ? COLORS.primary : COLORS.white},
+            ]}>
+            {loading ? <ActivityIndicator color="white" /> : <>{qty}</>}
+          </Text>
+        </View>
+      ) : null}
     </TouchableOpacity>
   );
 }
@@ -122,55 +128,56 @@ const index = ({navigation}) => {
     });
   }
   return (
-    <ImageBackground
-      source={images.backgroundImage}
-      style={{width: '100%', height: '100%'}}>
-      <View style={{paddingHorizontal: SIZES.padding * 4}}>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}>
+    <ScrollView style={{backgroundColor: 'white'}}>
+      <ImageBackground
+        source={images.backgroundImage}
+        style={{width: '100%', height: '100%'}}>
+        <View style={{paddingHorizontal: SIZES.padding * 4}}>
           <View
             style={{
-              flex: 1,
-              justifyContent: 'center',
-              alignItems: 'flex-start',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
             }}>
-            <Text style={styles.heading1}>Hi, {authContext?.user?.name}</Text>
-            <Text style={styles.heading2}>Welcome Back</Text>
+            <View
+              style={{
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'flex-start',
+              }}>
+              <Text style={styles.heading1}>Hi, {authContext?.user?.name}</Text>
+              <Text style={styles.heading2}>Welcome Back</Text>
+            </View>
+            <Image
+              source={images.deliveryBoy}
+              resizeMode="contain"
+              style={{
+                marginTop: 30,
+                height: responsiveWidth(35),
+                width: responsiveWidth(30),
+              }}
+            />
           </View>
-          <Image
-            source={images.deliveryBoy}
-            resizeMode="contain"
-            style={{
-              marginTop: 30,
-              height: responsiveWidth(35),
-              width: responsiveWidth(30),
-            }}
-          />
         </View>
-      </View>
-      <View style={styles.mainContainer}>
-        <View style={styles.innerMainContainer}>
-          <Text
-            style={{color: COLORS.primary, fontSize: 20, fontWeight: 'bold'}}>
-            Dashboard
-          </Text>
-          <Text
-            style={{color: COLORS.primary, fontSize: 20, fontWeight: 'bold'}}>
-            <TouchableOpacity onPress={() => getDashboardData()}>
-              <Icon
-                type="font-awesome"
-                name="refresh"
-                color={COLORS.primary}
-                size={25}
-              />
-            </TouchableOpacity>
-          </Text>
-        </View>
-        <ScrollView>
+        <View style={styles.mainContainer}>
+          <View style={styles.innerMainContainer}>
+            <Text
+              style={{color: COLORS.primary, fontSize: 20, fontWeight: 'bold'}}>
+              Dashboard
+            </Text>
+            <Text
+              style={{color: COLORS.primary, fontSize: 20, fontWeight: 'bold'}}>
+              <TouchableOpacity onPress={() => getDashboardData()}>
+                <Icon
+                  type="font-awesome"
+                  name="refresh"
+                  color={COLORS.primary}
+                  size={25}
+                />
+              </TouchableOpacity>
+            </Text>
+          </View>
+
           <View style={styles.cardContainer}>
             <Card
               backgroundColor={COLORS.lightRed}
@@ -179,6 +186,7 @@ const index = ({navigation}) => {
               title="PICKUPS"
               qty={dashboardData?.pending}
               onPress={() => navigation.navigate('Pickup')}
+              loading={loading}
             />
             <Card
               backgroundColor={COLORS.lightGreen}
@@ -187,21 +195,28 @@ const index = ({navigation}) => {
               title="DELIVERY"
               qty={dashboardData?.delivered}
               onPress={() => navigation.navigate('DeliveryList')}
+              loading={loading}
             />
-          </View>
-          <View style={styles.largeCardContainer}>
             <Card
-              backgroundColor={COLORS.primary}
-              icon="file"
-              color={COLORS.white}
-              title="VIEW"
-              qty="View Document"
-              fullWidth={true}
+              backgroundColor={COLORS.lightSkyblue}
+              icon="dollar"
+              color={COLORS.primary}
+              title="RATE LIST"
+              onPress={() => navigation.navigate('DeliveryList')}
+              qtyAvailable={false}
+            />
+            <Card
+              backgroundColor={COLORS.lightOrange}
+              icon="plus"
+              color={COLORS.orange}
+              title="CREATE ORDER"
+              onPress={() => navigation.navigate('DeliveryList')}
+              qtyAvailable={false}
             />
           </View>
-        </ScrollView>
-      </View>
-    </ImageBackground>
+        </View>
+      </ImageBackground>
+    </ScrollView>
   );
 };
 
@@ -245,6 +260,8 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   cardContainer: {
+    flex: 1,
+    flexWrap: 'wrap',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',

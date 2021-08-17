@@ -5,14 +5,14 @@ import {Card, Button, Icon} from 'react-native-elements';
 import {COLORS, images, FONTS} from '../../constants';
 import api from '../../api/services';
 import cache from '../../utils/cache';
+import {showMessage} from 'react-native-flash-message';
 
-import {ErrorScreen, LoadingScreen} from '../../screens';
+import {ErrorScreen, LoadingScreen, EmptyAnimation} from '../../screens';
 
 const index = () => {
   const [pendingOrders, setPendingOrders] = useState([]);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
-
   useEffect(() => {
     getDeliveryList();
   }, []);
@@ -22,13 +22,33 @@ const index = () => {
       setLoading(true);
       cache.get('user').then(async user => {
         if (user != null) {
-          // user.id;
-          const response = await api.getDeliveredOrdersList();
+          const response = await api.getDeliveredOrdersList(user.id);
           if (response.ok !== true) setError(false);
           setPendingOrders(response?.data?.order_list);
           setLoading(false);
         }
       });
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async function doneDeliveryOrder(orderId) {
+    try {
+      setLoading(true);
+      const response = await api.doneDeliveryOrder(orderId);
+      if (response.ok !== true) setError(false);
+      getPickups();
+      showMessage({
+        message:
+          response.data?.status == true
+            ? response.data?.message
+            : 'Order Pickup Failed !',
+        type: response.data?.status == true ? 'success' : 'danger',
+        icon: response.data?.status == true ? 'success' : 'danger',
+        position: 'right',
+      });
+      setLoading(false);
     } catch (err) {
       console.error(err);
     }
@@ -61,7 +81,9 @@ const index = () => {
             padding: 5,
           }}>
           <View style={{maxWidth: '50%'}}>
-            <Text style={{...FONTS.h4, paddingBottom: 5}}>{item.user_id}</Text>
+            <Text style={{...FONTS.h4, paddingBottom: 5}}>
+              {item?.user?.name}
+            </Text>
             <Text
               style={{
                 ...FONTS.body4,
@@ -86,7 +108,16 @@ const index = () => {
         <Card.Divider />
         <View style={{flexDirection: 'row'}}>
           <TouchableOpacity
-            onPress={() => {}}
+            onPress={() => {
+              Alert.alert('Alert!', 'Are you want to change status to Done ?', [
+                {
+                  text: 'Cancel',
+                  onPress: () => console.log('Cancel Pressed'),
+                  style: 'cancel',
+                },
+                {text: 'OK', onPress: () => doneDeliveryOrder(item.id)},
+              ]);
+            }}
             style={[
               styles.cardBottomButton,
               {
@@ -148,6 +179,18 @@ const index = () => {
           keyExtractor={item => `${item.id}`}
           refreshing={loading}
           onRefresh={() => getDeliveryList()}
+          ListEmptyComponent={() => {
+            return (
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <EmptyAnimation message="Empty Order List !" />
+              </View>
+            );
+          }}
         />
       )}
     </View>
