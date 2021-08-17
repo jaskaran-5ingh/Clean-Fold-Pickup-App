@@ -32,6 +32,7 @@ const index = () => {
           const response = await api.getDeliveredOrdersList(user.id);
           if (response.ok !== true) setError(false);
           setPendingOrders(response?.data?.order_list);
+          console.log(response?.data);
           setLoading(false);
         }
       });
@@ -161,7 +162,7 @@ const index = () => {
   }
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 1, backgroundColor: 'white'}}>
       {loading == true ? (
         <LoadingScreen />
       ) : (
