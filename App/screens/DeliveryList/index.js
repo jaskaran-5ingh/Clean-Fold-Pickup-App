@@ -1,5 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {View, StyleSheet, TouchableOpacity, Text, FlatList} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+  FlatList,
+  Alert,
+} from 'react-native';
 import {Card, Button, Icon} from 'react-native-elements';
 
 import {COLORS, images, FONTS} from '../../constants';
@@ -38,7 +45,7 @@ const index = () => {
       setLoading(true);
       const response = await api.doneDeliveryOrder(orderId);
       if (response.ok !== true) setError(false);
-      getPickups();
+      getDeliveryList();
       showMessage({
         message:
           response.data?.status == true
