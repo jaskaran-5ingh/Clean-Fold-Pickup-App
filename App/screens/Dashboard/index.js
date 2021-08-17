@@ -199,10 +199,10 @@ const index = ({navigation}) => {
             />
             <Card
               backgroundColor={COLORS.lightSkyblue}
-              icon="dollar"
+              icon="rupee"
               color={COLORS.primary}
               title="RATE LIST"
-              onPress={() => navigation.navigate('DeliveryList')}
+              onPress={() => console.log('DeliveryList')}
               qtyAvailable={false}
             />
             <Card
@@ -210,7 +210,7 @@ const index = ({navigation}) => {
               icon="plus"
               color={COLORS.orange}
               title="CREATE ORDER"
-              onPress={() => navigation.navigate('DeliveryList')}
+              onPress={() => navigation.navigate('CreateOrderScreen')}
               qtyAvailable={false}
             />
           </View>
