@@ -2,6 +2,7 @@
 import Welcome from './Welcome';
 import SignIn from './SignIn';
 import ErrorScreen from './ErrorScreen';
+import EmptyAnimation from './EmptyAnimation';
 import LoadingScreen from './LoadingScreen';
 import Pickup from './Pickup';
 import DeliveryList from './DeliveryList';
@@ -17,4 +18,5 @@ export {
   Dashboard,
   Pickup,
   DeliveryList,
+  EmptyAnimation,
 };
