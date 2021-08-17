@@ -4,7 +4,13 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {COLORS, icons} from '../constants';
 
 //Screens
-import {Dashboard, Pickup, DeliveryList} from '../screens';
+import {
+  Dashboard,
+  Pickup,
+  DeliveryList,
+  CreateOrderScreen,
+  DeliveryListEdit,
+} from '../screens';
 //Create object for navigation
 const Stack = createStackNavigator();
 
@@ -32,13 +38,27 @@ export default function AppStackNavigator() {
       />
       <Stack.Screen
         name="Pickup"
+        label="PICKUPS"
         component={Pickup}
         options={{headerShown: true, label: 'PICKUPS'}}
       />
       <Stack.Screen
         name="DeliveryList"
         component={DeliveryList}
+        label="DELIVERY"
         options={{headerShown: true, label: 'DELIVERY'}}
+      />
+      <Stack.Screen
+        name="CreateOrderScreen"
+        component={CreateOrderScreen}
+        label="Create Order"
+        options={{headerShown: true, label: 'CreateOrderScreen'}}
+      />
+      <Stack.Screen
+        name="DeliveryListEdit"
+        component={DeliveryListEdit}
+        label="DeliveryListEdit"
+        options={{headerShown: true, label: 'DeliveryListEdit'}}
       />
     </Stack.Navigator>
   );

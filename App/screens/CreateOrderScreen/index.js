@@ -10,7 +10,7 @@ import {
   Platform,
   TouchableOpacity,
 } from 'react-native';
-
+import DateTimePicker from '@react-native-community/datetimepicker';
 import {showMessage} from 'react-native-flash-message';
 import AuthContext from '../../auth/Context';
 import api from '../../api/auth';
@@ -25,7 +25,7 @@ import {
   SIZES,
 } from '../../constants';
 import {Button, Input} from '../../components';
-import {ErrorScreen, LoadingScreen} from '../../screens';
+import {ErrorScreen, LoadingScreen} from '..';
 
 export default function index({navigation}) {
   //Deceleration Of Context
@@ -129,7 +129,7 @@ export default function index({navigation}) {
         <Button
           height={responsiveHeight(6)}
           width="100%"
-          title="Sign In"
+          title="Create Order"
           titleColor="white"
           backgroundColor={COLORS.primary}
           onPress={() => {
@@ -144,9 +144,9 @@ export default function index({navigation}) {
     return (
       <View
         style={{
-          paddingBottom: SIZES.padding * 2,
+          paddingBottom: SIZES.padding,
         }}>
-        <Text style={styles.welcome}>Sign In</Text>
+        <Text style={styles.welcome}>Create Order</Text>
       </View>
     );
   }
@@ -170,12 +170,67 @@ export default function index({navigation}) {
   function renderInputFields() {
     return (
       <View behavior="position" style={{paddingBottom: SIZES.padding * 2}}>
+        {/* mobile */}
+        <Input
+          placeholder=""
+          label="Mobile"
+          value=""
+          leftIcon="phone"
+          onChangeText={value => {
+            handleInputStateChanges({
+              name: 'email',
+              value: value,
+            });
+          }}
+        />
+
         {/* email */}
         <Input
-          placeholder="example@email.com"
-          label="Email "
-          leftIcon="envelope"
-          value={userDetails.email}
+          placeholder=""
+          label="Name "
+          value=""
+          leftIcon="user"
+          onChangeText={value => {
+            handleInputStateChanges({
+              name: 'email',
+              value: value,
+            });
+          }}
+        />
+
+        {/* email */}
+        <Input
+          placeholder=""
+          label="Category"
+          value=""
+          leftIcon="bars"
+          onChangeText={value => {
+            handleInputStateChanges({
+              name: 'email',
+              value: value,
+            });
+          }}
+        />
+
+        {/* email */}
+        <Input
+          placeholder=""
+          label="Pickup Date"
+          value=""
+          leftIcon="calendar"
+          onChangeText={value => {
+            handleInputStateChanges({
+              name: 'email',
+              value: value,
+            });
+          }}
+        />
+
+        <Input
+          placeholder=""
+          label="Delivery Date"
+          value=""
+          leftIcon="calendar"
           onChangeText={value => {
             handleInputStateChanges({
               name: 'email',
@@ -186,21 +241,39 @@ export default function index({navigation}) {
 
         {/* Password */}
         <Input
-          placeholder="password"
-          label="Password"
-          isPassword={true}
-          value={userDetails.password}
-          leftIcon="key"
-          onChangeText={value => {
-            handleInputStateChanges({
-              name: 'password',
-              value: value,
-            });
-          }}
+          placeholder=""
+          label="Remarks"
+          value=""
+          leftIcon="edit"
+          onChangeText={value => console.log(value)}
         />
       </View>
     );
   }
+
+  const [date, setDate] = useState(new Date());
+  const [mode, setMode] = useState('date');
+  const [show, setShow] = useState(false);
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === 'ios');
+    console.log(currentDate);
+    setDate(currentDate);
+  };
+
+  const showMode = currentMode => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode('date');
+  };
+
+  const showTimepicker = () => {
+    showMode('time');
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -212,12 +285,7 @@ export default function index({navigation}) {
             <LoadingScreen />
           ) : (
             <>
-              {/* Logo */}
-              {renderLogo()}
               <ScrollView>
-                {/* Sign Text */}
-                {renderSignText()}
-
                 <KeyboardAvoidingView
                   behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
                   {/* Text Input */}
@@ -236,8 +304,8 @@ export default function index({navigation}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: SIZES.padding * 4,
-    paddingTop: SIZES.padding * 5,
+    paddingHorizontal: SIZES.padding * 3,
+    paddingTop: SIZES.padding * 2,
   },
   welcome: {
     ...FONTS.h1,

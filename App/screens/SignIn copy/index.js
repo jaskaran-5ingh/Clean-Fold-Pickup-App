@@ -25,7 +25,7 @@ import {
   SIZES,
 } from '../../constants';
 import {Button, Input} from '../../components';
-import {ErrorScreen, LoadingScreen} from '../../screens';
+import {ErrorScreen, LoadingScreen} from '..';
 
 export default function index({navigation}) {
   //Deceleration Of Context
@@ -48,9 +48,9 @@ export default function index({navigation}) {
       setUserValid(true);
       setLoading(false);
       setUserDetails({
-        email: 'testdummy@gmail.com',
-        password: 'secret',
-      });
+    email: 'testdummy@gmail.com',
+    password: 'secret',
+  });
     };
   }, []);
 
@@ -174,7 +174,6 @@ export default function index({navigation}) {
         <Input
           placeholder="example@email.com"
           label="Email "
-          leftIcon="envelope"
           value={userDetails.email}
           onChangeText={value => {
             handleInputStateChanges({
@@ -190,7 +189,6 @@ export default function index({navigation}) {
           label="Password"
           isPassword={true}
           value={userDetails.password}
-          leftIcon="key"
           onChangeText={value => {
             handleInputStateChanges({
               name: 'password',

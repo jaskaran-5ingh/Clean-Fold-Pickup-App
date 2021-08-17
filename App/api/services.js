@@ -6,7 +6,9 @@ const endPoint = {
   getOrdersList: '/get/orders/list',
   getCategoryProduct: '/getCategoryProduct/1',
   donePendingOrder: '/done-pickup',
-  doneDeliveryOrder: 'done-delivery',
+  doneDeliveryOrder: '/done-delivery',
+  getOrderDetailsById: '/get/order-detail',
+  updateDeliveredOrder: '/edit-order',
 };
 
 //Call Api Function
@@ -34,6 +36,13 @@ const doneDeliveryOrder = orderId => {
   return apiClient.get(endPoint.doneDeliveryOrder + '/' + orderId);
 };
 
+const getOrderDetailsById = orderId => {
+  return apiClient.get(endPoint.getOrderDetailsById + '/' + orderId);
+};
+
+const updateDeliveredOrder = jsonData => {
+  return apiClient.post(endPoint.updateDeliveredOrder, jsonData);
+};
 //Export Functions
 export default {
   getDashboardData,
@@ -42,4 +51,6 @@ export default {
   getCategoryProduct,
   donePendingOrder,
   doneDeliveryOrder,
+  getOrderDetailsById,
+  updateDeliveredOrder,
 };
