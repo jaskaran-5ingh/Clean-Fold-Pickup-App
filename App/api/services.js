@@ -10,6 +10,7 @@ const endPoint = {
   getOrderDetailsById: '/get/order-detail',
   updateDeliveredOrder: '/edit-order',
   getUserByMobile: '/get/user',
+  getOrderCategory: '/get/OrderCategory',
 };
 
 //Call Api Function
@@ -49,6 +50,10 @@ const getUserByMobile = mobileNumber => {
   return apiClient.get(endPoint.getUserByMobile + '/' + mobileNumber);
 };
 
+const getOrderCategory = () => {
+  return apiClient.get(endPoint.getOrderCategory);
+};
+
 //Export Functions
 export default {
   getDashboardData,
@@ -60,4 +65,5 @@ export default {
   getOrderDetailsById,
   updateDeliveredOrder,
   getUserByMobile,
+  getOrderCategory,
 };
