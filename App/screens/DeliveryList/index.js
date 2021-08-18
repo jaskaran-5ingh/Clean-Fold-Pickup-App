@@ -8,6 +8,7 @@ import {
   Alert,
 } from 'react-native';
 import {Card, Button, Icon} from 'react-native-elements';
+import {useIsFocused} from '@react-navigation/native';
 
 import {COLORS, images, FONTS} from '../../constants';
 import api from '../../api/services';
@@ -20,9 +21,12 @@ const index = ({navigation}) => {
   const [pendingOrders, setPendingOrders] = useState([]);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const isFocused = useIsFocused();
+
   useEffect(() => {
     getDeliveryList();
-  }, []);
+  }, [isFocused]);
 
   async function getDeliveryList() {
     try {
@@ -76,7 +80,7 @@ const index = ({navigation}) => {
           </View>
           <View>
             <Text style={styles.cardTitleSmall}>Order Number</Text>
-            <Text style={styles.cardTitle}>{item.number}</Text>
+            <Text style={styles.cardTitle}>{item.id}</Text>
           </View>
         </View>
         <Card.Divider />

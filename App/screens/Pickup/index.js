@@ -130,7 +130,7 @@ const index = () => {
             style={[
               styles.cardBottomButton,
               {
-                backgroundColor: COLORS.darkGreen,
+                backgroundColor: COLORS.darkTransparent,
               },
             ]}>
             <Text style={{fontSize: 15, color: COLORS.white}}>Done</Text>

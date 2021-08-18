@@ -48,6 +48,7 @@ export default function index({route, navigation}) {
       if (response.ok !== true) setError(false);
       setRemarks(response?.data?.orderDetails?.remarks);
       setDeliveryData(response?.data?.orderDetails);
+      console.log(response?.data?.orderDetails);
       setLoading(false);
     } catch (err) {
       console.error(err);
@@ -59,8 +60,17 @@ export default function index({route, navigation}) {
       setLoading(true);
       const response = await api.updateDeliveredOrder(jsonData);
       if (response.ok !== true) setError(false);
-      console.log(response);
+      showMessage({
+        message:
+          response.data?.status == true
+            ? response.data?.message
+            : 'Order Update Failed !',
+        type: response.data?.status == true ? 'success' : 'danger',
+        icon: response.data?.status == true ? 'success' : 'danger',
+        position: 'right',
+      });
       setLoading(false);
+      navigation.navigate('DeliveryList');
     } catch (err) {
       console.error(err);
     }
@@ -97,7 +107,6 @@ export default function index({route, navigation}) {
           label="Remarks"
           value={remarks}
           leftIcon="edit"
-          keyboardType="textarea"
           onChangeText={value => setRemarks(value)}
         />
       </View>
