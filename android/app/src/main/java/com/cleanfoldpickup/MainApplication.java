@@ -5,6 +5,7 @@ import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.reactcommunity.rndatetimepicker.RNDateTimePickerPackage;
+import com.reactcommunity.rndatetimepicker.RNDateTimePickerPackage;
 import com.reactnativecommunity.netinfo.NetInfoPackage;
 import com.airbnb.android.react.lottie.LottiePackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;

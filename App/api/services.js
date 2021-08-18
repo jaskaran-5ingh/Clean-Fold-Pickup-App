@@ -9,6 +9,7 @@ const endPoint = {
   doneDeliveryOrder: '/done-delivery',
   getOrderDetailsById: '/get/order-detail',
   updateDeliveredOrder: '/edit-order',
+  getUserByMobile: '/get/user',
 };
 
 //Call Api Function
@@ -43,6 +44,11 @@ const getOrderDetailsById = orderId => {
 const updateDeliveredOrder = jsonData => {
   return apiClient.post(endPoint.updateDeliveredOrder, jsonData);
 };
+
+const getUserByMobile = mobileNumber => {
+  return apiClient.get(endPoint.getUserByMobile + '/' + mobileNumber);
+};
+
 //Export Functions
 export default {
   getDashboardData,
@@ -53,4 +59,5 @@ export default {
   doneDeliveryOrder,
   getOrderDetailsById,
   updateDeliveredOrder,
+  getUserByMobile,
 };
