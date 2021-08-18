@@ -9,9 +9,12 @@ import {
   ScrollView,
   Platform,
   TouchableOpacity,
+  Pressable,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {showMessage} from 'react-native-flash-message';
+import PickerModal from 'react-native-picker-modal-view';
+
 import AuthContext from '../../auth/Context';
 import api from '../../api/services';
 import cache from '../../utils/cache';
@@ -34,7 +37,7 @@ export default function index({navigation}) {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [userDetails, setUserDetails] = useState({});
-
+  const [orderCategories, setOrderCategories] = useState([]);
   //Form States
   const [pickupDate, setPickupDate] = useState('');
   const [deliveryDate, setDeliveryDate] = useState('');
@@ -71,6 +74,7 @@ export default function index({navigation}) {
 
   //Call Api Only Once when components loads
   useEffect(() => {
+    getOrderCategory();
     return () => {
       setError(false);
       setUserValid(true);
@@ -95,6 +99,27 @@ export default function index({navigation}) {
       newUserDetails.password = value;
     }
     setUserDetails(newUserDetails);
+  }
+
+  async function getOrderCategory() {
+    try {
+      setLoading(true);
+      const response = await api.getOrderCategory();
+      if (response.ok !== true) {
+        showMessage({
+          message: 'Something went wrong !',
+          description: 'Please try again latter',
+          backgroundColor: COLORS.red,
+          type: 'danger',
+          icon: 'danger',
+        });
+      } else {
+        setOrderCategories(response?.data?.categories);
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   async function handleFormSubmit(userDetails) {}
@@ -180,14 +205,32 @@ export default function index({navigation}) {
         />
 
         {/* Category */}
-        <Input
-          placeholder=""
-          label="Category"
-          value=""
-          leftIcon="bars"
-          onChangeText={value => {
-            console.log(value);
-          }}
+        <PickerModal
+          renderSelectView={(disabled, selected, showModal) => (
+            <Input
+              placeholder=""
+              label="Category"
+              value=""
+              leftIcon="bars"
+              onFocus={showModal}
+            />
+          )}
+          onSelected={selected => console.log(selected)}
+          onRequestClosed={() => console.warn('closed...')}
+          onBackRequest={() => console.warn('back key pressed')}
+          items={[
+            {Id: 1, Name: 'Test1 Name', Value: 'Test1 Value'},
+            {Id: 2, Name: 'Test2 Name', Value: 'Test2 Value'},
+            {Id: 3, Name: 'Test3 Name', Value: 'Test3 Value'},
+            {Id: 4, Name: 'Test4 Name', Value: 'Test4 Value'},
+          ]}
+          showToTopButton={true}
+          autoCorrect={false}
+          autoGenerateAlphabet={true}
+          chooseText={'Choose one'}
+          searchText={'Search...'}
+          forceSelect={false}
+          autoSort={true}
         />
 
         {/* Date Picker */}
