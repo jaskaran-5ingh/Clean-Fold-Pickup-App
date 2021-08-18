@@ -9,6 +9,8 @@ import {
   ScrollView,
   ActivityIndicator,
 } from 'react-native';
+import {useIsFocused} from '@react-navigation/native';
+
 import {Icon} from 'react-native-elements/dist/icons/Icon';
 import {
   COLORS,
@@ -94,6 +96,8 @@ function Card({
 }
 
 const index = ({navigation}) => {
+  const isFocused = useIsFocused();
+
   //Use State Hooks
 
   const defaultDashboardData = {
@@ -108,13 +112,14 @@ const index = ({navigation}) => {
 
   //Use Effect Hooks
   const authContext = useContext(AuthContext);
+
   useEffect(() => {
     try {
       getDashboardData();
     } catch (err) {
       console.error(err);
     }
-  }, []);
+  }, [isFocused]);
 
   async function getDashboardData() {
     setLoading(true);

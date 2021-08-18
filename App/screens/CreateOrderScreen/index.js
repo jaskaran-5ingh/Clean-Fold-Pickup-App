@@ -13,7 +13,7 @@ import {
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {showMessage} from 'react-native-flash-message';
 import AuthContext from '../../auth/Context';
-import api from '../../api/auth';
+import api from '../../api/services';
 import cache from '../../utils/cache';
 
 import {
@@ -30,16 +30,44 @@ import {ErrorScreen, LoadingScreen} from '..';
 export default function index({navigation}) {
   //Deceleration Of Context
   const authContext = useContext(AuthContext);
-
   //Component State Declarations
-  const [userDetails, setUserDetails] = useState({
-    email: 'testdummy@gmail.com',
-    password: 'secret',
-  });
-
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [isUserValid, setUserValid] = useState(false);
+  const [userDetails, setUserDetails] = useState({});
+
+  //Form States
+  const [pickupDate, setPickupDate] = useState('');
+  const [deliveryDate, setDeliveryDate] = useState('');
+  const [mobile, setMobile] = useState('');
+  const [name, setName] = useState('');
+  const [id, setId] = useState('');
+
+  const [date, setDate] = useState(new Date());
+  const [show, setShow] = useState(false);
+
+  const onChangeDate = (event, selectedDate) => {
+    const currentDate = selectedDate == undefined ? date : selectedDate;
+    setShow(Platform.OS === 'ios');
+    setDate(currentDate);
+    try {
+      let dd = currentDate.getDate();
+      let mm = currentDate.getMonth() + 1;
+      const yyyy = currentDate.getFullYear();
+
+      if (dd < 10) {
+        dd = `0${dd}`;
+      }
+
+      if (mm < 10) {
+        mm = `0${mm}`;
+      }
+      dateFormat = `${yyyy}-${mm}-${dd}`;
+
+      setPickupDate(dateFormat);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   //Call Api Only Once when components loads
   useEffect(() => {
@@ -69,58 +97,39 @@ export default function index({navigation}) {
     setUserDetails(newUserDetails);
   }
 
-  async function handleFormSubmit(userDetails) {
+  async function handleFormSubmit(userDetails) {}
+
+  async function getUserByMobile(mobile) {
     try {
-      if (Object.keys(userDetails).length == 0) {
+      setLoading(true);
+      const response = await api.getUserByMobile(mobile);
+      if (response.ok !== true) {
         showMessage({
-          message: 'Error',
-          description: 'Please fill details !',
+          message: 'Something went wrong !',
+          description: 'Please try again latter',
           backgroundColor: COLORS.red,
           type: 'danger',
           icon: 'danger',
         });
       } else {
-        setLoading(true);
-        const response = await api.signIn(userDetails);
-        console.log(response);
-        if (response.ok !== true) {
+        if (response?.data?.user_detail.length > 0) {
+          setName(response?.data?.user_detail[0]?.name);
+          setId(response?.data?.user_detail[0]?.id);
+        } else {
           showMessage({
-            message: 'Something went wrong !',
-            description: 'Please try again latter',
+            message: 'Failed !',
+            description: 'User not available !',
             backgroundColor: COLORS.red,
             type: 'danger',
             icon: 'danger',
           });
-          setLoading(false);
-        } else {
-          showMessage({
-            message:
-              response.data?.status == true
-                ? 'Login Success! Welcome ' + response.data?.details.name
-                : response.data?.errors,
-            type: response.data?.status == true ? 'success' : 'danger',
-            icon: response.data?.status == true ? 'success' : 'danger',
-            position: 'right',
-          });
-          // Set User In Auth Context
-          if (response?.data != null) {
-            if (response.data?.status == true) {
-              setUserValid(false);
-              cache.store('user', response.data.details);
-              authContext.setUser(response.data.details);
-              navigation.push('AppStackNavigator');
-            }
-          }
-          setUserDetails({});
-          setLoading(false);
         }
       }
+      setLoading(false);
     } catch (error) {
-      //Check logs for error
       console.error(error);
     }
   }
-
   //Componenet Renders
   function renderButtons() {
     return (
@@ -140,106 +149,65 @@ export default function index({navigation}) {
     );
   }
 
-  function renderSignText() {
-    return (
-      <View
-        style={{
-          paddingBottom: SIZES.padding,
-        }}>
-        <Text style={styles.welcome}>Create Order</Text>
-      </View>
-    );
-  }
-
-  function renderLogo() {
-    return (
-      <View style={styles.center}>
-        {/* Logo */}
-        <Image
-          source={images.logo}
-          resizeMode="contain"
-          style={{
-            height: responsiveWidth(50),
-            width: responsiveWidth(45),
-          }}
-        />
-      </View>
-    );
-  }
-
   function renderInputFields() {
     return (
       <View behavior="position" style={{paddingBottom: SIZES.padding * 2}}>
-        {/* mobile */}
+        {/* Mobile */}
         <Input
           placeholder=""
           label="Mobile"
-          value=""
+          value={mobile}
           leftIcon="phone"
-          onChangeText={value => {
-            handleInputStateChanges({
-              name: 'email',
-              value: value,
-            });
+          keyboardType="phone-pad"
+          onChangeText={mobile => {
+            setMobile(mobile);
+            if (mobile.length > 9) {
+              getUserByMobile(mobile);
+            }
           }}
+          maxLength={10}
         />
 
-        {/* email */}
+        {/* Name */}
         <Input
           placeholder=""
           label="Name "
-          value=""
+          value={name}
           leftIcon="user"
-          onChangeText={value => {
-            handleInputStateChanges({
-              name: 'email',
-              value: value,
-            });
+          onChangeText={name => {
+            setName(name);
           }}
         />
 
-        {/* email */}
+        {/* Category */}
         <Input
           placeholder=""
           label="Category"
           value=""
           leftIcon="bars"
           onChangeText={value => {
-            handleInputStateChanges({
-              name: 'email',
-              value: value,
-            });
+            console.log(value);
           }}
         />
 
-        {/* email */}
+        {/* Date Picker */}
         <Input
           placeholder=""
           label="Pickup Date"
-          value=""
+          value={pickupDate}
           leftIcon="calendar"
-          onChangeText={value => {
-            handleInputStateChanges({
-              name: 'email',
-              value: value,
-            });
-          }}
+          onFocus={() => setShow(true)}
         />
 
+        {/* Delivery Date */}
         <Input
           placeholder=""
           label="Delivery Date"
-          value=""
+          value={deliveryDate}
           leftIcon="calendar"
-          onChangeText={value => {
-            handleInputStateChanges({
-              name: 'email',
-              value: value,
-            });
-          }}
         />
 
-        {/* Password */}
+        {/* Remarks */}
         <Input
           placeholder=""
           label="Remarks"
@@ -251,32 +219,17 @@ export default function index({navigation}) {
     );
   }
 
-  const [date, setDate] = useState(new Date());
-  const [mode, setMode] = useState('date');
-  const [show, setShow] = useState(false);
-
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setShow(Platform.OS === 'ios');
-    console.log(currentDate);
-    setDate(currentDate);
-  };
-
-  const showMode = currentMode => {
-    setShow(true);
-    setMode(currentMode);
-  };
-
-  const showDatepicker = () => {
-    showMode('date');
-  };
-
-  const showTimepicker = () => {
-    showMode('time');
-  };
-
   return (
     <SafeAreaView style={styles.container}>
+      {show && (
+        <DateTimePicker
+          mode="date"
+          value={date}
+          display="default"
+          testID="dateTimePicker"
+          onChange={onChangeDate}
+        />
+      )}
       {error == true ? (
         <ErrorScreen />
       ) : (
