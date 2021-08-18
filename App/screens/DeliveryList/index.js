@@ -48,17 +48,27 @@ const index = ({navigation}) => {
     try {
       setLoading(true);
       const response = await api.doneDeliveryOrder(orderId);
-      if (response.ok !== true) setError(false);
-      getDeliveryList();
-      showMessage({
-        message:
-          response.data?.status == true
-            ? response.data?.message
-            : 'Order Pickup Failed !',
-        type: response.data?.status == true ? 'success' : 'danger',
-        icon: response.data?.status == true ? 'success' : 'danger',
-        position: 'right',
-      });
+      console.log(response);
+      if (response.ok !== true) {
+        setError(false);
+        showMessage({
+          message: 'Something went wrong please try again',
+          type: 'danger',
+          icon: 'danger',
+          position: 'top',
+        });
+      } else {
+        getDeliveryList();
+        showMessage({
+          message:
+            response.data?.status == true
+              ? response.data?.message
+              : 'Order Pickup Failed !',
+          type: response.data?.status == true ? 'success' : 'danger',
+          icon: response.data?.status == true ? 'success' : 'danger',
+          position: 'right',
+        });
+      }
       setLoading(false);
     } catch (err) {
       console.error(err);
