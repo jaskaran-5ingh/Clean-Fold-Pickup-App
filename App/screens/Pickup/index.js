@@ -78,7 +78,7 @@ const index = () => {
           </View>
           <View>
             <Text style={styles.cardTitleSmall}>Order Number</Text>
-            <Text style={styles.cardTitle}>{item.number}</Text>
+            <Text style={styles.cardTitle}>{item.id}</Text>
           </View>
         </View>
         <Card.Divider />

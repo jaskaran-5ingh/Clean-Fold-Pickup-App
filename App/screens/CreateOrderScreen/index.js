@@ -7,7 +7,6 @@ import {
   ScrollView,
   Platform,
 } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import {showMessage} from 'react-native-flash-message';
 import {LinearProgress} from 'react-native-elements';
 
@@ -36,33 +35,60 @@ export default function index({navigation}) {
   const [orderCategories, setOrderCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState({});
   //Form States
+  const [userId, setUserId] = useState('');
+  const [name, setName] = useState('');
+  const [mobile, setMobile] = useState('');
+  const [category, setCategory] = useState('');
   const [pickupDate, setPickupDate] = useState('');
   const [deliveryDate, setDeliveryDate] = useState('');
-  const [mobile, setMobile] = useState('');
-  const [name, setName] = useState('');
-  const [id, setId] = useState('');
-
-  const [date, setDate] = useState(new Date());
-  const [show, setShow] = useState(false);
-
-  const onChangeDate = (event, selectedDate) => {
-    const currentDate = selectedDate == undefined ? date : selectedDate;
-    setShow(Platform.OS === 'ios');
-    setDate(currentDate);
-  };
+  const [remarks, setRemarks] = useState('');
+  const [address, setAddress] = useState('');
+  const [idLocation, setIdLocation] = useState('');
+  const [pickupBoy, setPickupBoy] = useState('');
 
   //Call Api Only Once when components loads
   useEffect(() => {
     getOrderCategory();
+
+    var date = new Date();
+    setPickupDate(dateFormatter(date));
+    setDeliveryDate(dateFormatter(date));
+
+    cache.get('user').then(user => {
+      if (user != null) {
+        setPickupBoy(user.id);
+      }
+    });
+
     return () => {
       setError(false);
       setLoading(false);
     };
   }, []);
 
-  // states handling functions
+  const dateFormatter = currentDate => {
+    try {
+      let dd = currentDate.getDate();
+      let mm = currentDate.getMonth() + 1;
+      const yyyy = currentDate.getFullYear();
 
-  function handleInputStateChanges({name, value}) {}
+      if (dd < 10) {
+        dd = `0${dd}`;
+      }
+
+      if (mm < 10) {
+        mm = `0${mm}`;
+      }
+      return `${yyyy}-${mm}-${dd}`;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  function addHoursToDate(date, hours) {
+    return new Date(new Date(date).setHours(date.getHours() + hours));
+  }
+  // states handling functions
 
   async function getOrderCategory() {
     try {
@@ -83,7 +109,78 @@ export default function index({navigation}) {
     }
   }
 
-  async function handleFormSubmit(userDetails) {}
+  function checkProperties(obj) {
+    for (var key in obj) {
+      if (
+        obj[key] !== null &&
+        obj[key] != '' &&
+        obj[key] != ' ' &&
+        obj[key] != undefined
+      ) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+    return true;
+  }
+
+  async function handleFormSubmit() {
+    setLoading(true);
+    let saveOrderObject = {
+      category: category,
+      pickup_time: pickupDate,
+      delv_time: deliveryDate,
+      pickupboy: pickupBoy,
+      address: address,
+      mobile: mobile,
+      remarks: remarks,
+      user_id: userId,
+      id_location: idLocation,
+    };
+    if (
+      idLocation == '' ||
+      userId == '' ||
+      remarks == '' ||
+      mobile == '' ||
+      address == '' ||
+      pickupBoy == '' ||
+      deliveryDate == '' ||
+      category == '' ||
+      pickupDate == ''
+    ) {
+      showMessage({
+        message: 'Required fields are missing!',
+        description: 'Please fill details',
+        backgroundColor: COLORS.red,
+        type: 'danger',
+        icon: 'danger',
+      });
+    } else {
+      response = await api.createOrder(saveOrderObject);
+      if (response.ok !== true) {
+        showMessage({
+          message: 'Something went wrong !',
+          description: 'Please try again latter',
+          backgroundColor: COLORS.red,
+          type: 'danger',
+          icon: 'danger',
+        });
+      } else {
+        showMessage({
+          message:
+            response.data?.status == true
+              ? response.data?.message
+              : 'Order Saved Failed !',
+          type: response.data?.status == true ? 'success' : 'danger',
+          icon: response.data?.status == true ? 'success' : 'danger',
+          position: 'right',
+        });
+        navigation.navigate('Dashboard');
+      }
+    }
+    setLoading(false);
+  }
 
   async function getUserByMobile(mobile) {
     try {
@@ -100,7 +197,9 @@ export default function index({navigation}) {
       } else {
         if (response?.data?.user_detail.length > 0) {
           setName(response?.data?.user_detail[0]?.name);
-          setId(response?.data?.user_detail[0]?.id);
+          setUserId(response?.data?.user_detail[0]?.id);
+          setAddress(response?.data?.user_detail[0]?.address);
+          setIdLocation(response?.data?.user_detail[0]?.id_location);
         } else {
           showMessage({
             message: 'Failed !',
@@ -116,7 +215,7 @@ export default function index({navigation}) {
       console.error(error);
     }
   }
-  //Componenet Renders
+  //Component Renders
   function renderButtons() {
     return (
       <View style={styles.center}>
@@ -128,7 +227,7 @@ export default function index({navigation}) {
           titleColor="white"
           backgroundColor={COLORS.primary}
           onPress={() => {
-            handleFormSubmit(userDetails);
+            handleFormSubmit();
           }}
         />
       </View>
@@ -177,17 +276,24 @@ export default function index({navigation}) {
           placeholder="Select Category"
           onSelectItem={item => {
             setSelectedCategory(item);
+            setCategory(item.id);
+            var date = new Date();
+            setPickupDate(dateFormatter(date));
+            var hoursToAdd = parseInt(item?.hours) || 0;
+            setDeliveryDate(dateFormatter(addHoursToDate(date, hoursToAdd)));
           }}
         />
 
-        {/* Date Picker */}
+        {/* Picker Date */}
         <DatePicker
           label="Select Pickup Date"
           leftIcon="calendar"
           selectedItem={pickupDate}
           placeholder="Select Date"
-          onSelectDate={item => {
-            setPickupDate(item);
+          onSelectDate={date => {
+            setPickupDate(dateFormatter(date));
+            var hoursToAdd = parseInt(selectedCategory?.hours) || 0;
+            setDeliveryDate(dateFormatter(addHoursToDate(date, hoursToAdd)));
           }}
         />
 
@@ -198,19 +304,20 @@ export default function index({navigation}) {
           leftIcon="calendar"
           selectedItem={deliveryDate}
           placeholder="Select Date"
-          onSelectDate={item => {
-            setDeliveryDate(item);
+          onSelectDate={date => {
+            setDeliveryDate(dateFormatter(date));
           }}
+          disabled={true}
         />
 
         {/* Remarks */}
         <Input
           placeholder=""
           label="Remarks"
-          value=""
+          value={remarks}
           placeholder="Enter Remarks"
           leftIcon="edit"
-          onChangeText={value => console.log(value)}
+          onChangeText={value => setRemarks(value)}
         />
       </View>
     );
@@ -221,15 +328,6 @@ export default function index({navigation}) {
       {loadingUserDetails ? <LinearProgress color="dodgerblue" /> : null}
 
       <SafeAreaView style={styles.container}>
-        {show && (
-          <DateTimePicker
-            mode="date"
-            value={date}
-            display="default"
-            testID="dateTimePicker"
-            onChange={onChangeDate}
-          />
-        )}
         {error == true ? (
           <ErrorScreen />
         ) : (
