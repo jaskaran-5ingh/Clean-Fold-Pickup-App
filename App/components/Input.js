@@ -45,9 +45,7 @@ const Input = ({
       </Text>
 
       <TextInput
-        style={[
-          styles.textInputStyle,
-        ]}
+        style={[styles.textInputStyle]}
         secureTextEntry={showPassword}
         placeholderTextColor={COLORS.gray}
         onBlur={onBlur}
@@ -105,7 +103,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderBottomColor: COLORS.primary,
     borderRadius: 2,
-    color: 'black',
+    color: COLORS.darkTransparent,
     paddingLeft: 30,
     width: '100%',
   },
