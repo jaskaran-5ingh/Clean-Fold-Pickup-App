@@ -5,6 +5,7 @@ import ErrorScreen from './ErrorScreen';
 import EmptyAnimation from './EmptyAnimation';
 import LoadingScreen from './LoadingScreen';
 import Pickup from './Pickup';
+import PickupEdit from './Pickup/Edit';
 import DeliveryList from './DeliveryList';
 import DeliveryListEdit from './DeliveryList/Edit';
 import CreateOrderScreen from './CreateOrderScreen';
@@ -21,6 +22,7 @@ export {
   Pickup,
   DeliveryList,
   DeliveryListEdit,
+  PickupEdit,
   EmptyAnimation,
   CreateOrderScreen,
 };
