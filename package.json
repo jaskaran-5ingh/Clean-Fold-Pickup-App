@@ -26,6 +26,7 @@
     "react-native-elements": "^3.4.2",
     "react-native-flash-message": "^0.1.23",
     "react-native-gesture-handler": "^1.10.3",
+    "react-native-modal-datetime-picker": "^10.2.0",
     "react-native-safe-area-context": "^3.3.0",
     "react-native-screens": "^3.5.0",
     "react-native-splash-screen": "^3.2.0",

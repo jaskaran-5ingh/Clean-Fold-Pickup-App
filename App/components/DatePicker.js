@@ -18,8 +18,9 @@ import {
   responsiveHeight,
   icons,
 } from '../constants';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
-const PickerComponent = ({
+const index = ({
   isModalVisible = false,
   label = 'label',
   leftIcon = null,
@@ -29,23 +30,42 @@ const PickerComponent = ({
   data,
   placeholder,
   selectedItem,
-  onSelectItem,
+  onSelectDate,
 }) => {
-  // Component States
-  const [showModal, toggleModal] = useState(isModalVisible);
-  const [icon, setIcon] = useState(icons.eye);
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
-  //Functions
-  const handlePasswordToggle = () => {
-    toggleModal(!showModal);
-    if (showModal) {
-      setIcon(icons.disable_eye);
-    } else {
-      setIcon(icons.eye);
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const dateFormatter = currentDate => {
+    try {
+      let dd = currentDate.getDate();
+      let mm = currentDate.getMonth() + 1;
+      const yyyy = currentDate.getFullYear();
+
+      if (dd < 10) {
+        dd = `0${dd}`;
+      }
+
+      if (mm < 10) {
+        mm = `0${mm}`;
+      }
+      return `${yyyy}-${mm}-${dd}`;
+    } catch (error) {
+      console.error(error);
     }
   };
 
-  // Render component
+  const handleConfirm = date => {
+    onSelectDate(dateFormatter(date));
+    hideDatePicker();
+  };
+
   return (
     <View
       style={{
@@ -56,24 +76,14 @@ const PickerComponent = ({
         <Text style={styles.required}> *</Text>
       </Text>
 
-      <Pressable style={[styles.pickerStyle]} onPress={() => toggleModal(true)}>
+      <Pressable style={[styles.pickerStyle]} onPress={() => showDatePicker()}>
         <Text
           style={[
             styles.selectedItem,
-            {
-              color: selectedItem?.name ? COLORS.darkTransparent : COLORS.gray,
-            },
+            {color: selectedItem ? COLORS.darkTransparent : COLORS.gray},
           ]}>
-          {selectedItem?.name ? selectedItem?.name : placeholder}
+          {selectedItem ? selectedItem : placeholder}
         </Text>
-        <View style={styles.chevronDown}>
-          <Icon
-            type="font-awesome"
-            name="angle-down"
-            size={25}
-            color={COLORS.darkgray}
-          />
-        </View>
       </Pressable>
 
       {leftIcon ? (
@@ -106,50 +116,12 @@ const PickerComponent = ({
         </View>
       ) : null}
 
-      <Modal visible={showModal} animationType="slide">
-        <View
-          style={{
-            backgroundColor: COLORS.primary,
-            height: 50,
-          }}>
-          <TouchableOpacity
-            onPress={() => toggleModal(false)}
-            style={{
-              flexDirection: 'row',
-              alignSelf: 'flex-start',
-              paddingVertical: 10,
-              paddingHorizontal: 20,
-              width: '100%',
-            }}>
-            <Icon
-              type="font-awesome"
-              name="chevron-left"
-              size={20}
-              color={COLORS.white}
-            />
-            <Text style={{color: 'white', marginLeft: 10}}>Close</Text>
-          </TouchableOpacity>
-        </View>
-        <FlatList
-          data={data}
-          keyExtractor={item => `${item.id}`}
-          renderItem={({item}) => {
-            return (
-              <TouchableOpacity
-                onPress={() => {
-                  toggleModal(false);
-                  onSelectItem(item);
-                }}>
-                <ListItem key={item.id} bottomDivider>
-                  <ListItem.Content>
-                    <ListItem.Title>{item.name}</ListItem.Title>
-                  </ListItem.Content>
-                </ListItem>
-              </TouchableOpacity>
-            );
-          }}
-        />
-      </Modal>
+      <DateTimePickerModal
+        isVisible={isDatePickerVisible}
+        mode="date"
+        onConfirm={handleConfirm}
+        onCancel={hideDatePicker}
+      />
     </View>
   );
 };
@@ -202,5 +174,4 @@ const styles = StyleSheet.create({
     color: COLORS.darkTransparent,
   },
 });
-
-export default PickerComponent;
+export default index;
