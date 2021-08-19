@@ -170,7 +170,7 @@ export default function index({navigation}) {
   function renderInputFields() {
     return (
       <View behavior="position" style={{paddingBottom: SIZES.padding * 2}}>
-        {/* email */}
+        {/* Email */}
         <Input
           placeholder="example@email.com"
           label="Email "
