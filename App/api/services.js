@@ -11,6 +11,7 @@ const endPoint = {
   updateDeliveredOrder: '/edit-order',
   getUserByMobile: '/get/user',
   getOrderCategory: '/get/OrderCategory',
+  createOrder: '/create-order',
 };
 
 //Call Api Function
@@ -54,6 +55,10 @@ const getOrderCategory = () => {
   return apiClient.get(endPoint.getOrderCategory);
 };
 
+const createOrder = saveOrderObject => {
+  return apiClient.post(endPoint.createOrder, saveOrderObject);
+};
+
 //Export Functions
 export default {
   getDashboardData,
@@ -66,4 +71,5 @@ export default {
   updateDeliveredOrder,
   getUserByMobile,
   getOrderCategory,
+  createOrder,
 };

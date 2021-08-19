@@ -27,42 +27,25 @@ const index = ({
   onRightIconPress = () => {},
   rightLoadingComponent = false,
   rightIcon = null,
-  data,
   placeholder,
   selectedItem,
   onSelectDate,
+  disabled = false,
 }) => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-
   const showDatePicker = () => {
-    setDatePickerVisibility(true);
+    if (!disabled) {
+      console.log(disabled);
+      setDatePickerVisibility(true);
+    }
   };
 
   const hideDatePicker = () => {
     setDatePickerVisibility(false);
   };
 
-  const dateFormatter = currentDate => {
-    try {
-      let dd = currentDate.getDate();
-      let mm = currentDate.getMonth() + 1;
-      const yyyy = currentDate.getFullYear();
-
-      if (dd < 10) {
-        dd = `0${dd}`;
-      }
-
-      if (mm < 10) {
-        mm = `0${mm}`;
-      }
-      return `${yyyy}-${mm}-${dd}`;
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const handleConfirm = date => {
-    onSelectDate(dateFormatter(date));
+    onSelectDate(date);
     hideDatePicker();
   };
 
