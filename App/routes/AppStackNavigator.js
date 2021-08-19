@@ -1,7 +1,7 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 
-import {COLORS, icons} from '../constants';
+import {COLORS, icons, FONTS} from '../constants';
 
 //Screens
 import {
@@ -11,6 +11,7 @@ import {
   CreateOrderScreen,
   DeliveryListEdit,
 } from '../screens';
+import {formatDiagnostics} from 'typescript';
 //Create object for navigation
 const Stack = createStackNavigator();
 
@@ -27,6 +28,7 @@ export default function AppStackNavigator() {
         },
         headerTitleStyle: {
           color: COLORS.white,
+          ...FONTS.h4,
         },
         headerTintColor: COLORS.white,
         headerRight: () => null,
@@ -40,25 +42,25 @@ export default function AppStackNavigator() {
         name="Pickup"
         label="PICKUPS"
         component={Pickup}
-        options={{headerShown: true, label: 'PICKUPS'}}
+        options={{headerShown: true, title: 'Pickups'}}
       />
       <Stack.Screen
         name="DeliveryList"
         component={DeliveryList}
         label="DELIVERY"
-        options={{headerShown: true, label: 'DELIVERY'}}
+        options={{headerShown: true, title: 'Delivery'}}
       />
       <Stack.Screen
         name="CreateOrderScreen"
         component={CreateOrderScreen}
         label="Create Order"
-        options={{headerShown: true, label: 'CreateOrderScreen'}}
+        options={{headerShown: true, title: 'Create Order'}}
       />
       <Stack.Screen
         name="DeliveryListEdit"
         component={DeliveryListEdit}
         label="DeliveryListEdit"
-        options={{headerShown: true, label: 'DeliveryListEdit'}}
+        options={{headerShown: true, title: 'Edit Delivery'}}
       />
     </Stack.Navigator>
   );

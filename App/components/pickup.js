@@ -5,35 +5,47 @@ import {
   Image,
   TouchableOpacity,
   Text,
-  TextInput,
-  Keyboard,
   ActivityIndicator,
+  Modal,
+  Pressable,
+  FlatList,
 } from 'react-native';
-import {Icon} from 'react-native-elements';
-import {COLORS, FONTS, responsiveWidth, icons} from '../constants';
+import {Icon, Button, ListItem} from 'react-native-elements';
+import {
+  COLORS,
+  FONTS,
+  responsiveWidth,
+  responsiveHeight,
+  icons,
+} from '../constants';
 
-const Input = ({
-  isPassword = false,
+const PickerComponent = ({
+  isModalVisible = false,
   label = 'label',
   leftIcon = null,
-  onBlur = Keyboard.dismiss,
   onRightIconPress = () => {},
-  rightLoadingComponent = null,
+  rightLoadingComponent = false,
   rightIcon = null,
-  ...otherProps
+  data,
+  placeholder,
+  selectedItem,
+  onSelectItem,
 }) => {
   // Component States
-  const [showPassword, togglePassword] = useState(isPassword);
+  const [showModal, toggleModal] = useState(isModalVisible);
   const [icon, setIcon] = useState(icons.eye);
+
+  //Functions
   const handlePasswordToggle = () => {
-    togglePassword(!showPassword);
-    if (showPassword) {
+    toggleModal(!showModal);
+    if (showModal) {
       setIcon(icons.disable_eye);
     } else {
       setIcon(icons.eye);
     }
   };
 
+  // Render component
   return (
     <View
       style={{
@@ -43,17 +55,19 @@ const Input = ({
         {label}
         <Text style={styles.required}> *</Text>
       </Text>
-
-      <TextInput
-        style={[
-          styles.textInputStyle,
-        ]}
-        secureTextEntry={showPassword}
-        placeholderTextColor={COLORS.gray}
-        onBlur={onBlur}
-        {...otherProps}
-      />
-
+      <Pressable style={[styles.pickerStyle]} onPress={() => toggleModal(true)}>
+        <Text style={styles.selectedItem}>
+          {selectedItem?.name ? selectedItem?.name : placeholder}
+        </Text>
+        <View style={styles.chevronDown}>
+          <Icon
+            type="font-awesome"
+            name="angle-down"
+            size={25}
+            color={COLORS.darkgray}
+          />
+        </View>
+      </Pressable>
       {leftIcon ? (
         <View style={styles.leftIconContainer}>
           <Icon
@@ -65,20 +79,7 @@ const Input = ({
         </View>
       ) : null}
 
-      {rightIcon ? (
-        <View style={styles.rightIconContainer}>
-          <TouchableOpacity onPress={onRightIconPress}>
-            <Icon
-              type="font-awesome"
-              name={rightIcon}
-              size={20}
-              color={COLORS.primary}
-            />
-          </TouchableOpacity>
-        </View>
-      ) : null}
-
-      {isPassword ? (
+      {isModalVisible ? (
         <TouchableOpacity
           onPress={handlePasswordToggle}
           style={styles.passwordImageContainer}>
@@ -96,21 +97,49 @@ const Input = ({
           <ActivityIndicator color={COLORS.gray} size={20} />
         </View>
       ) : null}
+
+      <Modal visible={showModal} animationType="slide">
+        <Button
+          title="close"
+          onPress={() => toggleModal(false)}
+          buttonStyle={{backgroundColor: COLORS.darkTransparent}}
+        />
+        <FlatList
+          data={data}
+          keyExtractor={item => `${item.id}`}
+          renderItem={({item}) => {
+            return (
+              <ListItem key={item.id} bottomDivider>
+                <ListItem.Content>
+                  <TouchableOpacity
+                    onPress={() => {
+                      toggleModal(false);
+                      onSelectItem(item);
+                    }}>
+                    <ListItem.Title>{item.name}</ListItem.Title>
+                  </TouchableOpacity>
+                </ListItem.Content>
+              </ListItem>
+            );
+          }}
+        />
+      </Modal>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  textInputStyle: {
+  pickerStyle: {
     borderBottomWidth: 2,
     borderBottomColor: COLORS.primary,
     borderRadius: 2,
     color: 'black',
     paddingLeft: 30,
     width: '100%',
+    height: responsiveHeight(6.5),
   },
   passwordImage: {
-    height: responsiveWidth(7),
+    height: responsiveHeight(7),
     width: responsiveWidth(6),
   },
   passwordImageContainer: {
@@ -135,6 +164,18 @@ const styles = StyleSheet.create({
     color: COLORS.red,
     fontWeight: 'bold',
   },
+  chevronDown: {
+    position: 'absolute',
+    top: 10,
+    right: 5,
+  },
+  selectedItem: {
+    position: 'absolute',
+    top: 10,
+    left: 30,
+    fontWeight: 'bold',
+    color: COLORS.darkgray,
+  },
 });
 
-export default Input;
+export default PickerComponent;

@@ -8,12 +8,10 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Platform,
-  TouchableOpacity,
-  Pressable,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {showMessage} from 'react-native-flash-message';
-import PickerModal from 'react-native-picker-modal-view';
+import {LinearProgress} from 'react-native-elements';
 
 import AuthContext from '../../auth/Context';
 import api from '../../api/services';
@@ -22,12 +20,11 @@ import cache from '../../utils/cache';
 import {
   COLORS,
   FONTS,
-  images,
   responsiveHeight,
   responsiveWidth,
   SIZES,
 } from '../../constants';
-import {Button, Input} from '../../components';
+import {Button, Input, PickupComponent} from '../../components';
 import {ErrorScreen, LoadingScreen} from '..';
 
 export default function index({navigation}) {
@@ -36,8 +33,10 @@ export default function index({navigation}) {
   //Component State Declarations
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [userDetails, setUserDetails] = useState({});
+  const [loadingUserDetails, setUserDetails] = useState(false);
+
   const [orderCategories, setOrderCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState({});
   //Form States
   const [pickupDate, setPickupDate] = useState('');
   const [deliveryDate, setDeliveryDate] = useState('');
@@ -77,33 +76,16 @@ export default function index({navigation}) {
     getOrderCategory();
     return () => {
       setError(false);
-      setUserValid(true);
       setLoading(false);
-      setUserDetails({
-        email: 'testdummy@gmail.com',
-        password: 'secret',
-      });
     };
   }, []);
 
   // states handling functions
 
-  function handleInputStateChanges({name, value}) {
-    let newUserDetails = {};
-
-    if (name == 'email') {
-      newUserDetails.email = value;
-      newUserDetails.password = userDetails.password;
-    } else {
-      newUserDetails.email = userDetails.email;
-      newUserDetails.password = value;
-    }
-    setUserDetails(newUserDetails);
-  }
+  function handleInputStateChanges({name, value}) {}
 
   async function getOrderCategory() {
     try {
-      setLoading(true);
       const response = await api.getOrderCategory();
       if (response.ok !== true) {
         showMessage({
@@ -116,7 +98,6 @@ export default function index({navigation}) {
       } else {
         setOrderCategories(response?.data?.categories);
       }
-      setLoading(false);
     } catch (error) {
       console.error(error);
     }
@@ -126,7 +107,7 @@ export default function index({navigation}) {
 
   async function getUserByMobile(mobile) {
     try {
-      setLoading(true);
+      setUserDetails(true);
       const response = await api.getUserByMobile(mobile);
       if (response.ok !== true) {
         showMessage({
@@ -150,7 +131,7 @@ export default function index({navigation}) {
           });
         }
       }
-      setLoading(false);
+      setUserDetails(false);
     } catch (error) {
       console.error(error);
     }
@@ -202,35 +183,19 @@ export default function index({navigation}) {
           onChangeText={name => {
             setName(name);
           }}
+          rightLoadingComponent={loadingUserDetails}
         />
 
         {/* Category */}
-        <PickerModal
-          renderSelectView={(disabled, selected, showModal) => (
-            <Input
-              placeholder=""
-              label="Category"
-              value=""
-              leftIcon="bars"
-              onFocus={showModal}
-            />
-          )}
-          onSelected={selected => console.log(selected)}
-          onRequestClosed={() => console.warn('closed...')}
-          onBackRequest={() => console.warn('back key pressed')}
-          items={[
-            {Id: 1, Name: 'Test1 Name', Value: 'Test1 Value'},
-            {Id: 2, Name: 'Test2 Name', Value: 'Test2 Value'},
-            {Id: 3, Name: 'Test3 Name', Value: 'Test3 Value'},
-            {Id: 4, Name: 'Test4 Name', Value: 'Test4 Value'},
-          ]}
-          showToTopButton={true}
-          autoCorrect={false}
-          autoGenerateAlphabet={true}
-          chooseText={'Choose one'}
-          searchText={'Search...'}
-          forceSelect={false}
-          autoSort={true}
+        <PickupComponent
+          label="Categories"
+          leftIcon="bars"
+          data={orderCategories}
+          selectedItem={selectedCategory}
+          placeholder="Select Category"
+          onSelectItem={item => {
+            setSelectedCategory(item);
+          }}
         />
 
         {/* Date Picker */}
@@ -263,37 +228,41 @@ export default function index({navigation}) {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      {show && (
-        <DateTimePicker
-          mode="date"
-          value={date}
-          display="default"
-          testID="dateTimePicker"
-          onChange={onChangeDate}
-        />
-      )}
-      {error == true ? (
-        <ErrorScreen />
-      ) : (
-        <>
-          {loading == true ? (
-            <LoadingScreen />
-          ) : (
-            <>
-              <ScrollView>
-                <KeyboardAvoidingView
-                  behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-                  {/* Text Input */}
-                  {renderInputFields()}
-                  {renderButtons()}
-                </KeyboardAvoidingView>
-              </ScrollView>
-            </>
-          )}
-        </>
-      )}
-    </SafeAreaView>
+    <>
+      {loadingUserDetails ? <LinearProgress color="dodgerblue" /> : null}
+
+      <SafeAreaView style={styles.container}>
+        {show && (
+          <DateTimePicker
+            mode="date"
+            value={date}
+            display="default"
+            testID="dateTimePicker"
+            onChange={onChangeDate}
+          />
+        )}
+        {error == true ? (
+          <ErrorScreen />
+        ) : (
+          <>
+            {loading == true ? (
+              <LoadingScreen />
+            ) : (
+              <>
+                <ScrollView>
+                  <KeyboardAvoidingView
+                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+                    {/* Text Input */}
+                    {renderInputFields()}
+                    {renderButtons()}
+                  </KeyboardAvoidingView>
+                </ScrollView>
+              </>
+            )}
+          </>
+        )}
+      </SafeAreaView>
+    </>
   );
 }
 
