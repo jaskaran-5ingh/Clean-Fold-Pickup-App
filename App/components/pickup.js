@@ -101,11 +101,29 @@ const PickerComponent = ({
       ) : null}
 
       <Modal visible={showModal} animationType="slide">
-        <Button
-          title="close"
-          onPress={() => toggleModal(false)}
-          buttonStyle={{backgroundColor: COLORS.darkTransparent}}
-        />
+        <View
+          style={{
+            backgroundColor: COLORS.primary,
+            height: 50,
+          }}>
+          <TouchableOpacity
+            onPress={() => toggleModal(false)}
+            style={{
+              flexDirection: 'row',
+              alignSelf: 'flex-start',
+              paddingVertical: 10,
+              paddingHorizontal: 20,
+              width: '100%',
+            }}>
+            <Icon
+              type="font-awesome"
+              name="chevron-left"
+              size={20}
+              color={COLORS.white}
+            />
+            <Text style={{color: 'white', marginLeft: 10}}>Close</Text>
+          </TouchableOpacity>
+        </View>
         <FlatList
           data={data}
           keyExtractor={item => `${item.id}`}
