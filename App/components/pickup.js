@@ -55,6 +55,7 @@ const PickerComponent = ({
         {label}
         <Text style={styles.required}> *</Text>
       </Text>
+
       <Pressable style={[styles.pickerStyle]} onPress={() => toggleModal(true)}>
         <Text style={styles.selectedItem}>
           {selectedItem?.name ? selectedItem?.name : placeholder}
@@ -68,6 +69,7 @@ const PickerComponent = ({
           />
         </View>
       </Pressable>
+
       {leftIcon ? (
         <View style={styles.leftIconContainer}>
           <Icon
@@ -109,17 +111,17 @@ const PickerComponent = ({
           keyExtractor={item => `${item.id}`}
           renderItem={({item}) => {
             return (
-              <ListItem key={item.id} bottomDivider>
-                <ListItem.Content>
-                  <TouchableOpacity
-                    onPress={() => {
-                      toggleModal(false);
-                      onSelectItem(item);
-                    }}>
+              <TouchableOpacity
+                onPress={() => {
+                  toggleModal(false);
+                  onSelectItem(item);
+                }}>
+                <ListItem key={item.id} bottomDivider>
+                  <ListItem.Content>
                     <ListItem.Title>{item.name}</ListItem.Title>
-                  </TouchableOpacity>
-                </ListItem.Content>
-              </ListItem>
+                  </ListItem.Content>
+                </ListItem>
+              </TouchableOpacity>
             );
           }}
         />
@@ -133,7 +135,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderBottomColor: COLORS.primary,
     borderRadius: 2,
-    color: 'black',
+    color: COLORS.darkTransparent,
     paddingLeft: 30,
     width: '100%',
     height: responsiveHeight(6.5),
@@ -173,8 +175,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 10,
     left: 30,
-    fontWeight: 'bold',
-    color: COLORS.darkgray,
+    color: COLORS.darkTransparent,
   },
 });
 
