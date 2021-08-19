@@ -2,8 +2,6 @@ import React, {useContext, useState, useEffect} from 'react';
 import {
   StyleSheet,
   View,
-  Image,
-  Text,
   SafeAreaView,
   KeyboardAvoidingView,
   ScrollView,
@@ -24,7 +22,7 @@ import {
   responsiveWidth,
   SIZES,
 } from '../../constants';
-import {Button, Input, PickupComponent} from '../../components';
+import {Button, DatePicker, Input, PickupComponent} from '../../components';
 import {ErrorScreen, LoadingScreen} from '..';
 
 export default function index({navigation}) {
@@ -51,24 +49,6 @@ export default function index({navigation}) {
     const currentDate = selectedDate == undefined ? date : selectedDate;
     setShow(Platform.OS === 'ios');
     setDate(currentDate);
-    try {
-      let dd = currentDate.getDate();
-      let mm = currentDate.getMonth() + 1;
-      const yyyy = currentDate.getFullYear();
-
-      if (dd < 10) {
-        dd = `0${dd}`;
-      }
-
-      if (mm < 10) {
-        mm = `0${mm}`;
-      }
-      dateFormat = `${yyyy}-${mm}-${dd}`;
-
-      setPickupDate(dateFormat);
-    } catch (error) {
-      console.error(error);
-    }
   };
 
   //Call Api Only Once when components loads
@@ -162,6 +142,7 @@ export default function index({navigation}) {
         <Input
           placeholder=""
           label="Mobile"
+          placeholder="Enter Mobile"
           value={mobile}
           leftIcon="phone"
           keyboardType="phone-pad"
@@ -183,6 +164,7 @@ export default function index({navigation}) {
           onChangeText={name => {
             setName(name);
           }}
+          placeholder="Enter Name"
           rightLoadingComponent={loadingUserDetails}
         />
 
@@ -199,20 +181,26 @@ export default function index({navigation}) {
         />
 
         {/* Date Picker */}
-        <Input
-          placeholder=""
-          label="Pickup Date"
-          value={pickupDate}
+        <DatePicker
+          label="Select Pickup Date"
           leftIcon="calendar"
-          onFocus={() => setShow(true)}
+          selectedItem={pickupDate}
+          placeholder="Select Date"
+          onSelectDate={item => {
+            setPickupDate(item);
+          }}
         />
 
         {/* Delivery Date */}
-        <Input
-          placeholder=""
-          label="Delivery Date"
-          value={deliveryDate}
+
+        <DatePicker
+          label="Select Delivery Date"
           leftIcon="calendar"
+          selectedItem={deliveryDate}
+          placeholder="Select Date"
+          onSelectDate={item => {
+            setDeliveryDate(item);
+          }}
         />
 
         {/* Remarks */}
@@ -220,6 +208,7 @@ export default function index({navigation}) {
           placeholder=""
           label="Remarks"
           value=""
+          placeholder="Enter Remarks"
           leftIcon="edit"
           onChangeText={value => console.log(value)}
         />
