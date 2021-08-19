@@ -33,7 +33,6 @@ const index = () => {
           const response = await api.getPendingOrdersList(user.id);
           if (response.ok !== true) setError(false);
           setPendingOrders(response?.data?.order_list);
-          console.log(response?.data?.order_list);
           setLoading(false);
         }
       });
@@ -44,20 +43,24 @@ const index = () => {
 
   async function donePickupOrder(orderId) {
     try {
-      setLoading(true);
-      const response = await api.donePendingOrder(orderId);
-      if (response.ok !== true) setError(false);
-      getPickups();
+      let newOrders = pendingOrders.filter(item => item.id !== orderId);
+      setPendingOrders(newOrders);
       showMessage({
-        message:
-          response.data?.status == true
-            ? response.data?.message
-            : 'Order Pickup Failed !',
-        type: response.data?.status == true ? 'success' : 'danger',
-        icon: response.data?.status == true ? 'success' : 'danger',
-        position: 'right',
+        message: 'Order Pickup Success !',
+        type: 'success',
+        icon: 'success',
+        position: 'top',
       });
-      setLoading(false);
+      const response = await api.donePendingOrder(orderId);
+      if (response.ok !== true) {
+        showMessage({
+          message: 'Order Pickup Failed !',
+          type: 'error',
+          icon: 'error',
+          position: 'top',
+        });
+        getPickups();
+      }
     } catch (err) {
       console.error(err);
     }
