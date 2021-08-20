@@ -2,26 +2,17 @@ import React, {useContext, useState, useEffect} from 'react';
 import {
   StyleSheet,
   View,
-  Image,
-  Text,
   SafeAreaView,
   KeyboardAvoidingView,
   ScrollView,
   Platform,
 } from 'react-native';
 import {showMessage} from 'react-native-flash-message';
-import AuthContext from '../../auth/Context';
-import api from '../../api/services';
-import cache from '../../utils/cache';
 
-import {
-  COLORS,
-  FONTS,
-  images,
-  responsiveHeight,
-  responsiveWidth,
-  SIZES,
-} from '../../constants';
+import api from '../../api/services';
+
+import {COLORS, FONTS, responsiveHeight, SIZES} from '../../constants';
+
 import {Button, Input, PickupComponent, DatePicker} from '../../components';
 import {ErrorScreen, LoadingScreen} from '..';
 
@@ -33,6 +24,7 @@ export default function index({route, navigation}) {
   const [selectedCategory, setSelectedCategory] = useState({});
   const [pickupDate, setPickupDate] = useState('');
   const [deliveryDate, setDeliveryDate] = useState('');
+  const [isCategoryDisabled, setCategoryDisabled] = useState(false);
 
   //States For api
 
@@ -41,7 +33,7 @@ export default function index({route, navigation}) {
   const [id, setid] = useState('');
   const [id_location, setId_location] = useState('');
   const [mobile, setMobile] = useState('');
-  const [pickupboy, setPickupboy] = useState('');
+  const [pickupBoy, setPickUpBoy] = useState('');
   const [remarks, setRemarks] = useState('');
   const [user_id, setUser_id] = useState('');
 
@@ -102,16 +94,21 @@ export default function index({route, navigation}) {
       setLoading(true);
       const response = await api.getOrderDetailsById(route.params.orderId);
       if (response.ok !== true) setError(false);
+
       setRemarks(response?.data?.orderDetails?.remarks || '');
-      setAddress(response?.data?.orderDetails?.address);
-      setCategory(response?.data?.orderDetails?.order_categories);
-      setDeliveryDate(response?.data?.orderDetails?.delv_time);
-      setid(response?.data?.orderDetails?.id);
-      setId_location(response?.data?.orderDetails?.id_location);
-      setMobile(response?.data?.orderDetails?.mobile);
-      setPickupDate(response?.data?.orderDetails?.pickup_time);
-      setPickupboy(response?.data?.orderDetails?.pickup_emp);
-      setUser_id(response?.data?.orderDetails?.user_id);
+      setAddress(response?.data?.orderDetails?.address || '');
+      setCategory(response?.data?.orderDetails?.order_categories || '');
+      setDeliveryDate(response?.data?.orderDetails?.delv_time || '');
+      setid(response?.data?.orderDetails?.id || '');
+      setId_location(response?.data?.orderDetails?.id_location || '');
+      setMobile(response?.data?.orderDetails?.mobile || '');
+      setPickupDate(response?.data?.orderDetails?.pickup_time || '');
+      setPickUpBoy(response?.data?.orderDetails?.pickup_emp || '');
+      setUser_id(response?.data?.orderDetails?.user_id) || '';
+
+      if (response?.data?.orderDetails?.order_item_count > 0) {
+        setCategoryDisabled(true);
+      }
 
       //CalL Api function to get categories
       getOrderCategory(response?.data?.orderDetails?.order_categories);
@@ -133,14 +130,15 @@ export default function index({route, navigation}) {
         id_location: id_location,
         mobile: mobile,
         pickup_time: pickupDate,
-        pickupboy: pickupboy,
+        pickupboy: pickupBoy,
         remarks: remarks,
         user_id: user_id,
       };
       const response = await api.updateDeliveredOrder(data);
       if (response.ok !== true) setError(false);
       showMessage({
-        message:
+        message: response.data?.status == true ? 'Success !' : 'Failed !',
+        description:
           response.data?.status == true
             ? response.data?.message
             : 'Order Update Failed !',
@@ -196,6 +194,8 @@ export default function index({route, navigation}) {
             var hoursToAdd = parseInt(item?.hours) || 0;
             setDeliveryDate(dateFormatter(addHoursToDate(date, hoursToAdd)));
           }}
+          disable={isCategoryDisabled}
+          disableMessage="Order already generated, Category Can not be changed!"
         />
 
         {/* Picker Date */}
@@ -212,7 +212,6 @@ export default function index({route, navigation}) {
         />
 
         {/* Delivery Date */}
-
         <DatePicker
           label="Select Delivery Date"
           leftIcon="calendar"
@@ -222,6 +221,8 @@ export default function index({route, navigation}) {
             setDeliveryDate(dateFormatter(date));
           }}
         />
+
+        {/* Remarks */}
         <Input
           placeholder=""
           label="Remarks"
