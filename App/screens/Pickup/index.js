@@ -14,9 +14,14 @@ import {COLORS, images, FONTS} from '../../constants';
 import api from '../../api/services';
 import cache from '../../utils/cache';
 
-import {ErrorScreen, LoadingScreen, EmptyAnimation} from '../../screens';
+import {
+  ErrorScreen,
+  LoadingScreen,
+  EmptyAnimation,
+  PickupEdit,
+} from '../../screens';
 
-const index = () => {
+const index = ({navigation}) => {
   const [pendingOrders, setPendingOrders] = useState([]);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -140,7 +145,9 @@ const index = () => {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => {}}
+            onPress={() => {
+              navigation.navigate('PickupEdit', {orderId: item.id});
+            }}
             style={[
               styles.cardBottomButton,
               {

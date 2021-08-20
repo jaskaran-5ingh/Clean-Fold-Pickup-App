@@ -109,22 +109,6 @@ export default function index({navigation}) {
     }
   }
 
-  function checkProperties(obj) {
-    for (var key in obj) {
-      if (
-        obj[key] !== null &&
-        obj[key] != '' &&
-        obj[key] != ' ' &&
-        obj[key] != undefined
-      ) {
-        return false;
-      } else {
-        return true;
-      }
-    }
-    return true;
-  }
-
   async function handleFormSubmit() {
     setLoading(true);
     let saveOrderObject = {
@@ -176,7 +160,7 @@ export default function index({navigation}) {
           icon: response.data?.status == true ? 'success' : 'danger',
           position: 'right',
         });
-        navigation.navigate('Dashboard');
+        navigation.push('Dashboard');
       }
     }
     setLoading(false);
@@ -307,7 +291,6 @@ export default function index({navigation}) {
           onSelectDate={date => {
             setDeliveryDate(dateFormatter(date));
           }}
-          disabled={true}
         />
 
         {/* Remarks */}
