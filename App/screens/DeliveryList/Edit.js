@@ -92,7 +92,6 @@ export default function index({route, navigation}) {
         remarks: remarks,
         user_id: user_id,
       };
-      console.log(data);
 
       const response = await api.updateDeliveredOrder(data);
       if (response.ok !== true) setError(false);
