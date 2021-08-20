@@ -10,7 +10,9 @@ import {
   Pressable,
   FlatList,
 } from 'react-native';
-import {Icon, Button, ListItem} from 'react-native-elements';
+import {Icon, ListItem} from 'react-native-elements';
+import {showMessage} from 'react-native-flash-message';
+
 import {
   COLORS,
   FONTS,
@@ -30,6 +32,8 @@ const PickerComponent = ({
   placeholder,
   selectedItem,
   onSelectItem,
+  disable = false,
+  disableMessage,
 }) => {
   // Component States
   const [showModal, toggleModal] = useState(isModalVisible);
@@ -56,7 +60,22 @@ const PickerComponent = ({
         <Text style={styles.required}> *</Text>
       </Text>
 
-      <Pressable style={[styles.pickerStyle]} onPress={() => toggleModal(true)}>
+      <Pressable
+        style={[styles.pickerStyle]}
+        onPress={() => {
+          if (disable == false) {
+            toggleModal(true);
+          } else {
+            showMessage({
+              message: 'Warning !',
+              description: disableMessage,
+              backgroundColor: COLORS.orange,
+              type: 'warning',
+              icon: 'warning',
+            });
+            toggleModal(false);
+          }
+        }}>
         <Text
           style={[
             styles.selectedItem,

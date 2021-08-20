@@ -7,19 +7,14 @@ import {
   FlatList,
   Alert,
 } from 'react-native';
-import {Card, Button, Icon} from 'react-native-elements';
+import {Card} from 'react-native-elements';
 import {showMessage} from 'react-native-flash-message';
 
-import {COLORS, images, FONTS} from '../../constants';
+import {COLORS, FONTS} from '../../constants';
 import api from '../../api/services';
 import cache from '../../utils/cache';
 
-import {
-  ErrorScreen,
-  LoadingScreen,
-  EmptyAnimation,
-  PickupEdit,
-} from '../../screens';
+import {LoadingScreen, EmptyAnimation} from '../../screens';
 
 const index = ({navigation}) => {
   const [pendingOrders, setPendingOrders] = useState([]);
@@ -51,7 +46,8 @@ const index = ({navigation}) => {
       let newOrders = pendingOrders.filter(item => item.id !== orderId);
       setPendingOrders(newOrders);
       showMessage({
-        message: 'Order Pickup Success !',
+        message: 'Success !',
+        description: 'Order Pickup Success !',
         type: 'success',
         icon: 'success',
         position: 'top',
@@ -59,7 +55,8 @@ const index = ({navigation}) => {
       const response = await api.donePendingOrder(orderId);
       if (response.ok !== true) {
         showMessage({
-          message: 'Order Pickup Failed !',
+          message: 'Failed !',
+          description: 'Order Pickup Failed !',
           type: 'error',
           icon: 'error',
           position: 'top',
