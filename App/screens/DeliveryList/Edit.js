@@ -34,7 +34,7 @@ export default function index({route, navigation}) {
 
   //States For api
   const [address, setAddress] = useState('');
-  const [category, setCategory] = useState('');
+  const [order_categories, setCategory] = useState('');
   const [delv_time, setDelv_time] = useState('');
   const [id, setid] = useState('');
   const [id_location, setId_location] = useState('');
@@ -57,11 +57,12 @@ export default function index({route, navigation}) {
       setLoading(true);
       const response = await api.getOrderDetailsById(route.params.orderId);
       if (response.ok !== true) setError(false);
+      console.log(response?.data?.orderDetails);
 
       setRemarks(response?.data?.orderDetails?.remarks);
       setDeliveryData(response?.data?.orderDetails);
       setAddress(response?.data?.orderDetails?.address);
-      setCategory(response?.data?.orderDetails?.category);
+      setCategory(response?.data?.orderDetails?.order_categories);
       setDelv_time(response?.data?.orderDetails?.delv_time);
       setid(response?.data?.orderDetails?.id);
       setId_location(response?.data?.orderDetails?.id_location);
@@ -81,7 +82,7 @@ export default function index({route, navigation}) {
       setLoading(true);
       const data = {
         address: address,
-        category: category,
+        category: order_categories,
         delv_time: delv_time,
         id: id,
         id_location: id_location,
@@ -92,6 +93,7 @@ export default function index({route, navigation}) {
         user_id: user_id,
       };
       console.log(data);
+
       const response = await api.updateDeliveredOrder(data);
       if (response.ok !== true) setError(false);
       showMessage({
@@ -104,7 +106,7 @@ export default function index({route, navigation}) {
         position: 'right',
       });
       setLoading(false);
-      navigation.navigate('DeliveryList');
+      navigation.push('DeliveryList');
     } catch (err) {
       console.error(err);
     }
