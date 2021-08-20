@@ -10,6 +10,7 @@ import {
   DeliveryList,
   CreateOrderScreen,
   DeliveryListEdit,
+  PickupEdit,
 } from '../screens';
 import {formatDiagnostics} from 'typescript';
 //Create object for navigation
@@ -43,6 +44,13 @@ export default function AppStackNavigator() {
         label="PICKUPS"
         component={Pickup}
         options={{headerShown: true, title: 'Pickups'}}
+      />
+
+      <Stack.Screen
+        name="PickupEdit"
+        label="PICKUP Edit"
+        component={PickupEdit}
+        options={{headerShown: true, title: 'Pickup Edit'}}
       />
       <Stack.Screen
         name="DeliveryList"
