@@ -13,6 +13,7 @@ import {showMessage} from 'react-native-flash-message';
 import {COLORS, FONTS} from '../../constants';
 import api from '../../api/services';
 import cache from '../../utils/cache';
+import {usePhoneCall} from '../../hooks';
 
 import {LoadingScreen, EmptyAnimation} from '../../screens';
 
@@ -79,11 +80,11 @@ const index = ({navigation}) => {
           }}>
           <View>
             <Text style={styles.cardTitleSmall}>Pickup Time</Text>
-            <Text style={styles.cardTitle}>{item.pickup_time}</Text>
+            <Text style={styles.cardTitle}>{item?.pickup_time}</Text>
           </View>
           <View>
             <Text style={styles.cardTitleSmall}>Order Number</Text>
-            <Text style={styles.cardTitle}>{item.id}</Text>
+            <Text style={styles.cardTitle}>{item?.id}</Text>
           </View>
         </View>
         <Card.Divider />
@@ -98,13 +99,16 @@ const index = ({navigation}) => {
             <Text style={{...FONTS.h4, paddingBottom: 5}}>
               {item?.user?.name}
             </Text>
+            <Text style={{...FONTS.h5, paddingBottom: 5}}>
+              ({item?.user?.mobile})
+            </Text>
             <Text
               style={{
                 ...FONTS.body4,
                 color: COLORS.darkgray,
                 paddingBottom: 5,
               }}>
-              {item.address}
+              {item?.location?.area_name}
             </Text>
           </View>
           <View style={{maxWidth: '50%'}}>
@@ -115,7 +119,7 @@ const index = ({navigation}) => {
                 color: COLORS.darkgray,
                 paddingBottom: 5,
               }}>
-              {item.remarks}
+              {item?.remarks}
             </Text>
           </View>
         </View>
@@ -163,6 +167,16 @@ const index = ({navigation}) => {
               },
             ]}>
             <Text style={{fontSize: 15, color: COLORS.white}}>Bill</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => usePhoneCall(item?.user?.mobile)}
+            style={[
+              styles.cardBottomButton,
+              {
+                backgroundColor: COLORS.darkGreen,
+              },
+            ]}>
+            <Text style={{fontSize: 15, color: COLORS.white}}>Call</Text>
           </TouchableOpacity>
         </View>
       </Card>
