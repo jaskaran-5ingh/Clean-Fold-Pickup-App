@@ -40,7 +40,7 @@ export default function index({navigation}) {
           titleColor="white"
           backgroundColor={COLORS.secondary}
           onPress={() => {
-            navigation.navigate('SignUp');
+            navigation.push('SignUp');
           }}
         />
       </View>

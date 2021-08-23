@@ -1,7 +1,7 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 
-import {COLORS, icons, FONTS} from '../constants';
+import {COLORS, FONTS} from '../constants';
 
 //Screens
 import {
@@ -11,8 +11,9 @@ import {
   CreateOrderScreen,
   DeliveryListEdit,
   PickupEdit,
+  OrderPreviewScreen,
 } from '../screens';
-import {formatDiagnostics} from 'typescript';
+
 //Create object for navigation
 const Stack = createStackNavigator();
 
@@ -69,6 +70,13 @@ export default function AppStackNavigator() {
         component={DeliveryListEdit}
         label="DeliveryListEdit"
         options={{headerShown: true, title: 'Edit Delivery'}}
+      />
+
+      <Stack.Screen
+        name="OrderPreviewScreen"
+        component={OrderPreviewScreen}
+        label="OrderPreviewScreen"
+        options={{headerShown: true, title: 'Order Details'}}
       />
     </Stack.Navigator>
   );

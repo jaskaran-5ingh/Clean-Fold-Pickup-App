@@ -7,11 +7,11 @@ import {
   FlatList,
   Alert,
 } from 'react-native';
-import {Card, Button, Icon} from 'react-native-elements';
+import {Card} from 'react-native-elements';
 import {useIsFocused} from '@react-navigation/native';
 import {showMessage} from 'react-native-flash-message';
 
-import {COLORS, images, FONTS} from '../../constants';
+import {COLORS, FONTS} from '../../constants';
 import api from '../../api/services';
 import cache from '../../utils/cache';
 import {usePhoneCall} from '../../hooks';
@@ -91,7 +91,12 @@ const index = ({navigation}) => {
           </View>
           <View>
             <Text style={styles.cardTitleSmall}>Order Number</Text>
-            <Text style={styles.cardTitle}>{item.id}</Text>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.push('OrderPreviewScreen', {orderId: item.id})
+              }>
+              <Text style={styles.cardTitle}>{item.id}</Text>
+            </TouchableOpacity>
           </View>
         </View>
         <Card.Divider />
@@ -103,11 +108,17 @@ const index = ({navigation}) => {
             padding: 5,
           }}>
           <View style={{maxWidth: '50%'}}>
-            <Text style={{...FONTS.h4, paddingBottom: 5}}>
+            <Text style={{...FONTS.h4, fontWeight: 'bold', paddingBottom: 5}}>
               {item?.user?.name}
             </Text>
-            <Text style={{...FONTS.h5, paddingBottom: 5}}>
-              ({item?.user?.mobile})
+            <Text
+              style={{
+                ...FONTS.body4,
+                paddingBottom: 5,
+                color: COLORS.black,
+                opacity: 0.8,
+              }}>
+              {item?.user?.mobile}
             </Text>
             <Text
               style={{
@@ -154,7 +165,7 @@ const index = ({navigation}) => {
 
           <TouchableOpacity
             onPress={() =>
-              navigation.navigate('DeliveryListEdit', {orderId: item.id})
+              navigation.push('DeliveryListEdit', {orderId: item.id})
             }
             style={[
               styles.cardBottomButton,
