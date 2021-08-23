@@ -138,7 +138,7 @@ export default function index({navigation}) {
           });
 
           if (response.data?.status == 'success') {
-            navigation.navigate('SignIn');
+            navigation.push('SignIn');
           }
         }
         setLoading(false);
