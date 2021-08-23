@@ -7,7 +7,7 @@ import {COLORS, FONTS} from '../../constants';
 const index = ({route, navigation}) => {
   const [loading, setLoading] = useState();
   const [orderDetails, setOrderDetails] = useState();
-  console.log(loading);
+
   useEffect(() => {
     try {
       getOrderDetails();

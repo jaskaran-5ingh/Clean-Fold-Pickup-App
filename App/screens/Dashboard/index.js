@@ -124,7 +124,11 @@ const index = ({navigation}) => {
   // Call Api After 2 Minutes
   useEffect(() => {
     const interval = setInterval(() => {
-      getDashboardData();
+      try {
+        getDashboardData();
+      } catch (error) {
+        console.error(error);
+      }
     }, 20000);
     return () => {
       {

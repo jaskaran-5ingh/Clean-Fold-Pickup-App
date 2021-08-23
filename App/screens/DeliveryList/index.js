@@ -86,16 +86,16 @@ const index = ({navigation}) => {
             padding: 10,
           }}>
           <View>
-            <Text style={styles.cardTitleSmall}>Pickup Time</Text>
-            <Text style={styles.cardTitle}>{item.pickup_time}</Text>
+            <Text style={styles.cardTitleSmall}>Delivery Date</Text>
+            <Text style={styles.cardTitle}>{item?.delv_time}</Text>
           </View>
           <View>
             <Text style={styles.cardTitleSmall}>Order Number</Text>
             <TouchableOpacity
               onPress={() =>
-                navigation.push('OrderPreviewScreen', {orderId: item.id})
+                navigation.push('OrderPreviewScreen', {orderId: item?.id})
               }>
-              <Text style={styles.cardTitle}>{item.id}</Text>
+              <Text style={styles.cardTitle}>{item?.id}</Text>
             </TouchableOpacity>
           </View>
         </View>
