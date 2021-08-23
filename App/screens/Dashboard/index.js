@@ -121,6 +121,18 @@ const index = ({navigation}) => {
     }
   }, [isFocused]);
 
+  // Call Api After 2 Minutes
+  useEffect(() => {
+    const interval = setInterval(() => {
+      getDashboardData();
+    }, 20000);
+    return () => {
+      {
+        clearInterval(interval);
+      }
+    };
+  }, []);
+
   async function getDashboardData() {
     setLoading(true);
     cache.get('user').then(async user => {

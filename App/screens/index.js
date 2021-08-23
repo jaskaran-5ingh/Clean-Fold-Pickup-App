@@ -9,7 +9,7 @@ import PickupEdit from './Pickup/Edit';
 import DeliveryList from './DeliveryList';
 import DeliveryListEdit from './DeliveryList/Edit';
 import CreateOrderScreen from './CreateOrderScreen';
-
+import OrderPreviewScreen from './OrderPreviewScreen';
 //App Screens
 import Dashboard from './Dashboard';
 
@@ -25,4 +25,5 @@ export {
   PickupEdit,
   EmptyAnimation,
   CreateOrderScreen,
+  OrderPreviewScreen,
 };
