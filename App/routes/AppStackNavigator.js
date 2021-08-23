@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useContext} from 'react';
+import {TouchableOpacity} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
-
 import {COLORS, FONTS} from '../constants';
-
+import AuthContext from '../auth/Context';
+import cache from '../utils/cache';
 //Screens
 import {
   Dashboard,
@@ -13,11 +14,23 @@ import {
   PickupEdit,
   OrderPreviewScreen,
 } from '../screens';
+import {Icon} from 'react-native-elements/dist/icons/Icon';
 
 //Create object for navigation
 const Stack = createStackNavigator();
 
 export default function AppStackNavigator() {
+  const authContext = useContext(AuthContext);
+  function logout() {
+    try {
+      authContext.setUser(null);
+      cache.store('user', null);
+    } catch (error) {
+      console.error(error);
+    }
+    return null;
+  }
+
   return (
     <Stack.Navigator
       initialRouteName="Dashboard"
@@ -33,12 +46,34 @@ export default function AppStackNavigator() {
           ...FONTS.h4,
         },
         headerTintColor: COLORS.white,
-        headerRight: () => null,
       })}>
       <Stack.Screen
         name="Dashboard"
         component={Dashboard}
-        options={{headerShown: true}}
+        options={{
+          headerShown: true,
+          headerRight: ({color, size}) => {
+            return (
+              <TouchableOpacity
+                onPress={() => {
+                  logout();
+                }}
+                style={{
+                  padding: 5,
+                  borderRadius: 10,
+                  marginRight: 10,
+                  backgroundColor: COLORS.red,
+                }}>
+                <Icon
+                  name="sign-out"
+                  type="font-awesome"
+                  size={size}
+                  color="white"
+                />
+              </TouchableOpacity>
+            );
+          },
+        }}
       />
       <Stack.Screen
         name="Pickup"
