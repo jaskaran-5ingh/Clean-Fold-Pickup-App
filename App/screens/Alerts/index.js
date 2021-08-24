@@ -17,7 +17,6 @@ import {
   responsiveFontSize,
   responsiveHeight,
   SIZES,
-  icons,
 } from '../../constants';
 import {ErrorScreen, LoadingScreen} from '../../screens';
 import {BottomSheet, ListItem, Button} from 'react-native-elements';
@@ -199,17 +198,8 @@ export default function App({navigation}) {
                 <Pressable
                   style={styles.bottomSheetInnerContainer}
                   onPress={() => setModelVisible(false)}>
-                  <TouchableOpacity onPress={() => setModelVisible(false)}>
-                    <Image
-                      source={icons.back}
-                      resizeMode="contain"
-                      tintColor={COLORS.primary}
-                      style={{
-                        height: responsiveHeight(7),
-                        width: responsiveWidth(6),
-                      }}
-                    />
-                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => setModelVisible(false)}></TouchableOpacity>
                   <View>
                     <ListItem bottomDivider>
                       <ListItem.Content>
