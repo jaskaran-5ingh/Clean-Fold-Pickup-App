@@ -20,6 +20,7 @@ const Input = ({
   onRightIconPress = () => {},
   rightLoadingComponent = null,
   rightIcon = null,
+  required = false,
   ...otherProps
 }) => {
   // Component States
@@ -41,7 +42,7 @@ const Input = ({
       }}>
       <Text style={styles.labelText}>
         {label}
-        <Text style={styles.required}> *</Text>
+        {required ? <Text style={styles.required}> *</Text> : null}
       </Text>
 
       <TextInput

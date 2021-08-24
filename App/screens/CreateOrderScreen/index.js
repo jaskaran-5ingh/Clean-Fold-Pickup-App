@@ -125,7 +125,6 @@ export default function index({navigation}) {
     if (
       idLocation == '' ||
       userId == '' ||
-      remarks == '' ||
       mobile == '' ||
       address == '' ||
       pickupBoy == '' ||
@@ -141,26 +140,30 @@ export default function index({navigation}) {
         icon: 'danger',
       });
     } else {
-      response = await api.createOrder(saveOrderObject);
-      if (response.ok !== true) {
-        showMessage({
-          message: 'Something went wrong !',
-          description: 'Please try again latter',
-          backgroundColor: COLORS.red,
-          type: 'danger',
-          icon: 'danger',
-        });
-      } else {
-        showMessage({
-          message:
-            response.data?.status == true
-              ? response.data?.message
-              : 'Order Saved Failed !',
-          type: response.data?.status == true ? 'success' : 'danger',
-          icon: response.data?.status == true ? 'success' : 'danger',
-          position: 'right',
-        });
-        navigation.push('Dashboard');
+      try {
+        response = await api.createOrder(saveOrderObject);
+        if (response.ok !== true) {
+          showMessage({
+            message: 'Something went wrong !',
+            description: 'Please try again latter',
+            backgroundColor: COLORS.red,
+            type: 'danger',
+            icon: 'danger',
+          });
+        } else {
+          showMessage({
+            message:
+              response.data?.status == true
+                ? response.data?.message
+                : 'Order Saved Failed !',
+            type: response.data?.status == true ? 'success' : 'danger',
+            icon: response.data?.status == true ? 'success' : 'danger',
+            position: 'right',
+          });
+          navigation.push('Dashboard');
+        }
+      } catch (error) {
+        console.error(error);
       }
     }
     setLoading(false);
@@ -236,6 +239,7 @@ export default function index({navigation}) {
             }
           }}
           maxLength={10}
+          required={true}
         />
 
         {/* Name */}
@@ -249,6 +253,7 @@ export default function index({navigation}) {
           }}
           placeholder="Enter Name"
           rightLoadingComponent={loadingUserDetails}
+          required={true}
         />
 
         {/* Category */}
