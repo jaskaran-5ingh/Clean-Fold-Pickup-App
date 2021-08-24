@@ -34,6 +34,7 @@ const PickerComponent = ({
   onSelectItem,
   disable = false,
   disableMessage,
+  required = false,
 }) => {
   // Component States
   const [showModal, toggleModal] = useState(isModalVisible);
@@ -57,7 +58,7 @@ const PickerComponent = ({
       }}>
       <Text style={styles.labelText}>
         {label}
-        <Text style={styles.required}> *</Text>
+        {required ? <Text style={styles.required}> *</Text> : null}
       </Text>
 
       <Pressable
