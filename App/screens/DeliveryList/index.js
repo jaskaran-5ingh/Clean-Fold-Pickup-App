@@ -14,7 +14,6 @@ import {showMessage} from 'react-native-flash-message';
 import {COLORS, FONTS} from '../../constants';
 import api from '../../api/services';
 import cache from '../../utils/cache';
-import {usePhoneCall} from '../../hooks';
 
 import {ErrorScreen, LoadingScreen, EmptyAnimation} from '../../screens';
 
@@ -93,9 +92,17 @@ const index = ({navigation}) => {
             <Text style={styles.cardTitleSmall}>Order Number</Text>
             <TouchableOpacity
               onPress={() =>
-                navigation.push('OrderPreviewScreen', {orderId: item?.id})
-              }>
-              <Text style={styles.cardTitle}>{item?.id}</Text>
+                navigation.push('OrderPreviewScreen', {orderId: item.id})
+              }
+              style={[
+                {
+                  backgroundColor: COLORS.darkGreen,
+                  padding: 2,
+                  borderRadius: 4,
+                },
+                styles.cardBottomButton,
+              ]}>
+              <Text style={{fontSize: 15, color: COLORS.white}}>{item.id}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -109,15 +116,6 @@ const index = ({navigation}) => {
           }}>
           <View style={{maxWidth: '50%'}}>
             <Text style={{...FONTS.h4, fontWeight: 'bold', paddingBottom: 5}}>
-              {item?.user?.name}
-            </Text>
-            <Text
-              style={{
-                ...FONTS.body4,
-                paddingBottom: 5,
-                color: COLORS.black,
-                opacity: 0.8,
-              }}>
               {item?.user?.mobile}
             </Text>
             <Text
@@ -134,7 +132,8 @@ const index = ({navigation}) => {
             <Text
               style={{
                 ...FONTS.body4,
-                color: COLORS.darkgray,
+                color: COLORS.red,
+
                 paddingBottom: 5,
               }}>
               {item.remarks}
@@ -185,17 +184,6 @@ const index = ({navigation}) => {
               },
             ]}>
             <Text style={{fontSize: 15, color: COLORS.white}}>Bill</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => usePhoneCall(item?.user?.mobile)}
-            style={[
-              styles.cardBottomButton,
-              {
-                backgroundColor: COLORS.darkGreen,
-              },
-            ]}>
-            <Text style={{fontSize: 15, color: COLORS.white}}>Call</Text>
           </TouchableOpacity>
         </View>
       </Card>
@@ -248,11 +236,12 @@ const index = ({navigation}) => {
 
 const styles = StyleSheet.create({
   cardBottomButton: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 10,
-    flex: 1,
+    elevation: 5,
   },
   cardTitle: {...FONTS.h4, color: COLORS.primary, fontWeight: 'bold'},
   cardTitleSmall: {
