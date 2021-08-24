@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, Text, ScrollView} from 'react-native';
+import {View, StyleSheet, ActivityIndicator} from 'react-native';
 import {Tab, TabView, Badge} from 'react-native-elements';
 import api from '../../api/services';
 import {Card} from 'react-native-elements';
@@ -7,9 +7,12 @@ import {COLORS, FONTS} from '../../constants';
 import OrderDetails from './OrderDetails';
 import OrderItems from './OrderItems';
 const index = ({route, navigation}) => {
-  const [loading, setLoading] = useState();
+  const [loading, setLoading] = useState(true);
   const [orderDetails, setOrderDetails] = useState();
-  const [index, setIndex] = useState(0);
+  const [orderItemsCount, setOrderItemsCount] = useState(0);
+  const [orderItems, setOrderItems] = useState([]);
+  const [orderCategory, setOrderCategory] = useState('');
+  const [index, setIndex] = useState(1);
 
   useEffect(() => {
     try {
@@ -25,9 +28,12 @@ const index = ({route, navigation}) => {
       const response = await api.getOrderDetailsByOrderId(
         route?.params?.orderId,
       );
-      console.log(response);
-      setOrderDetails(response?.data?.orderDetails);
-      setLoading(true);
+      console.log(response?.data);
+      setOrderDetails(response?.data?.data);
+      setOrderItemsCount(response?.data?.data?.order_item.length);
+      setOrderItems(response?.data?.data?.order_item);
+      setOrderCategory(response?.data?.order_categories[0]);
+      setLoading(false);
     } catch (err) {
       console.error(err);
     }
@@ -86,7 +92,7 @@ const index = ({route, navigation}) => {
           />
           <Badge
             status="error"
-            value="10"
+            value={orderItemsCount}
             containerStyle={{
               position: 'absolute',
               top: -8,
@@ -104,10 +110,43 @@ const index = ({route, navigation}) => {
 
       <TabView value={index} onChange={setIndex}>
         <TabView.Item style={{width: '100%', flex: 1}}>
-          <OrderDetails />
+          <>
+            {loading ? (
+              <View
+                style={{
+                  flex: 0.8,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <ActivityIndicator color={COLORS.primary} size={50} />
+              </View>
+            ) : (
+              <OrderDetails
+                orderData={orderDetails}
+                orderCategory={orderCategory}
+              />
+            )}
+          </>
         </TabView.Item>
         <TabView.Item style={{width: '100%', flex: 1}}>
-          <OrderItems />
+          <>
+            {loading ? (
+              <View
+                style={{
+                  flex: 0.8,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <ActivityIndicator color={COLORS.primary} size={50} />
+              </View>
+            ) : (
+              <OrderItems
+                orderItems={orderItems}
+                orderCategory={orderCategory}
+                orderId={orderDetails?.id}
+              />
+            )}
+          </>
         </TabView.Item>
       </TabView>
     </View>

@@ -194,7 +194,7 @@ export default function index({route, navigation}) {
             var hoursToAdd = parseInt(item?.hours) || 0;
             setDeliveryDate(dateFormatter(addHoursToDate(date, hoursToAdd)));
           }}
-          disable={isCategoryDisabled}
+          disable={true}
           disableMessage="Order already generated, Category Can not be changed!"
         />
 
@@ -209,6 +209,7 @@ export default function index({route, navigation}) {
             var hoursToAdd = parseInt(selectedCategory?.hours) || 0;
             setDeliveryDate(dateFormatter(addHoursToDate(date, hoursToAdd)));
           }}
+          disable={true}
         />
 
         {/* Delivery Date */}
@@ -220,6 +221,7 @@ export default function index({route, navigation}) {
           onSelectDate={date => {
             setDeliveryDate(dateFormatter(date));
           }}
+          disable={true}
         />
 
         {/* Remarks */}

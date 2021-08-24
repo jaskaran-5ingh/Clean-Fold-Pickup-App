@@ -3,7 +3,7 @@ import {View, StyleSheet, Text, ScrollView} from 'react-native';
 import {Card, Badge} from 'react-native-elements';
 import {COLORS, FONTS} from '../../constants';
 
-const index = ({route, navigation}) => {
+const index = ({orderData, orderCategory}) => {
   return (
     <View style={styles.container}>
       <Card style={{position: 'relative', width: '100%', height: 'auto'}}>
@@ -26,12 +26,12 @@ const index = ({route, navigation}) => {
                   color: COLORS.black,
                 },
               ]}>
-              10-05-2021
+              {orderData?.formated_date}
             </Text>
           </View>
           <View>
             <Text style={styles.cardTitle}>Order Id</Text>
-            <Text style={styles.cardTitleSmall}>598431256</Text>
+            <Text style={styles.cardTitleSmall}>{orderData?.id}</Text>
           </View>
         </View>
         <Card.Divider />
@@ -39,46 +39,60 @@ const index = ({route, navigation}) => {
           <View>
             <View style={styles.cardDivider}>
               <Text style={styles.cardTitleDark}>Pickup Date</Text>
-              <Text style={styles.cardTitleSmall}>10-05-2021</Text>
+              <Text style={styles.cardTitleSmall}>
+                {orderData?.pickup_time}
+              </Text>
             </View>
 
             <View style={styles.cardDivider}>
               <Text style={styles.cardTitleDark}>Delivery Date</Text>
-              <Text style={styles.cardTitleSmall}>14-05-2021</Text>
+              <Text style={styles.cardTitleSmall}>{orderData?.delv_time}</Text>
             </View>
+
             <Card.Divider />
 
             <View style={styles.cardDivider}>
               <Text style={styles.cardTitleDark}>Mobile</Text>
               <Text style={[styles.cardTitleDark, {color: COLORS.primary}]}>
-                9530654704
+                {orderData?.mobile}
               </Text>
             </View>
             <View style={styles.cardDivider}>
               <Text style={styles.cardTitleDark}>Order Type</Text>
-              <Text style={styles.cardTitleSmall}>Normal</Text>
+              <Text style={styles.cardTitleSmall}>{orderData?.order_type}</Text>
             </View>
             <View style={styles.cardDivider}>
               <Text style={styles.cardTitleDark}>Name </Text>
-              <Text style={styles.cardTitleSmall}>Jaskaran Singh</Text>
+              <Text style={styles.cardTitleSmall}> {orderData?.mobile}</Text>
             </View>
 
             <View style={styles.cardDivider}>
               <Text style={styles.cardTitleDark}>Order From </Text>
-              <Text style={styles.cardTitleSmall}>Administration</Text>
+              <Text style={styles.cardTitleSmall}>
+                {orderData?.order_through == 'mobile_app'
+                  ? 'Mobile App'
+                  : 'Adminstration'}
+              </Text>
             </View>
 
             <View style={styles.cardDivider}>
               <Text style={styles.cardTitleDark}>Address </Text>
               <Text style={[styles.cardTitleDark, {color: COLORS.primary}]}>
-                143606,ChetanPura, Amrtisar
+                {orderData?.address}
               </Text>
             </View>
 
             <View style={styles.cardDivider}>
               <Text style={styles.cardTitleDark}>Locality </Text>
               <Text style={[styles.cardTitleDark, {color: COLORS.primary}]}>
-                Amrtisar
+                {orderData?.location?.area_name}
+              </Text>
+            </View>
+            <Card.Divider />
+            <View style={styles.cardDivider}>
+              <Text style={styles.cardTitleDark}>Category </Text>
+              <Text style={[styles.cardTitleDark, {color: COLORS.primary}]}>
+                {orderCategory}
               </Text>
             </View>
           </View>
