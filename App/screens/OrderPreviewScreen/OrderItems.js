@@ -1,12 +1,20 @@
 import React from 'react';
-import {View, StyleSheet, Text, ScrollView} from 'react-native';
+import {View, StyleSheet, Text, FlatList} from 'react-native';
 import {Card} from 'react-native-elements';
 import {COLORS, FONTS} from '../../constants';
 
-const index = ({route, navigation}) => {
+const index = ({orderItems, orderCategory, orderId}) => {
+  console.log(orderItems);
   return (
     <View style={styles.container}>
-      <Card style={{position: 'relative', width: '100%', height: 'auto'}}>
+      <View
+        style={{
+          position: 'relative',
+          width: '100%',
+          height: 'auto',
+          paddingVertical: 3,
+          paddingHorizontal: 4,
+        }}>
         <View
           style={{
             flexDirection: 'row',
@@ -15,17 +23,79 @@ const index = ({route, navigation}) => {
             paddingHorizontal: 10,
             paddingVertical: 8,
             backgroundColor: COLORS.lightGray,
+            marginBottom: 10,
           }}>
-          <View
-            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-            <Text style={styles.cardTitle}>Order Items List</Text>
+          <View>
+            <Text>Order Id</Text>
+            <Text style={{fontWeight: 'bold', marginTop: 5}}>{orderId}</Text>
+          </View>
+
+          <View>
+            <Text>Order Category</Text>
+            <Text style={{fontWeight: 'bold', marginTop: 5}}>
+              {orderCategory}
+            </Text>
           </View>
         </View>
-        <Card.Divider />
-        <ScrollView>
-          <Text>Items</Text>
-        </ScrollView>
-      </Card>
+
+        <View
+          style={{
+            flexDirection: 'row',
+            paddingHorizontal: 10,
+            backgroundColor: COLORS.primary,
+            paddingVertical: 10,
+            color: COLORS.white,
+          }}>
+          <Text style={styles.cardTitle}>Item</Text>
+          <Text style={styles.cardTitle}>Price</Text>
+          <Text style={styles.cardTitle}>Dis.%</Text>
+          <Text style={styles.cardTitle}>Qty</Text>
+          <Text style={styles.cardTitle}>Total</Text>
+        </View>
+        <FlatList
+          data={orderItems}
+          keyExtractor={item => `${item.id}`}
+          renderItem={({item, index}) => {
+            console.log(item);
+            return (
+              <>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    padding: 6,
+                    width: '100%',
+                    marginTop: 6,
+                  }}>
+                  <Text style={styles.cardTitleSmall}>
+                    {item?.product?.title}
+                  </Text>
+                  <Text style={styles.cardTitleSmall}>{item?.price}</Text>
+                  <Text style={styles.cardTitleSmall}>
+                    {item?.product?.discount_product}%
+                  </Text>
+                  <Text style={styles.cardTitleSmall}>1X{item?.qty}</Text>
+                  <Text style={styles.cardTitleSmall}>{item?.qty}</Text>
+                </View>
+                <Card.Divider />
+              </>
+            );
+          }}
+        />
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            paddingHorizontal: 10,
+          }}>
+          <Text>Total</Text>
+          <Text></Text>
+          <Text></Text>
+          <Text></Text>
+          <Text></Text>
+          <Text></Text>
+        </View>
+      </View>
     </View>
   );
 };
@@ -35,12 +105,17 @@ const styles = StyleSheet.create({
     padding: 3,
     flex: 1,
   },
-  cardTitle: {...FONTS.h5, color: COLORS.primary, fontWeight: 'bold'},
+  cardTitle: {
+    ...FONTS.h5,
+    color: COLORS.white,
+    fontWeight: 'bold',
+    width: '22%',
+  },
   cardTitleSmall: {
     ...FONTS.body4,
     color: COLORS.darkTransparent,
     paddingBottom: 4,
-    opacity: 0.8,
+    width: '22%',
   },
   cardTitleDark: {
     ...FONTS.h5,

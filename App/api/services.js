@@ -46,7 +46,8 @@ const getOrderDetailsById = orderId => {
 };
 
 const getOrderDetailsByOrderId = orderId => {
-  return apiClient.get(endPoint.getOrderDetailsByOrderId + '/' + orderId);
+  //  +'/' + orderId;
+  return apiClient.get(endPoint.getOrderDetailsByOrderId);
 };
 
 const getOrderCategory = () => {

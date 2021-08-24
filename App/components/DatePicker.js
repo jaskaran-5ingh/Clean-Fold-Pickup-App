@@ -31,11 +31,11 @@ const index = ({
   selectedItem,
   onSelectDate,
   disabled = false,
+  required = false,
 }) => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const showDatePicker = () => {
-    if (!disabled) {
-      console.log(disabled);
+    if (disabled) {
       setDatePickerVisibility(true);
     }
   };
@@ -56,14 +56,20 @@ const index = ({
       }}>
       <Text style={styles.labelText}>
         {label}
-        <Text style={styles.required}> *</Text>
+        {required ? <Text style={styles.required}> *</Text> : null}
       </Text>
 
       <Pressable style={[styles.pickerStyle]} onPress={() => showDatePicker()}>
         <Text
           style={[
             styles.selectedItem,
-            {color: selectedItem ? COLORS.darkTransparent : COLORS.gray},
+            {
+              color: selectedItem
+                ? disabled
+                  ? COLORS.darkTransparent
+                  : COLORS.darkgray
+                : COLORS.gray,
+            },
           ]}>
           {selectedItem ? selectedItem : placeholder}
         </Text>
