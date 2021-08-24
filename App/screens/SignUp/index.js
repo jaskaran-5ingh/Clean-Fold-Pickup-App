@@ -20,7 +20,6 @@ import cache from '../../utils/cache';
 import {
   COLORS,
   FONTS,
-  icons,
   images,
   responsiveHeight,
   responsiveWidth,
@@ -272,15 +271,6 @@ export default function index({navigation}) {
               flexDirection: 'row',
               alignItems: 'center',
             }}>
-            <Image
-              source={icons.back}
-              resizeMode="contain"
-              tintColor={COLORS.white}
-              style={{
-                height: responsiveHeight(7),
-                width: responsiveWidth(6),
-              }}
-            />
             <Text style={{fontSize: 20, color: COLORS.white, marginLeft: 20}}>
               Terms And Conditions
             </Text>
@@ -434,19 +424,6 @@ export default function index({navigation}) {
                         justifyContent: 'space-between',
                       }}
                       onPress={() => setModelVisible(true)}>
-                      <Image
-                        source={
-                          termsAndConditions == true
-                            ? icons.checked
-                            : icons.unchecked
-                        }
-                        resizeMode="contain"
-                        tintColor={COLORS.primary}
-                        style={{
-                          height: responsiveWidth(7),
-                          width: responsiveWidth(6),
-                        }}
-                      />
                       <Text style={{marginLeft: 20}}>Terms and conditions</Text>
                     </TouchableOpacity>
                   </View>

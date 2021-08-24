@@ -17,7 +17,6 @@ import {
   responsiveFontSize,
   responsiveHeight,
   SIZES,
-  icons,
 } from '../../constants';
 import {ErrorScreen, LoadingScreen} from '../../screens';
 import {BottomSheet, ListItem, Button} from 'react-native-elements';
@@ -103,12 +102,7 @@ export default function App({navigation}) {
                 left: -10,
                 width: 30,
                 height: 30,
-              }}>
-              <Image
-                source={icons.bell}
-                style={{width: 25, height: 25, tintColor: COLORS.secondary}}
-              />
-            </View>
+              }}></View>
             <View style={{flex: 1}}>
               <View style={{flex: 1}}>
                 <Text
