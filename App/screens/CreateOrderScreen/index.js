@@ -7,22 +7,45 @@ import {
   ScrollView,
   Platform,
 } from 'react-native';
-import {showMessage} from 'react-native-flash-message';
 import {LinearProgress} from 'react-native-elements';
+import {showMessage} from 'react-native-flash-message';
 
 import AuthContext from '../../auth/Context';
-import api from '../../api/services';
-import cache from '../../utils/cache';
 
 import {
-  COLORS,
-  FONTS,
-  responsiveHeight,
-  responsiveWidth,
-  SIZES,
-} from '../../constants';
+  createOrder,
+  getOrderCategory as getOrderCategoryApi,
+  getUserByMobile as getUserByMobileApi,
+} from '../../api/services';
+
+import cache from '../../utils/cache';
+
+import {COLORS, FONTS, responsiveHeight, SIZES} from '../../constants';
 import {Button, DatePicker, Input, PickupComponent} from '../../components';
 import {ErrorScreen, LoadingScreen} from '..';
+
+const dateFormatter = currentDate => {
+  try {
+    let dd = currentDate.getDate();
+    let mm = currentDate.getMonth() + 1;
+    const yyyy = currentDate.getFullYear();
+
+    if (dd < 10) {
+      dd = `0${dd}`;
+    }
+
+    if (mm < 10) {
+      mm = `0${mm}`;
+    }
+    return `${yyyy}-${mm}-${dd}`;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const addHoursToDate = (date, hours) => {
+  return new Date(new Date(date).setHours(date.getHours() + hours));
+};
 
 export default function index({navigation}) {
   //Deceleration Of Context
@@ -49,7 +72,6 @@ export default function index({navigation}) {
   //Call Api Only Once when components loads
   useEffect(() => {
     getOrderCategory();
-
     var date = new Date();
     setPickupDate(dateFormatter(date));
     setDeliveryDate(dateFormatter(date));
@@ -66,33 +88,11 @@ export default function index({navigation}) {
     };
   }, []);
 
-  const dateFormatter = currentDate => {
-    try {
-      let dd = currentDate.getDate();
-      let mm = currentDate.getMonth() + 1;
-      const yyyy = currentDate.getFullYear();
-
-      if (dd < 10) {
-        dd = `0${dd}`;
-      }
-
-      if (mm < 10) {
-        mm = `0${mm}`;
-      }
-      return `${yyyy}-${mm}-${dd}`;
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  function addHoursToDate(date, hours) {
-    return new Date(new Date(date).setHours(date.getHours() + hours));
-  }
   // states handling functions
 
-  async function getOrderCategory() {
+  const getOrderCategory = async () => {
     try {
-      const response = await api.getOrderCategory();
+      const response = await getOrderCategoryApi();
       if (response.ok !== true) {
         showMessage({
           message: 'Something went wrong !',
@@ -107,9 +107,9 @@ export default function index({navigation}) {
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
-  async function handleFormSubmit() {
+  const handleFormSubmit = async () => {
     setLoading(true);
     let saveOrderObject = {
       category: category,
@@ -141,7 +141,7 @@ export default function index({navigation}) {
         icon: 'danger',
       });
     } else {
-      response = await api.createOrder(saveOrderObject);
+      response = await createOrder(saveOrderObject);
       if (response.ok !== true) {
         showMessage({
           message: 'Something went wrong !',
@@ -164,12 +164,12 @@ export default function index({navigation}) {
       }
     }
     setLoading(false);
-  }
+  };
 
-  async function getUserByMobile(mobile) {
+  const getUserByMobile = async mobile => {
     try {
       setUserDetails(true);
-      const response = await api.getUserByMobile(mobile);
+      const response = await getUserByMobileApi(mobile);
       if (response.ok !== true) {
         showMessage({
           message: 'Something went wrong !',
@@ -198,7 +198,8 @@ export default function index({navigation}) {
     } catch (error) {
       console.error(error);
     }
-  }
+  };
+
   //Component Renders
   function renderButtons() {
     return (
@@ -309,7 +310,6 @@ export default function index({navigation}) {
   return (
     <>
       {loadingUserDetails ? <LinearProgress color="dodgerblue" /> : null}
-
       <SafeAreaView style={styles.container}>
         {error == true ? (
           <ErrorScreen />
@@ -318,16 +318,13 @@ export default function index({navigation}) {
             {loading == true ? (
               <LoadingScreen />
             ) : (
-              <>
-                <ScrollView>
-                  <KeyboardAvoidingView
-                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-                    {/* Text Input */}
-                    {renderInputFields()}
-                    {renderButtons()}
-                  </KeyboardAvoidingView>
-                </ScrollView>
-              </>
+              <ScrollView>
+                <KeyboardAvoidingView
+                  behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+                  {renderInputFields()}
+                  {renderButtons()}
+                </KeyboardAvoidingView>
+              </ScrollView>
             )}
           </>
         )}

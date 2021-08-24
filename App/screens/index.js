@@ -1,29 +1,30 @@
 //Auth Screens
-import Welcome from './Welcome';
 import SignIn from './SignIn';
-import ErrorScreen from './ErrorScreen';
-import EmptyAnimation from './EmptyAnimation';
-import LoadingScreen from './LoadingScreen';
-import Pickup from './Pickup';
-import PickupEdit from './Pickup/Edit';
+
+//App Screens
+import CreateOrderScreen from './CreateOrderScreen';
+import Dashboard from './Dashboard';
 import DeliveryList from './DeliveryList';
 import DeliveryListEdit from './DeliveryList/Edit';
-import CreateOrderScreen from './CreateOrderScreen';
 import OrderPreviewScreen from './OrderPreviewScreen';
-//App Screens
-import Dashboard from './Dashboard';
+import Pickup from './Pickup';
+import PickupEdit from './Pickup/Edit';
+
+//Other Screens
+import EmptyAnimation from './EmptyAnimation';
+import ErrorScreen from './ErrorScreen';
+import LoadingScreen from './LoadingScreen';
 
 export {
-  Welcome,
-  SignIn,
-  LoadingScreen,
-  ErrorScreen,
+  CreateOrderScreen,
   Dashboard,
-  Pickup,
   DeliveryList,
   DeliveryListEdit,
-  PickupEdit,
   EmptyAnimation,
-  CreateOrderScreen,
+  ErrorScreen,
+  LoadingScreen,
   OrderPreviewScreen,
+  Pickup,
+  PickupEdit,
+  SignIn,
 };
