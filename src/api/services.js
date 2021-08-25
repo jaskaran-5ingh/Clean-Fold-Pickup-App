@@ -10,7 +10,7 @@ const endPoint = {
     getOrdersList: '/get/orders/list',
     getOrderCategory: '/get/OrderCategory',
     getOrderDetailsById: '/get/order-detail',
-    getOrderDetailsByOrderId: '/get/order-detailById/105984',
+    getOrderDetailsByOrderId: '/get/order-detailById',
     getUserByMobile: '/get/user',
     updateDeliveredOrder: '/edit-order',
     getRateList:'/getCategoryProduct/1'
@@ -48,7 +48,7 @@ const getOrderDetailsById = orderId => {
 
 const getOrderDetailsByOrderId = orderId => {
     //  +'/' + orderId;
-    return apiClient.get(endPoint.getOrderDetailsByOrderId);
+    return apiClient.get(endPoint.getOrderDetailsByOrderId+  '/' + orderId);
 };
 
 const getOrderCategory = () => {
