@@ -15,12 +15,13 @@ const index = ({
                    placeholder,
                    selectedItem,
                    onSelectDate,
-                   disabled = false,
+                   disabled,
                    required = false,
                }) => {
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const showDatePicker = () => {
-        if (disabled) {
+        console.log(disabled)
+        if (disabled != true) {
             setDatePickerVisibility(true);
         }
     };
@@ -50,9 +51,7 @@ const index = ({
                         styles.selectedItem,
                         {
                             color: selectedItem
-                                ? disabled
-                                    ? COLORS.darkTransparent
-                                    : COLORS.darkgray
+                                ? COLORS.darkTransparent
                                 : COLORS.gray,
                         },
                     ]}>

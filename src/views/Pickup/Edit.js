@@ -173,49 +173,49 @@ export default function index({route, navigation}) {
                 {/* mobile */}
 
                 {/* Category */}
-                <PickupComponent
-                    label="Categories"
-                    leftIcon="bars"
-                    data={orderCategories}
-                    selectedItem={selectedCategory}
-                    placeholder="Select Category"
-                    onSelectItem={item => {
-                        setSelectedCategory(item);
-                        setCategory(item.id);
-                        var date = new Date();
-                        setPickupDate(dateFormatter(date));
-                        var hoursToAdd = parseInt(item?.hours) || 0;
-                        setDeliveryDate(dateFormatter(addHoursToDate(date, hoursToAdd)));
-                    }}
-                    disable={true}
-                    disableMessage="Order already generated, Category Can not be changed!"
-                />
+                {/*<PickupComponent*/}
+                {/*    label="Categories"*/}
+                {/*    leftIcon="bars"*/}
+                {/*    data={orderCategories}*/}
+                {/*    selectedItem={selectedCategory}*/}
+                {/*    placeholder="Select Category"*/}
+                {/*    onSelectItem={item => {*/}
+                {/*        setSelectedCategory(item);*/}
+                {/*        setCategory(item.id);*/}
+                {/*        var date = new Date();*/}
+                {/*        setPickupDate(dateFormatter(date));*/}
+                {/*        var hoursToAdd = parseInt(item?.hours) || 0;*/}
+                {/*        setDeliveryDate(dateFormatter(addHoursToDate(date, hoursToAdd)));*/}
+                {/*    }}*/}
+                {/*    disable={true}*/}
+                {/*    disableMessage="Order already generated, Category Can not be changed!"*/}
+                {/*/>*/}
 
                 {/* Picker Date */}
-                <DatePicker
-                    label="Select Pickup Date"
-                    leftIcon="calendar"
-                    selectedItem={pickupDate}
-                    placeholder="Select Date"
-                    onSelectDate={date => {
-                        setPickupDate(dateFormatter(date));
-                        var hoursToAdd = parseInt(selectedCategory?.hours) || 0;
-                        setDeliveryDate(dateFormatter(addHoursToDate(date, hoursToAdd)));
-                    }}
-                    disable={true}
-                />
+                {/*<DatePicker*/}
+                {/*    label="Select Pickup Date"*/}
+                {/*    leftIcon="calendar"*/}
+                {/*    selectedItem={pickupDate}*/}
+                {/*    placeholder="Select Date"*/}
+                {/*    onSelectDate={date => {*/}
+                {/*        setPickupDate(dateFormatter(date));*/}
+                {/*        var hoursToAdd = parseInt(selectedCategory?.hours) || 0;*/}
+                {/*        setDeliveryDate(dateFormatter(addHoursToDate(date, hoursToAdd)));*/}
+                {/*    }}*/}
+                {/*    disable={true}*/}
+                {/*/>*/}
 
                 {/* Delivery Date */}
-                <DatePicker
-                    label="Select Delivery Date"
-                    leftIcon="calendar"
-                    selectedItem={deliveryDate}
-                    placeholder="Select Date"
-                    onSelectDate={date => {
-                        setDeliveryDate(dateFormatter(date));
-                    }}
-                    disable={true}
-                />
+                {/*<DatePicker*/}
+                {/*    label="Select Delivery Date"*/}
+                {/*    leftIcon="calendar"*/}
+                {/*    selectedItem={deliveryDate}*/}
+                {/*    placeholder="Select Date"*/}
+                {/*    onSelectDate={date => {*/}
+                {/*        setDeliveryDate(dateFormatter(date));*/}
+                {/*    }}*/}
+                {/*    disable={true}*/}
+                {/*/>*/}
 
                 {/* Remarks */}
                 <InputComponent
