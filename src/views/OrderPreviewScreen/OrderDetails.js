@@ -71,7 +71,7 @@ const index = ({orderData, orderCategory}) => {
                             <Text style={styles.cardTitleSmall}>
                                 {orderData?.order_through == 'mobile_app'
                                     ? 'Mobile App'
-                                    : 'Adminstration'}
+                                    : 'Administration'}
                             </Text>
                         </View>
 

@@ -12,7 +12,7 @@ const index = ({route, navigation}) => {
     const [orderItemsCount, setOrderItemsCount] = useState(0);
     const [orderItems, setOrderItems] = useState([]);
     const [orderCategory, setOrderCategory] = useState('');
-    const [index, setIndex] = useState(1);
+    const [index, setIndex] = useState(0);
 
     useEffect(() => {
         try {
@@ -28,7 +28,6 @@ const index = ({route, navigation}) => {
             const response = await api.getOrderDetailsByOrderId(
                 route?.params?.orderId,
             );
-            console.log(response?.data);
             setOrderDetails(response?.data?.data);
             setOrderItemsCount(response?.data?.data?.order_item.length);
             setOrderItems(response?.data?.data?.order_item);

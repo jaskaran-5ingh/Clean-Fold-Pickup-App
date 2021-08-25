@@ -8,7 +8,7 @@ import {COLORS, FONTS} from '../../constants';
 import api from '../../api/services';
 import cache from '../../utils/cache';
 
-import {EmptyAnimation, ErrorScreen, LoadingScreen} from './.';
+import {EmptyAnimation, LoadingScreen} from '..';
 
 const index = ({navigation}) => {
     const [pendingOrders, setPendingOrders] = useState([]);

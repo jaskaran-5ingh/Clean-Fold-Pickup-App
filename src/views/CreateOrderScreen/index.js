@@ -129,7 +129,7 @@ export default function index({navigation}) {
             });
         } else {
             try {
-                response = await api.createOrder(saveOrderObject);
+                let response = await api.createOrder(saveOrderObject);
                 if (response.ok !== true) {
                     showMessage({
                         message: 'Something went wrong !',
@@ -260,6 +260,7 @@ export default function index({navigation}) {
                         var hoursToAdd = parseInt(item?.hours) || 0;
                         setDeliveryDate(dateFormatter(addHoursToDate(date, hoursToAdd)));
                     }}
+                    required={true}
                 />
 
                 {/* Picker Date */}
@@ -273,6 +274,7 @@ export default function index({navigation}) {
                         var hoursToAdd = parseInt(selectedCategory?.hours) || 0;
                         setDeliveryDate(dateFormatter(addHoursToDate(date, hoursToAdd)));
                     }}
+                    required={true}
                 />
 
                 {/* Delivery Date */}
@@ -285,6 +287,7 @@ export default function index({navigation}) {
                     onSelectDate={date => {
                         setDeliveryDate(dateFormatter(date));
                     }}
+                    required={true}
                 />
 
                 {/* Remarks */}
