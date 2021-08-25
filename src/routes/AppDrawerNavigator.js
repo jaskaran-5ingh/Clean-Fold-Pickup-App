@@ -6,7 +6,7 @@ import AuthContext from '../auth/Context';
 
 import {COLORS, icons} from '../constants';
 import cache from '../utils/cache';
-import {Profile, Notifications, Alerts} from '../screens';
+import {Profile, Notifications, Alerts} from '../views';
 
 const Drawer = createDrawerNavigator();
 
