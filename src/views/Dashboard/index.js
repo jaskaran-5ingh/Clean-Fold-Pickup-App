@@ -217,7 +217,7 @@ const index = ({navigation}) => {
                             icon="rupee"
                             color={COLORS.primary}
                             title="RATE LIST"
-                            onPress={() => console.log('DeliveryList')}
+                            onPress={() => navigation.navigate('RateListScreen')}
                             qtyAvailable={false}
                         />
                         <Card

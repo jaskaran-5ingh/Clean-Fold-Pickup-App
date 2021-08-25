@@ -13,6 +13,7 @@ const endPoint = {
     getOrderDetailsByOrderId: '/get/order-detailById/105984',
     getUserByMobile: '/get/user',
     updateDeliveredOrder: '/edit-order',
+    getRateList:'/getCategoryProduct/1'
 };
 
 //Call Api Function
@@ -58,6 +59,10 @@ const getPendingOrdersList = EmployeeID => {
     return apiClient.get(endPoint.getOrdersList + '/' + EmployeeID + '/1');
 };
 
+const getRateList = () => {
+    return apiClient.get(endPoint.getRateList);
+};
+
 const getUserByMobile = mobileNumber => {
     return apiClient.get(endPoint.getUserByMobile + '/' + mobileNumber);
 };
@@ -74,10 +79,11 @@ export default {
     getDashboardData,
     getDeliveredOrdersList,
     getCategoryProduct,
-    getPendingOrdersList,
     getOrderCategory,
     getOrderDetailsById,
     getOrderDetailsByOrderId,
+    getPendingOrdersList,
+    getRateList,
     getUserByMobile,
     updateDeliveredOrder,
 };

@@ -9,6 +9,7 @@ import DeliveryListEdit from './DeliveryList/Edit';
 import OrderPreviewScreen from './OrderPreviewScreen';
 import Pickup from './Pickup';
 import PickupEdit from './Pickup/Edit';
+import RateListScreen from './RateListScreen';
 
 //Other Screens
 import EmptyAnimation from './EmptyAnimation';
@@ -26,5 +27,6 @@ export {
     OrderPreviewScreen,
     Pickup,
     PickupEdit,
+    RateListScreen,
     SignIn,
 };
