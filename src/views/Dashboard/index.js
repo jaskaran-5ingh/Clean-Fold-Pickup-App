@@ -17,7 +17,6 @@ import {COLORS, FONTS, images, responsiveWidth, SIZES,} from '../../constants';
 import api from '../../api/services';
 import AuthContext from '../../auth/Context';
 import cache from '../../utils/cache';
-import {ErrorScreen, LoadingScreen} from './.';
 
 // Components
 function Card({

@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, FlatList, SafeAreaView, StyleSheet, View} from 'react-native';
-import {Image, ListItem, Tab, TabView} from 'react-native-elements';
+import {Image, ListItem, Tab} from 'react-native-elements';
 import api from '../../api/services';
-import {COLORS,FONTS} from '../../constants';
+import {COLORS, FONTS} from '../../constants';
 import {LoadingScreen} from "../index";
 
-function TabItems({data,renderItems}){
-    return(
+function TabItems({data, renderItems}) {
+    return (
         <FlatList data={data} renderItem={renderItems}
                   keyExtractor={(item) => `${item.id}`}
         />
@@ -50,11 +50,11 @@ const index = ({route, navigation}) => {
                     styles.tabButtonStyle,
                     tabIndex == index
                         ? {
-                            width:100,
+                            width: 100,
                             backgroundColor: COLORS.lightGray,
                             color: COLORS.white,
-                            borderBottomColor:COLORS.primary,
-                            borderBottomWidth:3
+                            borderBottomColor: COLORS.primary,
+                            borderBottomWidth: 3
                         }
                         : null,
                 ]}
@@ -66,9 +66,9 @@ const index = ({route, navigation}) => {
                     <Image
                         source={{uri: item.icon}}
                         resizeMethod='scale'
-                        style={{width: 40, height: 50,marginVertical:4}}
+                        style={{width: 40, height: 50, marginVertical: 4}}
                         PlaceholderContent={
-                            <View style={[{height:'100%',width:'100%',justifyContent:'center'},                    tabIndex == index
+                            <View style={[{height: '100%', width: '100%', justifyContent: 'center'}, tabIndex == index
                                 ? {
                                     backgroundColor: COLORS.lightGray,
                                 }
@@ -76,7 +76,7 @@ const index = ({route, navigation}) => {
                                     backgroundColor: COLORS.white,
                                 },]}>
                                 <ActivityIndicator color={COLORS.primary} size={20} style={{
-                                    opacity:0.6
+                                    opacity: 0.6
                                 }}/>
                             </View>
                         }
@@ -96,25 +96,26 @@ const index = ({route, navigation}) => {
             <ListItem key={item.id} bottomDivider>
                 <Image
                     source={{uri: IMAGES_URL + item.image}}
-                    style={{width: 60, height: 90,marginRight:20}}
+                    style={{width: 60, height: 90, marginRight: 20}}
                     PlaceholderContent={
-                        <View style={{backgroundColor:'white',height:'100%',width:'100%',justifyContent:'center'}}>
-                        <ActivityIndicator color={COLORS.primary} size={40} style={{
-                            opacity:0.6
-                        }}/>
+                        <View
+                            style={{backgroundColor: 'white', height: '100%', width: '100%', justifyContent: 'center'}}>
+                            <ActivityIndicator color={COLORS.primary} size={40} style={{
+                                opacity: 0.6
+                            }}/>
                         </View>
                     }
                 />
                 <ListItem.Content>
                     <ListItem.Title style={{
                         color: COLORS.primary,
-                            ...FONTS.h4,
-                        fontWeight:'bold',
-                        marginBottom:10
+                        ...FONTS.h4,
+                        fontWeight: 'bold',
+                        marginBottom: 10
                     }}>{item.title}</ListItem.Title>
                     <ListItem.Subtitle style={{
                         color: COLORS.darkTransparent,
-                        fontWeight:'bold',
+                        fontWeight: 'bold',
                         ...FONTS.h3,
                     }}>₹ {item.price}</ListItem.Subtitle>
                 </ListItem.Content>
@@ -138,7 +139,7 @@ const index = ({route, navigation}) => {
                     />
                 </Tab>
 
-                    <TabItems data={rateList[tabIndex]?.products} renderItems={renderProducts}/>
+                <TabItems data={rateList[tabIndex]?.products} renderItems={renderProducts}/>
             </SafeAreaView>}
 
         </View>
