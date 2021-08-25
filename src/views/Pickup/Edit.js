@@ -6,7 +6,7 @@ import api from '../../api/services';
 
 import {COLORS, FONTS, responsiveHeight, SIZES} from '../../constants';
 
-import {Button, DatePicker, InputComponent, PickupComponent} from '../../components';
+import {Button, InputComponent} from '../../components';
 import {ErrorScreen, LoadingScreen} from '..';
 
 export default function index({route, navigation}) {
