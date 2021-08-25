@@ -13,6 +13,7 @@ import {
     OrderPreviewScreen,
     Pickup,
     PickupEdit,
+    RateListScreen,
 } from '../views';
 import {Icon} from 'react-native-elements/dist/icons/Icon';
 
@@ -113,6 +114,13 @@ export default function AppStackNavigator() {
                 component={OrderPreviewScreen}
                 label="OrderPreviewScreen"
                 options={{headerShown: true, title: 'Order Details'}}
+            />
+
+            <Stack.Screen
+                name="RateListScreen"
+                component={RateListScreen}
+                label="RateListScreen"
+                options={{headerShown: true, title: 'Rate List'}}
             />
         </Stack.Navigator>
     );
