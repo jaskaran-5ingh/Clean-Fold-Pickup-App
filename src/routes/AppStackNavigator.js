@@ -36,7 +36,7 @@ export default function AppStackNavigator() {
 
   return (
     <Stack.Navigator
-      initialRouteName="CategoriesList"
+      initialRouteName="Dashboard"
       allowFontScaling={false}
       screenOptions={({navigation, route}) => ({
         headerShown: true,
@@ -45,8 +45,8 @@ export default function AppStackNavigator() {
           backgroundColor: COLORS.primary,
         },
         headerTitleStyle: {
-          color: COLORS.white,
           ...FONTS.h4,
+          color: COLORS.white,
         },
         headerTintColor: COLORS.white,
       })}>
