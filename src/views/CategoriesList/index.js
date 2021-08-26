@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
+
 import {ListItem, Image, Divider} from 'react-native-elements';
 import api from '../../api/services';
 import {COLORS, FONTS, icons} from '../../constants';
@@ -33,7 +34,7 @@ const index = ({route, navigation}) => {
       const response = await api.getOrderCategory();
       if (response.ok !== true) {
         showMessage({
-          message: 'Something went wrong !',
+          message: response?.problem + ' !',
           description: 'Please try again latter',
           backgroundColor: COLORS.red,
           type: 'danger',
@@ -98,7 +99,7 @@ const index = ({route, navigation}) => {
           ListEmptyComponent={() => {
             return (
               <View style={styles.emptyScreenContainer}>
-                <EmptyAnimation message="Empty Order List !" />
+                <EmptyAnimation message="Empty !" />
               </View>
             );
           }}
@@ -121,12 +122,12 @@ const styles = StyleSheet.create({
   },
   title: {
     color: COLORS.primary,
-    ...FONTS.h4,
+    // ...FONTS.h4,
     marginBottom: 10,
   },
   subTitle: {
     color: COLORS.darkgray,
-    ...FONTS.h5,
+    // ...FONTS.h5,
   },
   iconStyle: {width: 60, height: 60, marginRight: 20},
   emptyScreenContainer: {

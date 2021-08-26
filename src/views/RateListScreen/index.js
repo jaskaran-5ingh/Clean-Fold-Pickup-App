@@ -6,11 +6,11 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import {Image, ListItem, Tab} from 'react-native-elements';
+import {Image, ListItem, Tab, Divider} from 'react-native-elements';
 import api from '../../api/services';
-import {COLORS, FONTS, icons} from '../../constants';
+import {COLORS, FONTS} from '../../constants';
 import {LoadingScreen} from '../index';
-
+import {showMessage} from 'react-native-flash-message';
 function TabItems({data, renderItems}) {
   return (
     <FlatList
@@ -20,6 +20,8 @@ function TabItems({data, renderItems}) {
     />
   );
 }
+
+function renderPriceDetails(itemName, itemPrice, itemDiscount) {}
 
 const index = ({route, navigation}) => {
   const [loading, setLoading] = useState(true);
@@ -42,7 +44,17 @@ const index = ({route, navigation}) => {
     try {
       setLoading(true);
       const response = await api.getRateList(route?.params?.categoryId);
-      setSetList(response?.data?.data);
+      if (response.ok !== true) {
+        showMessage({
+          message: response?.problem + ' !',
+          description: 'Please try again latter',
+          backgroundColor: COLORS.red,
+          type: 'danger',
+          icon: 'danger',
+        });
+      } else {
+        setSetList(response?.data?.data);
+      }
       setLoading(false);
     } catch (err) {
       console.error(err);
@@ -57,7 +69,7 @@ const index = ({route, navigation}) => {
           styles.tabButtonStyle,
           tabIndex == index
             ? {
-                width: 100,
+                minWidth: 110,
                 backgroundColor: COLORS.lightGray,
                 color: COLORS.white,
                 borderBottomColor: COLORS.primary,
@@ -70,7 +82,11 @@ const index = ({route, navigation}) => {
           <Image
             source={{uri: item.icon}}
             resizeMethod="scale"
-            style={{width: 40, height: 50, marginVertical: 4}}
+            style={{
+              width: 40,
+              height: 50,
+              marginVertical: 4,
+            }}
             PlaceholderContent={
               <View
                 style={[
@@ -125,23 +141,75 @@ const index = ({route, navigation}) => {
             </View>
           }
         />
+
         <ListItem.Content>
           <ListItem.Title
             style={{
+              position: 'absolute',
               color: COLORS.primary,
-              ...FONTS.h4,
+              ...FONTS.h5,
               fontWeight: 'bold',
-              marginBottom: 10,
+              width: 200,
+              top: -10,
             }}>
             {item.title}
           </ListItem.Title>
-          <ListItem.Subtitle
-            style={{
-              color: COLORS.darkTransparent,
-              fontWeight: 'bold',
-              ...FONTS.h3,
-            }}>
+          <ListItem.Subtitle style={[styles.totalTitle, {marginTop: 30}]}>
+            Price
+          </ListItem.Subtitle>
+          <ListItem.Subtitle style={styles.priceSubTitle}>
             ₹ {item.price}
+          </ListItem.Subtitle>
+        </ListItem.Content>
+
+        {/* Discount Percentage */}
+
+        <ListItem.Content>
+          <ListItem.Title
+            style={{
+              marginBottom: 10,
+            }}>
+            {' '}
+          </ListItem.Title>
+          <ListItem.Subtitle style={styles.totalTitle}>
+            Discount%
+          </ListItem.Subtitle>
+          <ListItem.Subtitle style={styles.priceSubTitle}>
+            {item?.discount_product || 0}
+          </ListItem.Subtitle>
+        </ListItem.Content>
+
+        {/* Discount Percentage */}
+
+        <ListItem.Content>
+          <ListItem.Title
+            style={{
+              marginBottom: 10,
+            }}>
+            {' '}
+          </ListItem.Title>
+          <ListItem.Subtitle style={styles.totalTitle}>
+            Discount ₹
+          </ListItem.Subtitle>
+          <ListItem.Subtitle style={styles.priceSubTitle}>
+            ₹ {(item.price * item?.discount_product) / 100}
+          </ListItem.Subtitle>
+        </ListItem.Content>
+
+        {/* Discount Percentage */}
+
+        <ListItem.Content>
+          <ListItem.Title
+            style={{
+              marginBottom: 10,
+            }}>
+            {' '}
+          </ListItem.Title>
+          <ListItem.Subtitle style={styles.totalTitle}>
+            Total ₹
+          </ListItem.Subtitle>
+          <ListItem.Subtitle style={styles.priceSubTitle}>
+            ₹ {item.price - (item.price * item?.discount_product) / 100}
           </ListItem.Subtitle>
         </ListItem.Content>
       </ListItem>
@@ -154,10 +222,7 @@ const index = ({route, navigation}) => {
         <LoadingScreen />
       ) : (
         <SafeAreaView style={{flex: 1}}>
-          <Tab
-            value={tabIndex}
-            indicatorStyle={styles.tabIndicator}
-            variant="primary">
+          <Tab value={tabIndex} indicatorStyle={styles.tabIndicator}>
             <FlatList
               data={rateList}
               keyExtractor={item => `${item.product_type_id}`}
@@ -167,7 +232,7 @@ const index = ({route, navigation}) => {
               showsHorizontalScrollIndicator={false}
             />
           </Tab>
-
+          <Divider />
           <TabItems
             data={rateList[tabIndex]?.products}
             renderItems={renderProducts}
@@ -192,12 +257,20 @@ const styles = StyleSheet.create({
   },
   tabButtonStyle: {
     backgroundColor: COLORS.white,
-
     shadowColor: COLORS.primary,
+    minWidth: 110,
   },
   tabIndicator: {
     backgroundColor: COLORS.transparent,
     height: 5,
+  },
+  priceSubTitle: {
+    color: COLORS.darkTransparent,
+  },
+  totalTitle: {
+    color: COLORS.darkgray,
+    fontWeight: 'bold',
+    fontSize: 10,
   },
 });
 

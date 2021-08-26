@@ -10,7 +10,7 @@ import {
   View,
 } from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
-
+import {showMessage} from 'react-native-flash-message';
 import {Icon} from 'react-native-elements/dist/icons/Icon';
 import {COLORS, FONTS, images, responsiveWidth, SIZES} from '../../constants';
 
@@ -130,15 +130,32 @@ const index = ({navigation}) => {
   }, []);
 
   async function getDashboardData() {
-    setLoading(true);
-    cache.get('user').then(async user => {
-      if (user != null) {
-        const response = await api.getDashboardData(user.id);
-        if (response.ok !== true) setError(false);
-        setDashboardData(response?.data);
-        setLoading(false);
-      }
-    });
+    try {
+      setLoading(true);
+      cache.get('user').then(async user => {
+        if (user != null) {
+          try {
+            const response = await api.getDashboardData(user.id);
+            if (response.ok !== true) {
+              showMessage({
+                message: response?.problem + ' !',
+                description: 'Please try again latter',
+                backgroundColor: COLORS.red,
+                type: 'danger',
+                icon: 'danger',
+              });
+            } else {
+              setDashboardData(response?.data);
+              setLoading(false);
+            }
+          } catch (error) {
+            console.error(error);
+          }
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
