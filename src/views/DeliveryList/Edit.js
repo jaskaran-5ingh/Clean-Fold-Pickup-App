@@ -123,6 +123,7 @@ export default function index({route, navigation}) {
                     value={remarks}
                     leftIcon="edit"
                     onChangeText={value => setRemarks(value)}
+                    multiline={true}
                 />
             </View>
         );
