@@ -2,6 +2,7 @@
 import SignIn from './SignIn';
 
 //App Screens
+import CategoriesList from './CategoriesList';
 import CreateOrderScreen from './CreateOrderScreen';
 import Dashboard from './Dashboard';
 import DeliveryList from './DeliveryList';
@@ -17,16 +18,17 @@ import ErrorScreen from './ErrorScreen';
 import LoadingScreen from './LoadingScreen';
 
 export {
-    CreateOrderScreen,
-    Dashboard,
-    DeliveryList,
-    DeliveryListEdit,
-    EmptyAnimation,
-    ErrorScreen,
-    LoadingScreen,
-    OrderPreviewScreen,
-    Pickup,
-    PickupEdit,
-    RateListScreen,
-    SignIn,
+  CategoriesList,
+  CreateOrderScreen,
+  Dashboard,
+  DeliveryList,
+  DeliveryListEdit,
+  EmptyAnimation,
+  ErrorScreen,
+  LoadingScreen,
+  OrderPreviewScreen,
+  Pickup,
+  PickupEdit,
+  RateListScreen,
+  SignIn,
 };
