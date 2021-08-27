@@ -203,15 +203,7 @@ const index = ({navigation}) => {
           <FlatList
             ListHeaderComponent={() => {
               return (
-                <Text
-                  style={{
-                    alignSelf: 'flex-end',
-                    justifyContent: 'center',
-                    ...FONTS.body4,
-                    color: COLORS.light,
-                    marginTop: 5,
-                    paddingHorizontal: 10,
-                  }}>
+                <Text style={styles.headerTitleStyle}>
                   Pull down to refresh list
                 </Text>
               );
@@ -223,12 +215,7 @@ const index = ({navigation}) => {
             onRefresh={() => getDeliveryList()}
             ListEmptyComponent={() => {
               return (
-                <View
-                  style={{
-                    flex: 1,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
+                <View style={styles.emptyListTitleStyle}>
                   <EmptyAnimation message="Empty Order List !" />
                 </View>
               );
@@ -254,6 +241,19 @@ const styles = StyleSheet.create({
     ...FONTS.body4,
     color: COLORS.darkTransparent,
     paddingBottom: 4,
+  },
+  emptyListTitleStyle: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  headerTitleStyle: {
+    alignSelf: 'flex-end',
+    justifyContent: 'center',
+    ...FONTS.body4,
+    color: COLORS.light,
+    marginTop: 5,
+    paddingHorizontal: 10,
   },
 });
 
