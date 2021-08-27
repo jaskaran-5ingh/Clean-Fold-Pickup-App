@@ -8,6 +8,8 @@ const index = ({orderItems, orderCategory, orderId}) => {
 
   let total = 0;
   let Grand = 0;
+  let discountAmount = 0;
+  let itemPrice = 0;
 
   return (
     <View style={styles.container}>
@@ -64,7 +66,8 @@ const index = ({orderItems, orderCategory, orderId}) => {
           }}>
           <Text style={styles.cardTitle}>Item</Text>
           <Text style={styles.cardTitle}>Price</Text>
-          {/*<Text style={styles.cardTitle}>Dis.%</Text>*/}
+          <Text style={styles.cardTitle}>Discount Price</Text>
+          <Text style={styles.cardTitle}>After Discount</Text>
           <Text style={styles.cardTitle}>Qty</Text>
           <Text style={styles.cardTitle}>Total</Text>
         </View>
@@ -72,7 +75,12 @@ const index = ({orderItems, orderCategory, orderId}) => {
           data={orderItems}
           keyExtractor={item => `${item.id}`}
           renderItem={({item, index}) => {
-            total = (item?.qty || 1) * (item?.price || 1) || 0;
+            itemPrice = Math.round(item?.price) || 0;
+            discountAmount =
+              Math.round((item?.product?.discount_product * itemPrice) / 100) ||
+              0;
+
+            total = (itemPrice - discountAmount) * (item?.qty || 1);
             Grand += total;
             setGrandTotal(Grand);
             return (
@@ -88,10 +96,11 @@ const index = ({orderItems, orderCategory, orderId}) => {
                   <Text style={styles.cardTitleSmall}>
                     {item?.product?.title}
                   </Text>
-                  <Text style={styles.cardTitleSmall}>{item?.price} ₹</Text>
-                  {/*<Text style={styles.cardTitleSmall}>*/}
-                  {/*    {item?.product?.discount_product}%*/}
-                  {/*</Text>*/}
+                  <Text style={styles.cardTitleSmall}>{itemPrice} ₹</Text>
+                  <Text style={styles.cardTitleSmall}>{discountAmount} ₹</Text>
+                  <Text style={styles.cardTitleSmall}>
+                    {itemPrice - discountAmount}
+                  </Text>
                   <Text style={styles.cardTitleSmall}>{item?.qty}</Text>
                   <Text style={styles.cardTitleSmall}>{total} ₹</Text>
                 </View>
@@ -105,13 +114,24 @@ const index = ({orderItems, orderCategory, orderId}) => {
             flexDirection: 'row',
             justifyContent: 'space-between',
             paddingHorizontal: 10,
+            marginTop: 10,
           }}>
           <Text></Text>
-          {/*<Text></Text>*/}
           <Text></Text>
           <Text></Text>
-          <Text>Grand Total : </Text>
-          <Text>{grandTotal} ₹</Text>
+          <Text></Text>
+          <Text></Text>
+          <Text
+            style={{
+              color: COLORS.darkTransparent,
+              fontWeight: 'bold',
+              color: COLORS.primary,
+            }}>
+            Grand Total :{' '}
+          </Text>
+          <Text style={{color: COLORS.darkTransparent, fontWeight: 'bold'}}>
+            {grandTotal} ₹
+          </Text>
         </View>
       </View>
     </View>
@@ -127,13 +147,14 @@ const styles = StyleSheet.create({
     ...FONTS.h5,
     color: COLORS.white,
     fontWeight: 'bold',
-    width: '26%',
+    width: '17%',
   },
   cardTitleSmall: {
     ...FONTS.body4,
     color: COLORS.darkTransparent,
     paddingBottom: 4,
-    width: '26%',
+    width: '17%',
+    maxWidth: '17%',
   },
   cardTitleDark: {
     ...FONTS.h5,
