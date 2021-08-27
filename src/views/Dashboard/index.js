@@ -33,16 +33,18 @@ function Card({
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={{
-        height: fullWidth ? 200 : 160,
-        width: fullWidth ? '100%' : '48%',
-        padding: 5,
-        marginTop: 15,
-        backgroundColor: backgroundColor,
-        borderRadius: 10,
-        justifyContent: 'space-evenly',
-        alignItems: 'center',
-      }}>
+      style={[
+        {
+          height: fullWidth ? 200 : 160,
+          width: fullWidth ? '100%' : '48%',
+          padding: 5,
+          marginTop: 15,
+          backgroundColor: backgroundColor,
+          borderRadius: 10,
+          justifyContent: 'space-evenly',
+          alignItems: 'center',
+        },
+      ]}>
       <View
         style={{
           height: fullWidth ? 80 : 50,
@@ -52,17 +54,10 @@ function Card({
           alignItems: 'center',
           backgroundColor: color,
         }}>
-        <Icon
-          type="font-awesome"
-          color={fullWidth ? COLORS.primary : COLORS.white}
-          name={icon}
-          size={30}
-        />
+        <Icon type="font-awesome" color={COLORS.white} name={icon} size={30} />
       </View>
       <View style={{paddingHorizontal: 20}}>
-        {fullWidth != true ? (
-          <Text style={[styles.heading5, {color: color}]}>{title}</Text>
-        ) : null}
+        <Text style={[styles.heading5, {color: color}]}>{title}</Text>
       </View>
       {qtyAvailable == true ? (
         <View
@@ -74,11 +69,7 @@ function Card({
             paddingHorizontal: 30,
             borderRadius: 5,
           }}>
-          <Text
-            style={[
-              styles.heading5,
-              {color: fullWidth ? COLORS.primary : COLORS.white},
-            ]}>
+          <Text style={[styles.heading5, {color: COLORS.white}]}>
             {loading ? <ActivityIndicator color="white" /> : <>{qty}</>}
           </Text>
         </View>
@@ -111,7 +102,7 @@ const index = ({navigation}) => {
     } catch (err) {
       console.error(err);
     }
-  }, [isFocused]);
+  }, [isFocused, authContext?.user?.id]);
 
   // Call Api After 2 Minutes
   useEffect(() => {
@@ -130,29 +121,24 @@ const index = ({navigation}) => {
   }, []);
 
   async function getDashboardData() {
+    setLoading(true);
     try {
-      setLoading(true);
-      cache.get('user').then(async user => {
-        if (user != null) {
-          try {
-            const response = await api.getDashboardData(user.id);
-            if (response.ok !== true) {
-              showMessage({
-                message: response?.problem + ' !',
-                description: 'Please try again latter',
-                backgroundColor: COLORS.red,
-                type: 'danger',
-                icon: 'danger',
-              });
-            } else {
-              setDashboardData(response?.data);
-              setLoading(false);
-            }
-          } catch (error) {
-            console.error(error);
-          }
+      console.log();
+      if (authContext?.user?.id != undefined) {
+        const response = await api.getDashboardData(authContext?.user?.id);
+        if (response.ok !== true) {
+          showMessage({
+            message: response?.problem + ' !',
+            description: 'Please try again latter',
+            backgroundColor: COLORS.red,
+            type: 'danger',
+            icon: 'danger',
+          });
+        } else {
+          setDashboardData(response?.data);
+          setLoading(false);
         }
-      });
+      }
     } catch (error) {
       console.error(error);
     }
@@ -218,32 +204,37 @@ const index = ({navigation}) => {
               qty={dashboardData?.pending}
               onPress={() => navigation.navigate('Pickup')}
               loading={loading}
+              fullWidth={authContext?.user?.role_id == 6}
             />
-            <Card
-              backgroundColor={COLORS.lightGreen}
-              icon="check"
-              color={COLORS.darkGreen}
-              title="DELIVERY"
-              qty={dashboardData?.delivered}
-              onPress={() => navigation.navigate('DeliveryList')}
-              loading={loading}
-            />
-            <Card
-              backgroundColor={COLORS.lightSkyblue}
-              icon="rupee"
-              color={COLORS.primary}
-              title="RATE LIST"
-              onPress={() => navigation.navigate('CategoriesList')}
-              qtyAvailable={false}
-            />
-            <Card
-              backgroundColor={COLORS.lightOrange}
-              icon="plus"
-              color={COLORS.orange}
-              title="CREATE ORDER"
-              onPress={() => navigation.navigate('CreateOrderScreen')}
-              qtyAvailable={false}
-            />
+            {authContext?.user?.role_id !== 6 ? (
+              <>
+                <Card
+                  backgroundColor={COLORS.lightGreen}
+                  icon="check"
+                  color={COLORS.darkGreen}
+                  title="DELIVERY"
+                  qty={dashboardData?.delivered}
+                  onPress={() => navigation.navigate('DeliveryList')}
+                  loading={loading}
+                />
+                <Card
+                  backgroundColor={COLORS.lightSkyblue}
+                  icon="rupee"
+                  color={COLORS.primary}
+                  title="RATE LIST"
+                  onPress={() => navigation.navigate('CategoriesList')}
+                  qtyAvailable={false}
+                />
+                <Card
+                  backgroundColor={COLORS.lightOrange}
+                  icon="plus"
+                  color={COLORS.orange}
+                  title="CREATE ORDER"
+                  onPress={() => navigation.navigate('CreateOrderScreen')}
+                  qtyAvailable={false}
+                />
+              </>
+            ) : null}
           </View>
         </View>
       </ImageBackground>

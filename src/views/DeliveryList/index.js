@@ -215,7 +215,16 @@ const index = ({navigation}) => {
             onRefresh={() => getDeliveryList()}
             ListEmptyComponent={() => {
               return (
-                <View style={styles.emptyListTitleStyle}>
+                <View
+                  style={[
+                    styles.emptyListTitleStyle,
+                    {
+                      backgroundColor:
+                        pendingOrders.length > 0
+                          ? COLORS.primary
+                          : COLORS.white,
+                    },
+                  ]}>
                   <EmptyAnimation message="Empty Order List !" />
                 </View>
               );
