@@ -162,24 +162,7 @@ const index = ({route, navigation}) => {
           </ListItem.Subtitle>
         </ListItem.Content>
 
-        {/* Discount Percentage */}
-
-        <ListItem.Content>
-          <ListItem.Title
-            style={{
-              marginBottom: 10,
-            }}>
-            {' '}
-          </ListItem.Title>
-          <ListItem.Subtitle style={styles.totalTitle}>
-            Discount%
-          </ListItem.Subtitle>
-          <ListItem.Subtitle style={styles.priceSubTitle}>
-            {item?.discount_product || 0}
-          </ListItem.Subtitle>
-        </ListItem.Content>
-
-        {/* Discount Percentage */}
+        {/* Discount Price */}
 
         <ListItem.Content>
           <ListItem.Title
@@ -192,7 +175,7 @@ const index = ({route, navigation}) => {
             Discount ₹
           </ListItem.Subtitle>
           <ListItem.Subtitle style={styles.priceSubTitle}>
-            ₹ {(item.price * item?.discount_product) / 100}
+            ₹ {Math.round((item.price * item?.discount_product) / 100)}
           </ListItem.Subtitle>
         </ListItem.Content>
 
@@ -209,7 +192,9 @@ const index = ({route, navigation}) => {
             Total ₹
           </ListItem.Subtitle>
           <ListItem.Subtitle style={styles.priceSubTitle}>
-            ₹ {item.price - (item.price * item?.discount_product) / 100}
+            ₹{' '}
+            {Math.round(item.price) -
+              Math.round((item.price * item?.discount_product) / 100)}
           </ListItem.Subtitle>
         </ListItem.Content>
       </ListItem>
