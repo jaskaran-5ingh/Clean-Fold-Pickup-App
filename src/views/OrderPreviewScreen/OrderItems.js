@@ -11,6 +11,53 @@ const index = ({orderItems, orderCategory, orderId}) => {
   let discountAmount = 0;
   let itemPrice = 0;
 
+  function renderOrderItems({item, index}) {
+    itemPrice = Math.round(item?.price) || 0;
+    discountAmount =
+      Math.round((item?.product?.discount_product * itemPrice) / 100) || 0;
+
+    total = (itemPrice - discountAmount) * (item?.qty || 1);
+    Grand += total;
+    setGrandTotal(Grand);
+    return (
+      <>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            padding: 6,
+            width: '100%',
+            marginTop: 6,
+          }}>
+          <Text style={styles.cardTitleSmall}>{item?.product?.title}</Text>
+          <Text style={styles.cardTitleSmall}>{itemPrice} ₹</Text>
+          <Text style={styles.cardTitleSmall}>{discountAmount} ₹</Text>
+          <Text style={styles.cardTitleSmall}>
+            {itemPrice - discountAmount}
+          </Text>
+          <Text style={styles.cardTitleSmall}>{item?.qty}</Text>
+          <Text style={styles.cardTitleSmall}>{total} ₹</Text>
+        </View>
+        <Card.Divider />
+      </>
+    );
+  }
+
+  const renderListEmptyComponent = () => {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <Text style={{color: COLORS.darkTransparent, paddingVertical: 30}}>
+          Items Not Available !
+        </Text>
+      </View>
+    );
+  };
+
   return (
     <View style={styles.container}>
       <View
@@ -66,7 +113,7 @@ const index = ({orderItems, orderCategory, orderId}) => {
           }}>
           <Text style={styles.cardTitle}>Item</Text>
           <Text style={styles.cardTitle}>Price</Text>
-          <Text style={styles.cardTitle}>Discount Price</Text>
+          <Text style={styles.cardTitle}>Discount</Text>
           <Text style={styles.cardTitle}>After Discount</Text>
           <Text style={styles.cardTitle}>Qty</Text>
           <Text style={styles.cardTitle}>Total</Text>
@@ -74,40 +121,8 @@ const index = ({orderItems, orderCategory, orderId}) => {
         <FlatList
           data={orderItems}
           keyExtractor={item => `${item.id}`}
-          renderItem={({item, index}) => {
-            itemPrice = Math.round(item?.price) || 0;
-            discountAmount =
-              Math.round((item?.product?.discount_product * itemPrice) / 100) ||
-              0;
-
-            total = (itemPrice - discountAmount) * (item?.qty || 1);
-            Grand += total;
-            setGrandTotal(Grand);
-            return (
-              <>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    padding: 6,
-                    width: '100%',
-                    marginTop: 6,
-                  }}>
-                  <Text style={styles.cardTitleSmall}>
-                    {item?.product?.title}
-                  </Text>
-                  <Text style={styles.cardTitleSmall}>{itemPrice} ₹</Text>
-                  <Text style={styles.cardTitleSmall}>{discountAmount} ₹</Text>
-                  <Text style={styles.cardTitleSmall}>
-                    {itemPrice - discountAmount}
-                  </Text>
-                  <Text style={styles.cardTitleSmall}>{item?.qty}</Text>
-                  <Text style={styles.cardTitleSmall}>{total} ₹</Text>
-                </View>
-                <Card.Divider />
-              </>
-            );
-          }}
+          renderItem={renderOrderItems}
+          ListEmptyComponent={renderListEmptyComponent}
         />
         <View
           style={{
