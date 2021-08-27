@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import {
   Alert,
   FlatList,
@@ -13,7 +13,7 @@ import {showMessage} from 'react-native-flash-message';
 import {COLORS, FONTS} from '../../constants';
 import api from '../../api/services';
 import cache from '../../utils/cache';
-
+import AuthContext from '../../auth/Context';
 import {EmptyAnimation, LoadingScreen} from '../index';
 
 function CardButton({onPress, containerStyle, title, titleStyle}) {
@@ -28,22 +28,38 @@ const index = ({navigation}) => {
   const [pendingOrders, setPendingOrders] = useState([]);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  const authContext = useContext(AuthContext);
   useEffect(() => {
-    getPickups();
+    try {
+      if (authContext?.user?.role_id == 6) {
+        getSofaBoyPickups();
+      } else {
+        getPickups();
+      }
+    } catch (err) {
+      console.error(err);
+    }
   }, []);
+
+  async function getSofaBoyPickups() {
+    try {
+      setLoading(true);
+      const response = await api.getSofaBoyPickups(authContext?.user?.id);
+      if (response.ok !== true) setError(false);
+      setPendingOrders(response?.data?.order_list);
+      setLoading(false);
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   async function getPickups() {
     try {
       setLoading(true);
-      cache.get('user').then(async user => {
-        if (user != null) {
-          const response = await api.getPendingOrdersList(user.id);
-          if (response.ok !== true) setError(false);
-          setPendingOrders(response?.data?.order_list);
-          setLoading(false);
-        }
-      });
+      const response = await api.getPendingOrdersList(authContext?.user?.id);
+      if (response.ok !== true) setError(false);
+      setPendingOrders(response?.data?.order_list);
+      setLoading(false);
     } catch (err) {
       console.error(err);
     }
@@ -60,7 +76,11 @@ const index = ({navigation}) => {
         icon: 'success',
         position: 'top',
       });
-      const response = await api.donePendingOrder(orderId);
+      const response =
+        authContext?.user?.role_id != 6
+          ? await api.donePendingOrder(orderId)
+          : await api.doneDeliveryOrder(orderId);
+
       if (response.ok !== true) {
         showMessage({
           message: 'Failed !',
@@ -69,7 +89,11 @@ const index = ({navigation}) => {
           icon: 'error',
           position: 'top',
         });
-        getPickups();
+        if (authContext?.user?.role_id == 6) {
+          getSofaBoyPickups();
+        } else {
+          getPickups();
+        }
       }
     } catch (err) {
       console.error(err);
@@ -86,10 +110,17 @@ const index = ({navigation}) => {
               justifyContent: 'space-between',
               padding: 10,
             }}>
-            <View>
-              <Text style={styles.cardTitleSmall}>Pickup Time</Text>
-              <Text style={styles.cardTitle}>{item?.pickup_time}</Text>
-            </View>
+            {authContext?.user?.role_id != 6 ? (
+              <View>
+                <Text style={styles.cardTitleSmall}>Pickup Date</Text>
+                <Text style={styles.cardTitle}>{item?.pickup_time}</Text>
+              </View>
+            ) : (
+              <View>
+                <Text style={styles.cardTitleSmall}>Delivery Date</Text>
+                <Text style={styles.cardTitle}>{item?.delv_time}</Text>
+              </View>
+            )}
             <View>
               <Text style={styles.cardTitleSmall}>Order Number</Text>
               <CardButton
@@ -162,35 +193,40 @@ const index = ({navigation}) => {
               style={[
                 styles.cardBottomButton,
                 {
-                  backgroundColor: COLORS.darkTransparent,
+                  backgroundColor:
+                    authContext?.user?.role_id == 6
+                      ? 'green'
+                      : COLORS.darkTransparent,
                 },
               ]}>
               <Text style={{fontSize: 15, color: COLORS.white}}>Done</Text>
             </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => {
-                navigation.push('PickupEdit', {orderId: item.id});
-              }}
-              style={[
-                styles.cardBottomButton,
-                {
-                  backgroundColor: COLORS.primary,
-                },
-              ]}>
-              <Text style={{fontSize: 15, color: COLORS.white}}>Edit</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => {}}
-              style={[
-                styles.cardBottomButton,
-                {
-                  backgroundColor: COLORS.orange,
-                },
-              ]}>
-              <Text style={{fontSize: 15, color: COLORS.white}}>Bill</Text>
-            </TouchableOpacity>
+            {authContext?.user?.role_id != 6 ? (
+              <>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.push('PickupEdit', {orderId: item.id});
+                  }}
+                  style={[
+                    styles.cardBottomButton,
+                    {
+                      backgroundColor: COLORS.primary,
+                    },
+                  ]}>
+                  <Text style={{fontSize: 15, color: COLORS.white}}>Edit</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {}}
+                  style={[
+                    styles.cardBottomButton,
+                    {
+                      backgroundColor: COLORS.orange,
+                    },
+                  ]}>
+                  <Text style={{fontSize: 15, color: COLORS.white}}>Bill</Text>
+                </TouchableOpacity>
+              </>
+            ) : null}
           </View>
         </Card>
       </View>
@@ -202,7 +238,12 @@ const index = ({navigation}) => {
       {loading == true ? (
         <LoadingScreen />
       ) : (
-        <View style={{flex: 1, backgroundColor: COLORS.primary}}>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor:
+              pendingOrders?.length > 0 ? COLORS.primary : COLORS.white,
+          }}>
           <FlatList
             ListHeaderComponent={() => {
               return (
@@ -215,14 +256,15 @@ const index = ({navigation}) => {
             renderItem={item => renderCardItem(item)}
             keyExtractor={item => `${item.id}`}
             refreshing={loading}
-            onRefresh={() => getPickups()}
+            onRefresh={() => {
+              authContext?.user?.role_id != 6
+                ? getPickups()
+                : getSofaBoyPickups();
+            }}
             ListEmptyComponent={() => {
               return (
                 <View
                   style={{
-                    flex: 1,
-                    justifyContent: 'center',
-                    alignItems: 'center',
                     backgroundColor: COLORS.white,
                   }}>
                   <EmptyAnimation message="Empty Order List !" />

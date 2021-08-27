@@ -14,6 +14,7 @@ const endPoint = {
   getUserByMobile: '/get/user',
   updateDeliveredOrder: '/edit-order',
   getRateList: '/getCategoryProduct',
+  getSofaBoyPickups: 'get/Sofaorders/list',
 };
 
 //Call Api Function
@@ -27,6 +28,7 @@ const getDashboardData = EmployeeID => {
 };
 
 const doneDeliveryOrder = orderId => {
+  console.log('Delivery Done : ' + orderId);
   return apiClient.get(endPoint.doneDeliveryOrder + '/' + orderId);
 };
 
@@ -63,6 +65,10 @@ const getRateList = categoryId => {
   return apiClient.get(endPoint.getRateList + '/' + categoryId);
 };
 
+const getSofaBoyPickups = EmployeeID => {
+  return apiClient.get(endPoint.getSofaBoyPickups + '/' + EmployeeID);
+};
+
 const getUserByMobile = mobileNumber => {
   return apiClient.get(endPoint.getUserByMobile + '/' + mobileNumber);
 };
@@ -84,6 +90,7 @@ export default {
   getOrderDetailsByOrderId,
   getPendingOrdersList,
   getRateList,
+  getSofaBoyPickups,
   getUserByMobile,
   updateDeliveredOrder,
 };
