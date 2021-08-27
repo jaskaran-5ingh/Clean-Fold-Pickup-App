@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {TouchableOpacity} from 'react-native';
+import {TouchableOpacity, Alert} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {COLORS, FONTS} from '../constants';
 import AuthContext from '../auth/Context';
@@ -59,7 +59,14 @@ export default function AppStackNavigator() {
             return (
               <TouchableOpacity
                 onPress={() => {
-                  logout();
+                  Alert.alert('Are you want to logout ❓', '', [
+                    {
+                      text: 'NO',
+                      onPress: () => console.log('Cancel Pressed'),
+                      style: 'cancel',
+                    },
+                    {text: 'YES', onPress: () => logout()},
+                  ]);
                 }}
                 style={{
                   padding: 5,
