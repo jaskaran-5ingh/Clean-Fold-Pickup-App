@@ -223,6 +223,7 @@ const index = ({navigation}) => {
                     flex: 1,
                     justifyContent: 'center',
                     alignItems: 'center',
+                    backgroundColor: COLORS.white,
                   }}>
                   <EmptyAnimation message="Empty Order List !" />
                 </View>

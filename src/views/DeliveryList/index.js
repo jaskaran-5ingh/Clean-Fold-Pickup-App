@@ -195,40 +195,46 @@ const index = ({navigation}) => {
       {loading == true ? (
         <LoadingScreen />
       ) : (
-        <FlatList
-          ListHeaderComponent={() => {
-            return (
-              <Text
-                style={{
-                  alignSelf: 'flex-end',
-                  justifyContent: 'center',
-                  ...FONTS.body4,
-                  color: COLORS.darkgray,
-                  marginTop: 5,
-                  paddingHorizontal: 10,
-                }}>
-                Pull down to refresh list
-              </Text>
-            );
-          }}
-          data={pendingOrders}
-          renderItem={item => renderCardItem(item)}
-          keyExtractor={item => `${item.id}`}
-          refreshing={loading}
-          onRefresh={() => getDeliveryList()}
-          ListEmptyComponent={() => {
-            return (
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <EmptyAnimation message="Empty Order List !" />
-              </View>
-            );
-          }}
-        />
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: COLORS.primary,
+          }}>
+          <FlatList
+            ListHeaderComponent={() => {
+              return (
+                <Text
+                  style={{
+                    alignSelf: 'flex-end',
+                    justifyContent: 'center',
+                    ...FONTS.body4,
+                    color: COLORS.light,
+                    marginTop: 5,
+                    paddingHorizontal: 10,
+                  }}>
+                  Pull down to refresh list
+                </Text>
+              );
+            }}
+            data={pendingOrders}
+            renderItem={item => renderCardItem(item)}
+            keyExtractor={item => `${item.id}`}
+            refreshing={loading}
+            onRefresh={() => getDeliveryList()}
+            ListEmptyComponent={() => {
+              return (
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <EmptyAnimation message="Empty Order List !" />
+                </View>
+              );
+            }}
+          />
+        </View>
       )}
     </View>
   );
