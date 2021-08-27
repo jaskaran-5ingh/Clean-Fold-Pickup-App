@@ -223,7 +223,7 @@ dependencies {
         implementation jscFlavor
     }
 
-    compile project(':react-native-splash-screen')
+    implementation project(':react-native-splash-screen')
 
 }
 
