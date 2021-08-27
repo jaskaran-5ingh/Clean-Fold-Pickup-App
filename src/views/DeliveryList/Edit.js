@@ -131,7 +131,6 @@ export default function index({route, navigation}) {
           leftIcon="edit"
           onChangeText={value => setRemarks(value)}
           multiline={true}
-          numberOfLines={10}
           inputStyle={{lineHeight: 30, fontSize: 17}}
         />
       </View>

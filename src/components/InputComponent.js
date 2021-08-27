@@ -108,7 +108,6 @@ const styles = StyleSheet.create({
     color: COLORS.darkTransparent,
     paddingLeft: 30,
     width: '100%',
-    paddingBottom: 15,
   },
   passwordImage: {
     height: responsiveWidth(7),
