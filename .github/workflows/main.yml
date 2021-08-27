@@ -33,3 +33,4 @@ jobs:
         with:
           name: clean-fold-pickup-release.apk
           path: android/app/build/outputs/apk/release/
+          retention-days: 2
