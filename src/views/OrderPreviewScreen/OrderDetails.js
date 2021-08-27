@@ -63,15 +63,13 @@ const index = ({orderData, orderCategory}) => {
             </View>
             <View style={styles.cardDivider}>
               <Text style={styles.cardTitleDark}>Name </Text>
-              <Text style={styles.cardTitleSmall}> {orderData?.mobile}</Text>
+              <Text style={styles.cardTitleSmall}>{orderData?.user?.name}</Text>
             </View>
 
             <View style={styles.cardDivider}>
               <Text style={styles.cardTitleDark}>Order From </Text>
               <Text style={styles.cardTitleSmall}>
-                {orderData?.order_through == 'mobile_app'
-                  ? 'Mobile App'
-                  : 'Administration'}
+                {orderData?.order_through}
               </Text>
             </View>
 
