@@ -1,6 +1,7 @@
-import React, {useContext} from 'react';
-import {TouchableOpacity, Alert} from 'react-native';
+import React, {useContext, useRef, useState, useEffect} from 'react';
+import {Alert, AppState, TouchableOpacity} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
+import navigation from './rootNavigator';
 import {COLORS, FONTS} from '../constants';
 import AuthContext from '../auth/Context';
 import cache from '../utils/cache';
@@ -23,6 +24,20 @@ const Stack = createStackNavigator();
 
 export default function AppStackNavigator() {
   const authContext = useContext(AuthContext);
+  const appState = useRef(AppState.currentState);
+  const [appStateVisible, setAppStateVisible] = useState(appState.current);
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', nextAppState => {
+      appState.current = nextAppState;
+      setAppStateVisible(appState.current);
+      navigation.navigate('Dashboard', {});
+    });
+
+    return () => {
+      subscription?.remove();
+    };
+  }, []);
 
   function logout() {
     try {
