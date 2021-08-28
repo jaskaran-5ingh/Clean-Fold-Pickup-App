@@ -15,11 +15,17 @@ const index = ({route, navigation}) => {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
+    let unAmounted = false;
     try {
-      getOrderDetails();
+      if (!unAmounted) {
+        getOrderDetails();
+      }
     } catch (err) {
       console.error(err);
     }
+    return () => {
+      unAmounted = true;
+    };
   }, []);
 
   async function getOrderDetails() {
