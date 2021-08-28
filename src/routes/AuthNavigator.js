@@ -33,11 +33,6 @@ export default function AuthNavigator() {
         component={SignIn}
         options={{headerShown: false}}
       />
-      <Stack.Screen
-        name="AppStackNavigator"
-        component={AppStackNavigator}
-        options={{headerShown: false}}
-      />
     </Stack.Navigator>
   );
 }

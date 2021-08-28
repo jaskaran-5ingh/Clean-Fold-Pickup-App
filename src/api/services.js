@@ -19,63 +19,45 @@ const endPoint = {
 
 //Call Api Function
 
-const createOrder = saveOrderObject => {
-  return apiClient.post(endPoint.createOrder, saveOrderObject);
-};
+const createOrder = saveOrderObject =>
+  apiClient.post(endPoint.createOrder, saveOrderObject);
 
-const getDashboardData = EmployeeID => {
-  return apiClient.get(endPoint.getDashboardData + '/' + EmployeeID);
-};
+const getDashboardData = EmployeeID =>
+  apiClient.get(endPoint.getDashboardData + '/' + EmployeeID);
 
-const doneDeliveryOrder = orderId => {
-  console.log('Delivery Done : ' + orderId);
-  return apiClient.get(endPoint.doneDeliveryOrder + '/' + orderId);
-};
+const doneDeliveryOrder = orderId =>
+  apiClient.get(endPoint.doneDeliveryOrder + '/' + orderId);
 
-const donePendingOrder = orderId => {
-  return apiClient.get(endPoint.donePendingOrder + '/' + orderId);
-};
+const donePendingOrder = orderId =>
+  apiClient.get(endPoint.donePendingOrder + '/' + orderId);
 
-const getCategoryProduct = () => {
-  return apiClient.get(endPoint.getCategoryProduct);
-};
+const getCategoryProduct = () => apiClient.get(endPoint.getCategoryProduct);
 
-const getDeliveredOrdersList = EmployeeID => {
-  return apiClient.get(endPoint.getOrdersList + '/' + EmployeeID + '/2');
-};
+const getDeliveredOrdersList = EmployeeID =>
+  apiClient.get(endPoint.getOrdersList + '/' + EmployeeID + '/2');
 
-const getOrderDetailsById = orderId => {
-  return apiClient.get(endPoint.getOrderDetailsById + '/' + orderId);
-};
+const getOrderDetailsById = orderId =>
+  apiClient.get(endPoint.getOrderDetailsById + '/' + orderId);
 
-const getOrderDetailsByOrderId = orderId => {
-  //  +'/' + orderId;
-  return apiClient.get(endPoint.getOrderDetailsByOrderId + '/' + orderId);
-};
+const getOrderDetailsByOrderId = orderId =>
+  apiClient.get(endPoint.getOrderDetailsByOrderId + '/' + orderId);
 
-const getOrderCategory = () => {
-  return apiClient.get(endPoint.getOrderCategory);
-};
+const getOrderCategory = () => apiClient.get(endPoint.getOrderCategory);
 
-const getPendingOrdersList = EmployeeID => {
-  return apiClient.get(endPoint.getOrdersList + '/' + EmployeeID + '/1');
-};
+const getPendingOrdersList = EmployeeID =>
+  apiClient.get(endPoint.getOrdersList + '/' + EmployeeID + '/1');
 
-const getRateList = categoryId => {
-  return apiClient.get(endPoint.getRateList + '/' + categoryId);
-};
+const getRateList = categoryId =>
+  apiClient.get(endPoint.getRateList + '/' + categoryId);
 
-const getSofaBoyPickups = EmployeeID => {
-  return apiClient.get(endPoint.getSofaBoyPickups + '/' + EmployeeID);
-};
+const getSofaBoyPickups = EmployeeID =>
+  apiClient.get(endPoint.getSofaBoyPickups + '/' + EmployeeID);
 
-const getUserByMobile = mobileNumber => {
-  return apiClient.get(endPoint.getUserByMobile + '/' + mobileNumber);
-};
+const getUserByMobile = mobileNumber =>
+  apiClient.get(endPoint.getUserByMobile + '/' + mobileNumber);
 
-const updateDeliveredOrder = jsonData => {
-  return apiClient.post(endPoint.updateDeliveredOrder, jsonData);
-};
+const updateDeliveredOrder = jsonData =>
+  apiClient.post(endPoint.updateDeliveredOrder, jsonData);
 
 //Export Functions
 export default {

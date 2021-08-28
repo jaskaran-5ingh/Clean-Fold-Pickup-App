@@ -9,11 +9,11 @@ import {
 
 import {ListItem, Image, Divider} from 'react-native-elements';
 import api from '../../api/services';
-import {COLORS, FONTS, icons} from '../../constants';
+import {COLORS} from '../../constants';
 import {showMessage} from 'react-native-flash-message';
 import {EmptyAnimation, LoadingScreen} from '..';
 
-const index = ({route, navigation}) => {
+const index = ({navigation}) => {
   const [loading, setLoading] = useState(true);
   const [categoryList, setCategoryList] = useState([]);
 
@@ -21,11 +21,17 @@ const index = ({route, navigation}) => {
     'https://cleanfold.in/backend/clean_fold/public/product_icon/';
 
   useEffect(() => {
+    let unAmounted = false;
     try {
-      getOrderCategory();
+      if (!unAmounted) {
+        getOrderCategory();
+      }
     } catch (err) {
       console.error(err);
     }
+    return () => {
+      unAmounted = true;
+    };
   }, []);
 
   async function getOrderCategory() {
