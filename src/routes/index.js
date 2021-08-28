@@ -3,6 +3,7 @@ import AuthNavigator from './AuthNavigator';
 import AppStackNavigator from './AppStackNavigator';
 //Navigator Theme
 import navigationTheme from './navigationTheme';
+import {navigationRef} from './rootNavigator';
 
 //Export Navigators
-export {AuthNavigator, AppStackNavigator, navigationTheme};
+export {AuthNavigator, AppStackNavigator, navigationTheme, navigationRef};

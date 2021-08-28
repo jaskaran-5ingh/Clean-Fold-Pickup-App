@@ -5,8 +5,12 @@ import {NavigationContainer} from '@react-navigation/native';
 import {useNetInfo} from '@react-native-community/netinfo';
 import FlashMessage from 'react-native-flash-message';
 
-import {AppStackNavigator, AuthNavigator, navigationTheme} from './src/routes';
-
+import {
+  AppStackNavigator,
+  AuthNavigator,
+  navigationTheme,
+  navigationRef,
+} from './src/routes';
 import AuthContext from './src/auth/Context';
 import cache from './src/utils/cache';
 
@@ -34,20 +38,28 @@ export default function App() {
   const netInfo = useNetInfo();
 
   //State Declarations
-  const [user, setUser] = useState([]);
+
   const [internetStatus, setInternetStatus] = useState(false);
+  const [user, setUser] = useState([]);
 
   // Use Effect hooks
 
   useEffect(() => {
+    let unAmounted = false;
+
     setTimeout(() => {
       try {
-        cache.get('user').then(res => setUser(res));
+        if (!unAmounted) {
+          cache.get('user').then(res => setUser(res));
+        }
         SplashScreen.hide();
       } catch (err) {
         console.error(err);
       }
     }, 2000);
+    return () => {
+      unAmounted = false;
+    };
   }, []);
 
   //Check Internet Connectivity
@@ -60,7 +72,7 @@ export default function App() {
     <View style={styles.container}>
       <StatusBar backgroundColor={COLORS.primary} />
       {internetStatus == true ? (
-        <NavigationContainer theme={navigationTheme}>
+        <NavigationContainer theme={navigationTheme} ref={navigationRef}>
           <AuthContext.Provider value={{user, setUser}}>
             {user ? <AppStackNavigator /> : <AuthNavigator />}
           </AuthContext.Provider>
