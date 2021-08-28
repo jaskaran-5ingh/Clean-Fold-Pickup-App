@@ -97,11 +97,17 @@ const index = ({navigation}) => {
   const authContext = useContext(AuthContext);
 
   useEffect(() => {
-    try {
-      getDashboardData();
-    } catch (err) {
-      console.error(err);
+    let unAmounted = false;
+    if (!unAmounted) {
+      try {
+        getDashboardData();
+      } catch (err) {
+        console.error(err);
+      }
     }
+    return () => {
+      unAmounted = true;
+    };
   }, [isFocused, authContext?.user?.id]);
 
   // Call Api After 2 Minutes

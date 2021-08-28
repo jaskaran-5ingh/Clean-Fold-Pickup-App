@@ -35,32 +35,19 @@ export default function App() {
 
   //State Declarations
   const [user, setUser] = useState([]);
-  const [auth, setAuth] = useState(false);
   const [internetStatus, setInternetStatus] = useState(false);
 
-  //Check For Auth
-  const authVerify = () => {
-    // cache.store('user', null); //This code remove user from Async Storage
-    cache.get('user').then(user => {
-      if (user != null) {
-        setAuth(true);
-      } else {
-        setAuth(false);
-      }
-      setUser(user);
-    });
-  };
   // Use Effect hooks
 
   useEffect(() => {
-    authVerify();
-  }, [user]);
-
-  useEffect(() => {
-    authVerify();
     setTimeout(() => {
-      SplashScreen.hide();
-    }, 1000);
+      try {
+        cache.get('user').then(res => setUser(res));
+        SplashScreen.hide();
+      } catch (err) {
+        console.error(err);
+      }
+    }, 2000);
   }, []);
 
   //Check Internet Connectivity
@@ -75,7 +62,7 @@ export default function App() {
       {internetStatus == true ? (
         <NavigationContainer theme={navigationTheme}>
           <AuthContext.Provider value={{user, setUser}}>
-            {!auth ? <AuthNavigator /> : <AppStackNavigator />}
+            {user ? <AppStackNavigator /> : <AuthNavigator />}
           </AuthContext.Provider>
         </NavigationContainer>
       ) : (
