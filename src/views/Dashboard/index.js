@@ -26,7 +26,7 @@ function Card({
   title = 'title',
   qty = 0,
   fullWidth = false,
-  onPress = () => console.log('clicked'),
+  onPress = () => {},
   qtyAvailable = true,
   loading = false,
 }) {
@@ -113,11 +113,17 @@ const index = ({navigation}) => {
   // Call Api After 2 Minutes
   useEffect(() => {
     const interval = setInterval(() => {
-      try {
-        getDashboardData();
-      } catch (error) {
-        console.error(error);
+      let unAmounted = false;
+      if (!unAmounted) {
+        try {
+          getDashboardData();
+        } catch (err) {
+          console.error(err);
+        }
       }
+      return () => {
+        unAmounted = true;
+      };
     }, 20000);
     return () => {
       {
@@ -129,7 +135,6 @@ const index = ({navigation}) => {
   async function getDashboardData() {
     setLoading(true);
     try {
-      console.log();
       if (authContext?.user?.id != undefined) {
         const response = await api.getDashboardData(authContext?.user?.id);
         if (response.ok !== true) {

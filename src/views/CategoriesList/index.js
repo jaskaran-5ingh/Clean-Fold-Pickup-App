@@ -7,11 +7,12 @@ import {
   FlatList,
 } from 'react-native';
 
-import {ListItem, Image, Divider} from 'react-native-elements';
+import {ListItem, Divider} from 'react-native-elements';
 import api from '../../api/services';
 import {COLORS} from '../../constants';
 import {showMessage} from 'react-native-flash-message';
 import {EmptyAnimation, LoadingScreen} from '..';
+import FastImage from 'react-native-fast-image';
 
 const index = ({navigation}) => {
   const [loading, setLoading] = useState(true);
@@ -63,20 +64,9 @@ const index = ({navigation}) => {
         }>
         <View>
           <ListItem>
-            <Image
+            <FastImage
               source={{uri: IMAGES_URL + item.images}}
               style={styles.iconStyle}
-              PlaceholderContent={
-                <View style={styles.activityContainer}>
-                  <ActivityIndicator
-                    color={COLORS.primary}
-                    size={20}
-                    style={{
-                      opacity: 0.6,
-                    }}
-                  />
-                </View>
-              }
             />
             <ListItem.Content>
               <ListItem.Title style={styles.title}>{item.name}</ListItem.Title>

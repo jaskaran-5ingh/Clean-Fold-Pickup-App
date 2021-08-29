@@ -183,7 +183,7 @@ const index = ({navigation}) => {
                   [
                     {
                       text: 'Cancel',
-                      onPress: () => console.log('Cancel Pressed'),
+                      onPress: () => null,
                       style: 'cancel',
                     },
                     {text: 'OK', onPress: () => donePickupOrder(item.id)},

@@ -1,16 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {
-  ActivityIndicator,
-  FlatList,
-  SafeAreaView,
-  StyleSheet,
-  View,
-} from 'react-native';
-import {Image, ListItem, Tab, Divider} from 'react-native-elements';
+import {FlatList, SafeAreaView, StyleSheet, View} from 'react-native';
+import {ListItem, Tab, Divider} from 'react-native-elements';
+import FastImage from 'react-native-fast-image';
 import api from '../../api/services';
 import {COLORS, FONTS} from '../../constants';
 import {LoadingScreen} from '../index';
 import {showMessage} from 'react-native-flash-message';
+
 function TabItems({data, renderItems}) {
   return (
     <FlatList
@@ -33,11 +29,17 @@ const index = ({route, navigation}) => {
     'https://cleanfold.in/backend/clean_fold/public/product_images/';
 
   useEffect(() => {
+    let unAmounted = false;
     try {
-      getRateList();
+      if (!unAmounted) {
+        getRateList();
+      }
     } catch (err) {
       console.error(err);
     }
+    return () => {
+      unAmounted = true;
+    };
   }, []);
 
   async function getRateList() {
@@ -79,35 +81,14 @@ const index = ({route, navigation}) => {
         ]}
         titleStyle={[styles.tabTitleStyle]}
         icon={
-          <Image
-            source={{uri: item.icon}}
+          <FastImage
+            source={{uri: item.icon, priority: FastImage.priority.high}}
             resizeMethod="scale"
             style={{
               width: 40,
               height: 50,
               marginVertical: 4,
             }}
-            PlaceholderContent={
-              <View
-                style={[
-                  {height: '100%', width: '100%', justifyContent: 'center'},
-                  tabIndex == index
-                    ? {
-                        backgroundColor: COLORS.lightGray,
-                      }
-                    : {
-                        backgroundColor: COLORS.white,
-                      },
-                ]}>
-                <ActivityIndicator
-                  color={COLORS.primary}
-                  size={20}
-                  style={{
-                    opacity: 0.6,
-                  }}
-                />
-              </View>
-            }
           />
         }
         onPress={() => {
@@ -120,26 +101,12 @@ const index = ({route, navigation}) => {
   function renderProducts({index, item}) {
     return (
       <ListItem key={item.id} bottomDivider>
-        <Image
-          source={{uri: IMAGES_URL + item.image}}
+        <FastImage
+          source={{
+            uri: IMAGES_URL + item.image,
+            priority: FastImage.priority.high,
+          }}
           style={{width: 60, height: 90, marginRight: 20}}
-          PlaceholderContent={
-            <View
-              style={{
-                backgroundColor: 'white',
-                height: '100%',
-                width: '100%',
-                justifyContent: 'center',
-              }}>
-              <ActivityIndicator
-                color={COLORS.primary}
-                size={40}
-                style={{
-                  opacity: 0.6,
-                }}
-              />
-            </View>
-          }
         />
 
         <ListItem.Content>
