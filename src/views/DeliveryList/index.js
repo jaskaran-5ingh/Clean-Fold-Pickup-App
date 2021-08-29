@@ -48,7 +48,6 @@ const index = ({navigation}) => {
     try {
       setLoading(true);
       const response = await api.doneDeliveryOrder(orderId);
-      console.log(response);
       if (response.ok !== true) {
         setError(false);
         showMessage({
@@ -147,7 +146,7 @@ const index = ({navigation}) => {
               Alert.alert('Alert!', 'Are you want to change status to Done ?', [
                 {
                   text: 'Cancel',
-                  onPress: () => console.log('Cancel Pressed'),
+                  onPress: () => null,
                   style: 'cancel',
                 },
                 {text: 'OK', onPress: () => doneDeliveryOrder(item.id)},

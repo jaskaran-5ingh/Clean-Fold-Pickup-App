@@ -1,8 +1,8 @@
 //Auth Screens
 import Button from './Button';
+import DatePicker from './DatePicker';
 import InputComponent from './InputComponent';
 import PickupComponent from './PickerComponent';
-import DatePicker from './DatePicker';
 //App Screens
 
-export {Button, InputComponent, PickupComponent, DatePicker};
+export {Button, DatePicker, InputComponent, PickupComponent};

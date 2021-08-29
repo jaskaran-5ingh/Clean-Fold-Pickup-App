@@ -44,7 +44,6 @@ export default function index({route, navigation}) {
       setLoading(true);
       const response = await api.getOrderDetailsById(route.params.orderId);
       if (response.ok !== true) setError(false);
-      console.log(response?.data?.orderDetails);
 
       setRemarks(response?.data?.orderDetails?.remarks);
       setDeliveryData(response?.data?.orderDetails);

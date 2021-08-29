@@ -77,7 +77,7 @@ export default function AppStackNavigator() {
                   Alert.alert('Are you want to logout ❓', '', [
                     {
                       text: 'NO',
-                      onPress: () => console.log('Cancel Pressed'),
+                      onPress: () => {},
                       style: 'cancel',
                     },
                     {text: 'YES', onPress: () => logout()},
