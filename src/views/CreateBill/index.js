@@ -1,13 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Divider, LinearProgress, ListItem, Tab} from 'react-native-elements';
 import FastImage from 'react-native-fast-image';
 import {showMessage} from 'react-native-flash-message';
 import api from '../../api/services';
 import {COLORS, FONTS} from '../../constants';
+import {CartItemsContext} from '../../utils/CartContext';
 import {LoadingScreen} from '../index';
 import ProductComponent from './ProductComponent';
 function TabItems({data, renderItems}) {
@@ -26,7 +27,8 @@ const index = ({route}) => {
   const [rateList, setSetList] = useState([]);
   const [tabIndex, setTabIndex] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState(2);
-
+  const cartContext = useContext(CartItemsContext);
+  console.log(cartContext.cartItems);
   const PRODUCT_IMAGES_URL =
     'https://cleanfold.in/backend/clean_fold/public/product_images/';
   const [categoryList, setCategoryList] = useState([]);

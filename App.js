@@ -13,6 +13,7 @@ import {
   navigationTheme,
 } from './src/routes';
 import cache from './src/utils/cache';
+import CartContext from './src/utils/CartContext';
 import {ErrorScreen} from './src/views';
 
 //Debugger Configuration Start
@@ -74,17 +75,19 @@ export default function App() {
   //Render Component
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor={COLORS.primary} />
-      {internetStatus == true ? (
-        <NavigationContainer theme={navigationTheme} ref={navigationRef}>
-          <AuthContext.Provider value={{user, setUser}}>
-            {user ? <AppStackNavigator /> : <AuthNavigator />}
-          </AuthContext.Provider>
-        </NavigationContainer>
-      ) : (
-        <ErrorScreen getAlerts={() => setInternetStatus(internetStatus)} />
-      )}
-      <FlashMessage position="top" />
+      <AuthContext.Provider value={{user, setUser}}>
+        <CartContext>
+          <StatusBar backgroundColor={COLORS.primary} />
+          {internetStatus == true ? (
+            <NavigationContainer theme={navigationTheme} ref={navigationRef}>
+              {user ? <AppStackNavigator /> : <AuthNavigator />}
+            </NavigationContainer>
+          ) : (
+            <ErrorScreen getAlerts={() => setInternetStatus(internetStatus)} />
+          )}
+          <FlashMessage position="top" />
+        </CartContext>
+      </AuthContext.Provider>
     </View>
   );
 }
