@@ -3,7 +3,7 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import {Alert, AppState, TouchableOpacity} from 'react-native';
-import {Icon} from 'react-native-elements';
+import {Badge, Icon} from 'react-native-elements';
 import AuthContext from '../auth/Context';
 import {COLORS, FONTS} from '../constants';
 import cache from '../utils/cache';
@@ -50,6 +50,37 @@ export default function AppStackNavigator() {
           backgroundColor: COLORS.red,
         }}>
         <Icon name="sign-out" type="font-awesome" size={size} color="white" />
+      </TouchableOpacity>
+    );
+  }
+
+  function cartButton(color, size) {
+    return (
+      <TouchableOpacity
+        onPress={() => {}}
+        style={{
+          padding: 5,
+          borderRadius: 10,
+          marginRight: 10,
+        }}>
+        <Icon
+          name="shopping-cart"
+          type="font-awesome"
+          size={size}
+          color={COLORS.white}
+        />
+        <Badge
+          value={0}
+          containerStyle={{
+            position: 'absolute',
+            top: -7,
+            right: -7,
+          }}
+          badgeStyle={{
+            elevation: 6,
+            backgroundColor: COLORS.red,
+          }}
+        />
       </TouchableOpacity>
     );
   }
@@ -112,7 +143,12 @@ export default function AppStackNavigator() {
         name="CreateBill"
         component={CreateBill}
         label="Create Bill"
-        options={{headerShown: true}}
+        options={{
+          headerShown: true,
+          headerRight: ({color, size}) => {
+            return cartButton(color, size);
+          },
+        }}
       />
 
       <Stack.Screen
