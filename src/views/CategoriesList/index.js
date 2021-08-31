@@ -1,18 +1,12 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import React, {useEffect, useState} from 'react';
-import {
-  ActivityIndicator,
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  FlatList,
-} from 'react-native';
-
-import {ListItem, Divider} from 'react-native-elements';
-import api from '../../api/services';
-import {COLORS} from '../../constants';
+import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Divider, ListItem} from 'react-native-elements';
+import FastImage from 'react-native-fast-image';
 import {showMessage} from 'react-native-flash-message';
 import {EmptyAnimation, LoadingScreen} from '..';
-import FastImage from 'react-native-fast-image';
+import api from '../../api/services';
+import {COLORS} from '../../constants';
 
 const index = ({navigation}) => {
   const [loading, setLoading] = useState(true);
@@ -21,20 +15,7 @@ const index = ({navigation}) => {
   var IMAGES_URL =
     'https://cleanfold.in/backend/clean_fold/public/product_icon/';
 
-  useEffect(() => {
-    let unAmounted = false;
-    try {
-      if (!unAmounted) {
-        getOrderCategory();
-      }
-    } catch (err) {
-      console.error(err);
-    }
-    return () => {
-      unAmounted = true;
-    };
-  }, []);
-
+  //Api Function Declaration
   async function getOrderCategory() {
     try {
       setLoading(true);
@@ -55,6 +36,20 @@ const index = ({navigation}) => {
       console.error(err);
     }
   }
+
+  useEffect(() => {
+    //Api function Calling
+    let unAmounted = false;
+
+    if (!unAmounted) {
+      getOrderCategory();
+    }
+
+    //Hook Clean Up
+    return () => {
+      unAmounted = true;
+    };
+  }, []);
 
   function renderCategory({item}) {
     return (

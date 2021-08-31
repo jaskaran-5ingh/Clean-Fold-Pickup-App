@@ -1,21 +1,19 @@
-import React, {useEffect, useState} from 'react';
-import SplashScreen from 'react-native-splash-screen';
-import {StatusBar, StyleSheet, View} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
 import {useNetInfo} from '@react-native-community/netinfo';
+import {NavigationContainer} from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
+import {StatusBar, StyleSheet, View} from 'react-native';
 import FlashMessage from 'react-native-flash-message';
-
+import SplashScreen from 'react-native-splash-screen';
+import AuthContext from './src/auth/Context';
+import {COLORS} from './src/constants';
 import {
   AppStackNavigator,
   AuthNavigator,
-  navigationTheme,
   navigationRef,
+  navigationTheme,
 } from './src/routes';
-import AuthContext from './src/auth/Context';
 import cache from './src/utils/cache';
-
 import {ErrorScreen} from './src/views';
-import {COLORS} from './src/constants';
 
 //Debugger Configuration Start
 // To see all the requests in the chrome Dev tools in the network tab.
@@ -64,7 +62,13 @@ export default function App() {
 
   //Check Internet Connectivity
   useEffect(() => {
-    setInternetStatus(netInfo.isConnected);
+    let unAmounted = false;
+    if (!unAmounted) {
+      setInternetStatus(netInfo.isConnected);
+    }
+    return () => {
+      unAmounted = true;
+    };
   }, [netInfo.isConnected]);
 
   //Render Component

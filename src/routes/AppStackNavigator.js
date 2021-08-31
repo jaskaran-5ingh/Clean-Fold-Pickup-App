@@ -1,13 +1,16 @@
-import React, {useContext, useRef, useState, useEffect} from 'react';
-import {Alert, AppState, TouchableOpacity} from 'react-native';
+/* eslint-disable no-unused-vars */
+/* eslint-disable react-native/no-inline-styles */
 import {createStackNavigator} from '@react-navigation/stack';
-import navigation from './rootNavigator';
-import {COLORS, FONTS} from '../constants';
+import React, {useContext, useEffect, useRef, useState} from 'react';
+import {Alert, AppState, TouchableOpacity} from 'react-native';
+import {Icon} from 'react-native-elements';
 import AuthContext from '../auth/Context';
+import {COLORS, FONTS} from '../constants';
 import cache from '../utils/cache';
 //Screens
 import {
   CategoriesList,
+  CreateBill,
   CreateOrderScreen,
   Dashboard,
   DeliveryList,
@@ -17,7 +20,7 @@ import {
   PickupEdit,
   RateListScreen,
 } from '../views';
-import {Icon} from 'react-native-elements/dist/icons/Icon';
+import navigation from './rootNavigator';
 
 //Create object for navigation
 const Stack = createStackNavigator();
@@ -27,14 +30,43 @@ export default function AppStackNavigator() {
   const appState = useRef(AppState.currentState);
   const [appStateVisible, setAppStateVisible] = useState(appState.current);
 
+  function logoutButton(color, size) {
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          Alert.alert('Are you want to logout ❓', '', [
+            {
+              text: 'NO',
+              onPress: () => {},
+              style: 'cancel',
+            },
+            {text: 'YES', onPress: () => logout()},
+          ]);
+        }}
+        style={{
+          padding: 5,
+          borderRadius: 10,
+          marginRight: 10,
+          backgroundColor: COLORS.red,
+        }}>
+        <Icon name="sign-out" type="font-awesome" size={size} color="white" />
+      </TouchableOpacity>
+    );
+  }
+
   useEffect(() => {
+    let unAmounted = false;
+
     const subscription = AppState.addEventListener('change', nextAppState => {
       appState.current = nextAppState;
-      setAppStateVisible(appState.current);
+      if (!unAmounted) {
+        setAppStateVisible(appState.current);
+      }
       navigation.navigate('Dashboard', {});
     });
 
     return () => {
+      unAmounted = true;
       subscription?.remove();
     };
   }, []);
@@ -51,106 +83,95 @@ export default function AppStackNavigator() {
 
   return (
     <Stack.Navigator
-      initialRouteName="Dashboard"
+      initialRouteName="CreateBill"
       allowFontScaling={false}
-      screenOptions={({navigation, route}) => ({
-        headerShown: true,
-        headerTitleAlign: 'center',
-        headerStyle: {
-          backgroundColor: COLORS.primary,
-        },
-        headerTitleStyle: {
-          ...FONTS.h4,
-          color: COLORS.white,
-        },
-        headerTintColor: COLORS.white,
-      })}>
+      screenOptions={() => {
+        return {
+          headerShown: true,
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: COLORS.primary,
+          },
+          headerTitleStyle: {
+            ...FONTS.h4,
+            color: COLORS.white,
+          },
+          headerTintColor: COLORS.white,
+        };
+      }}>
+      {/* List of screen components */}
+
+      <Stack.Screen
+        name="CategoriesList"
+        component={CategoriesList}
+        label="CategoriesList"
+        options={{headerShown: true}}
+      />
+
+      <Stack.Screen
+        name="CreateBill"
+        component={CreateBill}
+        label="Create Bill"
+        options={{headerShown: true}}
+      />
+
+      <Stack.Screen
+        name="CreateOrderScreen"
+        component={CreateOrderScreen}
+        label="Create Order"
+        options={{headerShown: true}}
+      />
+
       <Stack.Screen
         name="Dashboard"
         component={Dashboard}
         options={{
           headerShown: true,
           headerRight: ({color, size}) => {
-            return (
-              <TouchableOpacity
-                onPress={() => {
-                  Alert.alert('Are you want to logout ❓', '', [
-                    {
-                      text: 'NO',
-                      onPress: () => {},
-                      style: 'cancel',
-                    },
-                    {text: 'YES', onPress: () => logout()},
-                  ]);
-                }}
-                style={{
-                  padding: 5,
-                  borderRadius: 10,
-                  marginRight: 10,
-                  backgroundColor: COLORS.red,
-                }}>
-                <Icon
-                  name="sign-out"
-                  type="font-awesome"
-                  size={size}
-                  color="white"
-                />
-              </TouchableOpacity>
-            );
+            return logoutButton(color, size);
           },
         }}
       />
-      <Stack.Screen
-        name="Pickup"
-        label="PICKUPS"
-        component={Pickup}
-        options={{headerShown: true, title: 'Pickups'}}
-      />
 
-      <Stack.Screen
-        name="CategoriesList"
-        component={CategoriesList}
-        label="CategoriesList"
-        options={{headerShown: true, title: 'Category List'}}
-      />
-
-      <Stack.Screen
-        name="PickupEdit"
-        label="PICKUP Edit"
-        component={PickupEdit}
-        options={{headerShown: true, title: 'Pickup Edit'}}
-      />
       <Stack.Screen
         name="DeliveryList"
         component={DeliveryList}
         label="DELIVERY"
-        options={{headerShown: true, title: 'Delivery'}}
+        options={{headerShown: true}}
       />
-      <Stack.Screen
-        name="CreateOrderScreen"
-        component={CreateOrderScreen}
-        label="Create Order"
-        options={{headerShown: true, title: 'Create Order'}}
-      />
+
       <Stack.Screen
         name="DeliveryListEdit"
         component={DeliveryListEdit}
         label="DeliveryListEdit"
-        options={{headerShown: true, title: 'Edit Delivery'}}
+        options={{headerShown: true}}
       />
 
       <Stack.Screen
         name="OrderPreviewScreen"
         component={OrderPreviewScreen}
         label="OrderPreviewScreen"
-        options={{headerShown: true, title: 'Order Details'}}
+        options={{headerShown: true}}
+      />
+      <Stack.Screen
+        name="Pickup"
+        label="PICKUPS"
+        component={Pickup}
+        options={{headerShown: true}}
+      />
+
+      <Stack.Screen
+        name="PickupEdit"
+        label="PICKUP Edit"
+        component={PickupEdit}
+        options={{headerShown: true}}
       />
 
       <Stack.Screen
         name="RateListScreen"
         component={RateListScreen}
         label="RateListScreen"
-        options={{headerShown: true, title: 'Rate List'}}
+        options={{headerShown: true}}
       />
     </Stack.Navigator>
   );
