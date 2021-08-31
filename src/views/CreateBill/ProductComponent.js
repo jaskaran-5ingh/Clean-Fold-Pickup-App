@@ -1,4 +1,4 @@
-import React, {useReducer, useState} from 'react';
+import React, {useReducer} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {ListItem} from 'react-native-elements';
 import {COLORS, FONTS} from '../../constants';
@@ -18,7 +18,6 @@ function reducer(state, action) {
 }
 
 const ProductComponent = ({item}) => {
-  const [productQty, setProductQty] = useState(0);
   const [qty, dispatch] = useReducer(reducer, 0);
   return (
     <>
