@@ -1,4 +1,7 @@
-import React, {useEffect, useState, useContext} from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable react-native/no-inline-styles */
+import React, {useContext, useEffect, useState} from 'react';
 import {
   Alert,
   FlatList,
@@ -9,11 +12,9 @@ import {
 } from 'react-native';
 import {Card} from 'react-native-elements';
 import {showMessage} from 'react-native-flash-message';
-
-import {COLORS, FONTS} from '../../constants';
 import api from '../../api/services';
-import cache from '../../utils/cache';
 import AuthContext from '../../auth/Context';
+import {COLORS, FONTS} from '../../constants';
 import {EmptyAnimation, LoadingScreen} from '../index';
 
 function CardButton({onPress, containerStyle, title, titleStyle}) {
@@ -31,11 +32,7 @@ const index = ({navigation}) => {
   const authContext = useContext(AuthContext);
   useEffect(() => {
     try {
-      if (authContext?.user?.role_id == 6) {
-        getSofaBoyPickups();
-      } else {
-        getPickups();
-      }
+      authContext?.user?.role_id === 6 ? getSofaBoyPickups() : getPickups();
     } catch (err) {
       console.error(err);
     }
@@ -45,7 +42,9 @@ const index = ({navigation}) => {
     try {
       setLoading(true);
       const response = await api.getSofaBoyPickups(authContext?.user?.id);
-      if (response.ok !== true) setError(false);
+      if (response.ok !== true) {
+        setError(false);
+      }
       setPendingOrders(response?.data?.order_list);
       setLoading(false);
     } catch (err) {
@@ -57,7 +56,9 @@ const index = ({navigation}) => {
     try {
       setLoading(true);
       const response = await api.getPendingOrdersList(authContext?.user?.id);
-      if (response.ok !== true) setError(false);
+      if (response.ok !== true) {
+        setError(false);
+      }
       setPendingOrders(response?.data?.order_list);
       setLoading(false);
     } catch (err) {
@@ -77,7 +78,7 @@ const index = ({navigation}) => {
         position: 'top',
       });
       const response =
-        authContext?.user?.role_id != 6
+        authContext?.user?.role_id !== 6
           ? await api.donePendingOrder(orderId)
           : await api.doneDeliveryOrder(orderId);
 
@@ -89,11 +90,7 @@ const index = ({navigation}) => {
           icon: 'error',
           position: 'top',
         });
-        if (authContext?.user?.role_id == 6) {
-          getSofaBoyPickups();
-        } else {
-          getPickups();
-        }
+        authContext?.user?.role_id === 6 ? getSofaBoyPickups() : getPickups();
       }
     } catch (err) {
       console.error(err);
@@ -110,7 +107,7 @@ const index = ({navigation}) => {
               justifyContent: 'space-between',
               padding: 10,
             }}>
-            {authContext?.user?.role_id != 6 ? (
+            {authContext?.user?.role_id !== 6 ? (
               <View>
                 <Text style={styles.cardTitleSmall}>Pickup Date</Text>
                 <Text style={styles.cardTitle}>{item?.pickup_time}</Text>
@@ -194,14 +191,14 @@ const index = ({navigation}) => {
                 styles.cardBottomButton,
                 {
                   backgroundColor:
-                    authContext?.user?.role_id == 6
+                    authContext?.user?.role_id === 6
                       ? 'green'
                       : COLORS.darkTransparent,
                 },
               ]}>
-              <Text style={{fontSize: 15, color: COLORS.white}}>Done</Text>
+              <Text style={styles.buttonText}>Done</Text>
             </TouchableOpacity>
-            {authContext?.user?.role_id != 6 ? (
+            {authContext?.user?.role_id !== 6 ? (
               <>
                 <TouchableOpacity
                   onPress={() => {
@@ -213,17 +210,17 @@ const index = ({navigation}) => {
                       backgroundColor: COLORS.primary,
                     },
                   ]}>
-                  <Text style={{fontSize: 15, color: COLORS.white}}>Edit</Text>
+                  <Text style={styles.buttonText}>Edit</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() => {}}
+                  onPress={() => navigation.navigate('CreateBill')}
                   style={[
                     styles.cardBottomButton,
                     {
                       backgroundColor: COLORS.orange,
                     },
                   ]}>
-                  <Text style={{fontSize: 15, color: COLORS.white}}>Bill</Text>
+                  <Text style={styles.buttonText}>Bill</Text>
                 </TouchableOpacity>
               </>
             ) : null}
@@ -235,7 +232,7 @@ const index = ({navigation}) => {
 
   return (
     <View style={{flex: 1, backgroundColor: COLORS.white}}>
-      {loading == true ? (
+      {loading === true ? (
         <LoadingScreen />
       ) : (
         <View
@@ -257,7 +254,7 @@ const index = ({navigation}) => {
             keyExtractor={item => `${item.id}`}
             refreshing={loading}
             onRefresh={() => {
-              authContext?.user?.role_id != 6
+              authContext?.user?.role_id !== 6
                 ? getPickups()
                 : getSofaBoyPickups();
             }}
@@ -304,6 +301,7 @@ const styles = StyleSheet.create({
   cardContainerStyle: {
     backgroundColor: COLORS.white,
   },
+  buttonText: {fontSize: 15, color: COLORS.white},
 });
 
 export default index;

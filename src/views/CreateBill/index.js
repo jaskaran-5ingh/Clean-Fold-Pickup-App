@@ -2,8 +2,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
-import {FlatList, SafeAreaView, StyleSheet, View} from 'react-native';
-import {Divider, ListItem, Tab} from 'react-native-elements';
+import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Divider, LinearProgress, ListItem, Tab} from 'react-native-elements';
 import FastImage from 'react-native-fast-image';
 import {showMessage} from 'react-native-flash-message';
 import api from '../../api/services';
@@ -22,17 +22,89 @@ function TabItems({data, renderItems}) {
 
 const index = ({route}) => {
   const [loading, setLoading] = useState(true);
+  const [linearLoading, setLinearLoading] = useState(true);
   const [rateList, setSetList] = useState([]);
   const [tabIndex, setTabIndex] = useState(0);
+  const [selectedCategory, setSelectedCategory] = useState(2);
 
-  const IMAGES_URL =
+  const PRODUCT_IMAGES_URL =
     'https://cleanfold.in/backend/clean_fold/public/product_images/';
+  const [categoryList, setCategoryList] = useState([]);
+
+  var ICON_URL = 'https://cleanfold.in/backend/clean_fold/public/product_icon/';
+
+  //Api Function Declaration
+  async function getOrderCategory() {
+    try {
+      setLoading(true);
+      const response = await api.getOrderCategory();
+      if (response.ok !== true) {
+        showMessage({
+          message: response?.problem + ' !',
+          description: 'Please try again latter',
+          backgroundColor: COLORS.red,
+          type: 'danger',
+          icon: 'danger',
+        });
+      } else {
+        setCategoryList(response?.data?.categories);
+      }
+      setLoading(false);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  function renderCategory({item}) {
+    let isSelected =
+      item.id === selectedCategory ? {backgroundColor: COLORS.primary} : null;
+
+    return (
+      <TouchableOpacity
+        onPress={() => setSelectedCategory(item.id)}
+        style={[
+          {
+            padding: 10,
+            height: 60,
+            shadowColor: COLORS.primary,
+            minWidth: 110,
+            textAlign: 'center',
+            justifyContent: 'center',
+            alignItems: 'center',
+          },
+          isSelected,
+        ]}>
+        <Text
+          style={{
+            ...FONTS.h5,
+            paddingBottom: 13,
+            color: isSelected ? COLORS.white : COLORS.darkTransparent,
+          }}>
+          {item.name}
+        </Text>
+      </TouchableOpacity>
+    );
+  }
 
   useEffect(() => {
     let unAmounted = false;
     try {
       if (!unAmounted) {
-        getRateList();
+        getRateList(selectedCategory);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+    return () => {
+      unAmounted = true;
+    };
+  }, [selectedCategory]);
+
+  useEffect(() => {
+    let unAmounted = false;
+    try {
+      if (!unAmounted) {
+        getOrderCategory();
       }
     } catch (err) {
       console.error(err);
@@ -42,10 +114,10 @@ const index = ({route}) => {
     };
   }, []);
 
-  async function getRateList() {
+  async function getRateList(id) {
     try {
-      setLoading(true);
-      const response = await api.getRateList(route?.params?.categoryId);
+      setLinearLoading(true);
+      const response = await api.getRateList(id);
       if (response.ok !== true) {
         showMessage({
           message: response?.problem + ' !',
@@ -57,12 +129,11 @@ const index = ({route}) => {
       } else {
         setSetList(response?.data?.data);
       }
-      setLoading(false);
+      setLinearLoading(false);
     } catch (err) {
       console.error(err);
     }
   }
-
   const activeStyle = {
     minWidth: 110,
     backgroundColor: COLORS.lightGray,
@@ -97,7 +168,7 @@ const index = ({route}) => {
       <ListItem key={item.id} bottomDivider>
         <FastImage
           source={{
-            uri: IMAGES_URL + item.image,
+            uri: PRODUCT_IMAGES_URL + item.image,
             priority: FastImage.priority.high,
           }}
           style={{width: 60, height: 90, marginRight: 20}}
@@ -115,49 +186,8 @@ const index = ({route}) => {
             }}>
             {item.title}
           </ListItem.Title>
-          <ListItem.Subtitle style={[styles.totalTitle, {marginTop: 30}]}>
-            Price
-          </ListItem.Subtitle>
-          <ListItem.Subtitle style={styles.priceSubTitle}>
-            ₹ {item.price}
-          </ListItem.Subtitle>
         </ListItem.Content>
-
-        {/* Discount Price */}
-
-        <ListItem.Content>
-          <ListItem.Title
-            style={{
-              marginBottom: 10,
-            }}>
-            {' '}
-          </ListItem.Title>
-          <ListItem.Subtitle style={styles.totalTitle}>
-            Discount ₹
-          </ListItem.Subtitle>
-          <ListItem.Subtitle style={styles.priceSubTitle}>
-            ₹ {Math.round((item.price * item?.discount_product) / 100)}
-          </ListItem.Subtitle>
-        </ListItem.Content>
-
-        {/* Discount Percentage */}
-
-        <ListItem.Content>
-          <ListItem.Title
-            style={{
-              marginBottom: 10,
-            }}>
-            {' '}
-          </ListItem.Title>
-          <ListItem.Subtitle style={styles.totalTitle}>
-            Total ₹
-          </ListItem.Subtitle>
-          <ListItem.Subtitle style={styles.priceSubTitle}>
-            ₹{' '}
-            {Math.round(item.price) -
-              Math.round((item.price * item?.discount_product) / 100)}
-          </ListItem.Subtitle>
-        </ListItem.Content>
+        <ListItem.Content></ListItem.Content>
       </ListItem>
     );
   }
@@ -165,9 +195,38 @@ const index = ({route}) => {
   return (
     <View style={styles.container}>
       {loading ? (
+        <View
+          style={{
+            borderBottomWidth: 4,
+            borderBottomColor: COLORS.transparent,
+          }}
+        />
+      ) : (
+        <FlatList
+          data={categoryList}
+          keyExtractor={item => `${item.id}`}
+          renderItem={renderCategory}
+          refreshing={loading}
+          onRefresh={() => getOrderCategory()}
+          horizontal={true}
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+        />
+      )}
+      {linearLoading ? (
+        <LinearProgress color={COLORS.primary} />
+      ) : (
+        <View
+          style={{
+            borderBottomWidth: 4,
+            borderBottomColor: COLORS.gray,
+          }}
+        />
+      )}
+      {loading ? (
         <LoadingScreen />
       ) : (
-        <SafeAreaView style={{flex: 1}}>
+        <>
           <Tab value={tabIndex} indicatorStyle={styles.tabIndicator}>
             <FlatList
               data={rateList}
@@ -183,7 +242,7 @@ const index = ({route}) => {
             data={rateList[tabIndex]?.products}
             renderItems={renderProducts}
           />
-        </SafeAreaView>
+        </>
       )}
     </View>
   );
@@ -223,6 +282,7 @@ const styles = StyleSheet.create({
     height: 35,
     marginVertical: 2,
   },
+  iconStyle: {width: 60, height: 60, marginRight: 20},
 });
 
 export default index;
