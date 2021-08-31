@@ -9,7 +9,7 @@ import {showMessage} from 'react-native-flash-message';
 import api from '../../api/services';
 import {COLORS, FONTS} from '../../constants';
 import {LoadingScreen} from '../index';
-
+import ProductComponent from './ProductComponent';
 function TabItems({data, renderItems}) {
   return (
     <FlatList
@@ -173,29 +173,7 @@ const index = ({route}) => {
           }}
           style={{width: 60, height: 90, marginRight: 20}}
         />
-
-        <ListItem.Content>
-          <ListItem.Title
-            style={{
-              position: 'absolute',
-              color: COLORS.primary,
-              ...FONTS.h5,
-              fontWeight: 'bold',
-              width: 200,
-              top: -10,
-            }}>
-            {item.title}
-          </ListItem.Title>
-          <ListItem.Subtitle style={[styles.totalTitle, {marginTop: 20}]}>
-            Price
-          </ListItem.Subtitle>
-          <ListItem.Subtitle style={styles.priceSubTitle}>
-            ₹{' '}
-            {Math.round(item.price) -
-              Math.round((item.price * item?.discount_product) / 100)}
-          </ListItem.Subtitle>
-        </ListItem.Content>
-        <ListItem.Content></ListItem.Content>
+        <ProductComponent item={item} />
       </ListItem>
     );
   }
