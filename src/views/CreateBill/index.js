@@ -186,6 +186,14 @@ const index = ({route}) => {
             }}>
             {item.title}
           </ListItem.Title>
+          <ListItem.Subtitle style={[styles.totalTitle, {marginTop: 20}]}>
+            Price
+          </ListItem.Subtitle>
+          <ListItem.Subtitle style={styles.priceSubTitle}>
+            ₹{' '}
+            {Math.round(item.price) -
+              Math.round((item.price * item?.discount_product) / 100)}
+          </ListItem.Subtitle>
         </ListItem.Content>
         <ListItem.Content></ListItem.Content>
       </ListItem>
@@ -271,6 +279,7 @@ const styles = StyleSheet.create({
   },
   priceSubTitle: {
     color: COLORS.darkTransparent,
+    marginTop: 5,
   },
   totalTitle: {
     color: COLORS.darkgray,
