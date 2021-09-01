@@ -1,4 +1,4 @@
-import React, {useEffect, useReducer, useState} from 'react';
+import React, {useContext, useEffect, useReducer, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,6 +9,7 @@ import {
 import {ListItem} from 'react-native-elements';
 import {COLORS, FONTS} from '../../constants';
 import cache from '../../utils/cache';
+import {CartItemsContext} from '../../utils/CartContext';
 
 function incrementQty(state, action) {
   let productID = action.payload.productID;
@@ -128,10 +129,21 @@ const ProductComponent = ({item}) => {
   };
   const [state, dispatch] = useReducer(reducer, initialState);
   const [oldItemDetails, setOldItemDetails] = useState([]);
+  const cartContext = useContext(CartItemsContext);
 
   useEffect(() => {
-    cache.get('productList').then(products => setOldItemDetails(products));
+    let unAmounted = false;
+    if (!unAmounted) {
+      cache.get('productList').then(products => setOldItemDetails(products));
+    }
+    return () => {
+      unAmounted = true;
+    };
   }, []);
+
+  useEffect(() => {
+    console.log(cartContext?.state);
+  }, [state]);
 
   const productQuantity = oldItemDetails?.filter(product => {
     if (
@@ -145,7 +157,7 @@ const ProductComponent = ({item}) => {
 
   const qtyValue = state?.qty
     ? state?.qty
-    : productQuantity.length > 0
+    : productQuantity?.length > 0
     ? productQuantity[0].qty
     : 0;
 
