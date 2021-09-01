@@ -114,7 +114,7 @@ export default function AppStackNavigator() {
 
   return (
     <Stack.Navigator
-      initialRouteName="CreateBill"
+      initialRouteName="Dashboard"
       allowFontScaling={false}
       screenOptions={() => {
         return {

@@ -143,13 +143,11 @@ const ProductComponent = ({item}) => {
     }
   });
 
-  const qtyValue = parseInt(
-    state?.qty
-      ? state?.qty
-      : productQuantity.length > 0
-      ? productQuantity[0].qty
-      : 0,
-  );
+  const qtyValue = state?.qty
+    ? state?.qty
+    : productQuantity.length > 0
+    ? productQuantity[0].qty
+    : 0;
 
   return (
     <>
