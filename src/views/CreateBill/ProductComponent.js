@@ -1,15 +1,118 @@
-import React, {useReducer} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, {useEffect, useReducer, useState} from 'react';
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {ListItem} from 'react-native-elements';
 import {COLORS, FONTS} from '../../constants';
+import cache from '../../utils/cache';
+
+function incrementQty(state, action) {
+  let productID = action.payload.productID;
+  let productCategory = action.payload.categoryID;
+  let productType = action.payload.productType;
+  let productQty = action.payload.qty;
+
+  let newState = {
+    ...state,
+    productID: productID,
+    productCategory: productCategory,
+    productType: productType,
+    qty: productQty + 1,
+  };
+  try {
+    cache.get('productList').then(products => {
+      if (products !== null) {
+        let newArray = products.filter(
+          product => newState.productID !== product.productID,
+        );
+        cache.store('productList', [...newArray, newState]);
+      } else {
+        cache.store('productList', [newState]);
+      }
+    });
+  } catch (error) {
+    console.error(error);
+  }
+
+  return newState;
+}
+
+function decrementQty(state, action) {
+  let productID = action.payload.productID;
+  let productCategory = action.payload.categoryID;
+  let productType = action.payload.productType;
+  let productQty = action.payload.qty;
+
+  let newState = {
+    ...state,
+    productID: productID,
+    productType: productType,
+    productCategory: productCategory,
+    qty: productQty !== 0 ? productQty - 1 : 0,
+  };
+
+  try {
+    cache.get('productList').then(products => {
+      if (products !== null) {
+        let newArray = products.filter(
+          product => newState.productID !== product.productID,
+        );
+        cache.store('productList', [...newArray, newState]);
+      } else {
+        cache.store('productList', [newState]);
+      }
+    });
+  } catch (error) {
+    console.error(error);
+  }
+  return newState;
+}
+
+function onTextChange(state, action) {
+  let productID = action.payload.productID;
+  let productCategory = action.payload.categoryID;
+  let productType = action.payload.productType;
+  let productQty = action.payload.qty;
+
+  let newState = {
+    ...state,
+    productID: productID,
+    productType: productType,
+    productCategory: productCategory,
+    qty: productQty,
+  };
+
+  try {
+    cache.get('productList').then(products => {
+      if (products !== null) {
+        let newArray = products.filter(
+          product => newState.productID !== product.productID,
+        );
+        cache.store('productList', [...newArray, newState]);
+      } else {
+        cache.store('productList', [newState]);
+      }
+    });
+  } catch (error) {
+    console.error(error);
+  }
+  return newState;
+}
 
 function reducer(state, action) {
   switch (action.type) {
     case 'increment': {
-      return (state += 1);
+      return incrementQty(state, action);
     }
     case 'decrement': {
-      return state === 0 ? 0 : (state -= 1);
+      return decrementQty(state, action);
+    }
+    case 'onTextChange': {
+      return onTextChange(state, action);
     }
     default: {
       return state;
@@ -18,7 +121,36 @@ function reducer(state, action) {
 }
 
 const ProductComponent = ({item}) => {
-  const [qty, dispatch] = useReducer(reducer, 0);
+  const initialState = {
+    productID: 0,
+    productCategory: 0,
+    qty: 0,
+  };
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const [oldItemDetails, setOldItemDetails] = useState([]);
+
+  useEffect(() => {
+    cache.get('productList').then(products => setOldItemDetails(products));
+  }, []);
+
+  const productQuantity = oldItemDetails?.filter(product => {
+    if (
+      product.productID === item.id &&
+      product.productType === item.product_type &&
+      product.productCategory === item.categories_id
+    ) {
+      return product.qty;
+    }
+  });
+
+  const qtyValue = parseInt(
+    state?.qty
+      ? state?.qty
+      : productQuantity.length > 0
+      ? productQuantity[0].qty
+      : 0,
+  );
+
   return (
     <>
       <ListItem.Content>
@@ -39,19 +171,47 @@ const ProductComponent = ({item}) => {
             onPress={() =>
               dispatch({
                 type: 'decrement',
+                payload: {
+                  categoryID: item.categories_id,
+                  productID: item.id,
+                  productType: item.product_type,
+                  qty: qtyValue,
+                },
               })
             }>
             <Text style={styles.lightColor}>-</Text>
           </TouchableOpacity>
           <View>
             <Text style={styles.qtyLabel}>QTY</Text>
-            <Text> {qty} </Text>
+            <TextInput
+              onChangeText={event => {
+                console.table(event);
+                dispatch({
+                  type: 'onTextChange',
+                  payload: {
+                    categoryID: item.categories_id,
+                    productID: item.id,
+                    productType: item.product_type,
+                    qty: event,
+                  },
+                });
+              }}
+              value={qtyValue.toString()}
+              placeholder=""
+              keyboardType="numeric"
+            />
           </View>
           <TouchableOpacity
             style={styles.incrementIcon}
             onPress={() =>
               dispatch({
                 type: 'increment',
+                payload: {
+                  categoryID: item.categories_id,
+                  productID: item.id,
+                  productType: item.product_type,
+                  qty: qtyValue,
+                },
               })
             }>
             <Text style={styles.lightColor}>+</Text>
@@ -121,4 +281,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProductComponent;
+export default React.memo(ProductComponent);
