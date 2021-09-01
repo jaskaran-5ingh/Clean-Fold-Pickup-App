@@ -7,6 +7,7 @@ import {Badge, Icon} from 'react-native-elements';
 import AuthContext from '../auth/Context';
 import {COLORS, FONTS} from '../constants';
 import cache from '../utils/cache';
+import {CartItemsContext} from '../utils/CartContext';
 //Screens
 import {
   CategoriesList,
@@ -29,6 +30,7 @@ export default function AppStackNavigator() {
   const authContext = useContext(AuthContext);
   const appState = useRef(AppState.currentState);
   const [appStateVisible, setAppStateVisible] = useState(appState.current);
+  const cartContext = useContext(CartItemsContext);
 
   function logoutButton(color, size) {
     return (
@@ -70,7 +72,7 @@ export default function AppStackNavigator() {
           color={COLORS.white}
         />
         <Badge
-          value={0}
+          value={cartContext?.state?.selectedItems?.length || 0}
           containerStyle={{
             position: 'absolute',
             top: -7,

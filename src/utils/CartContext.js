@@ -2,7 +2,6 @@ import React, {createContext, useReducer} from 'react';
 import {StyleSheet} from 'react-native';
 
 function cartReducer(state, action) {
-  console.log(state, action);
   switch (action.type) {
     case 'storeCustomerDetails': {
       return {...state, customerDetails: action.payload.customerDetails};

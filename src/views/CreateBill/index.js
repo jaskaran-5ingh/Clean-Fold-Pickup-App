@@ -28,7 +28,7 @@ const index = ({route}) => {
   const [tabIndex, setTabIndex] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState(2);
   const cartContext = useContext(CartItemsContext);
-  console.log(cartContext.cartItems);
+
   const PRODUCT_IMAGES_URL =
     'https://cleanfold.in/backend/clean_fold/public/product_images/';
   const [categoryList, setCategoryList] = useState([]);
