@@ -21,7 +21,7 @@ const get = async key => {
 
 const deleteItem = async key => {
   try {
-    console.log(await AsyncStorage.removeItem(key));
+    await AsyncStorage.removeItem(key);
   } catch (exception) {
     console.error(exception);
   }

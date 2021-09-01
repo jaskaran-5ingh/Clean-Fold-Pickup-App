@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useReducer, useState} from 'react';
+import React, {useContext, useEffect, useReducer} from 'react';
 import {
   StyleSheet,
   Text,
@@ -128,13 +128,18 @@ const ProductComponent = ({item}) => {
     qty: 0,
   };
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [oldItemDetails, setOldItemDetails] = useState([]);
+
+  var oldItemDetails = [];
   const cartContext = useContext(CartItemsContext);
 
   useEffect(() => {
     let unAmounted = false;
     if (!unAmounted) {
-      cache.get('productList').then(products => setOldItemDetails(products));
+      cache.get('productList').then(products => {
+        if (!products) {
+          oldItemDetails = products;
+        }
+      });
     }
     return () => {
       unAmounted = true;
@@ -142,7 +147,19 @@ const ProductComponent = ({item}) => {
   }, []);
 
   useEffect(() => {
-    console.log(cartContext?.state);
+    let unAmounted = false;
+    if (!unAmounted) {
+      cache.get('productList').then(products => {
+        cartContext?.dispatch({
+          type: 'storeSelectedItems',
+          payload: {selectedItems: products},
+        });
+      });
+    }
+    console.log('compoment re-render in product component ');
+    return () => {
+      unAmounted = true;
+    };
   }, [state]);
 
   const productQuantity = oldItemDetails?.filter(product => {
@@ -195,7 +212,6 @@ const ProductComponent = ({item}) => {
             <Text style={styles.qtyLabel}>QTY</Text>
             <TextInput
               onChangeText={event => {
-                console.table(event);
                 dispatch({
                   type: 'onTextChange',
                   payload: {
@@ -291,4 +307,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default React.memo(ProductComponent);
+export default React.memo(ProductComponent) ;
