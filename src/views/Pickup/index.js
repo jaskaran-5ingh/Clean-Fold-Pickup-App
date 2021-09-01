@@ -15,6 +15,7 @@ import {showMessage} from 'react-native-flash-message';
 import api from '../../api/services';
 import AuthContext from '../../auth/Context';
 import {COLORS, FONTS} from '../../constants';
+import {CartItemsContext} from '../../utils/CartContext';
 import {EmptyAnimation, LoadingScreen} from '../index';
 
 function CardButton({onPress, containerStyle, title, titleStyle}) {
@@ -30,6 +31,8 @@ const index = ({navigation}) => {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
   const authContext = useContext(AuthContext);
+  const cartContext = useContext(CartItemsContext);
+
   useEffect(() => {
     try {
       authContext?.user?.role_id === 6 ? getSofaBoyPickups() : getPickups();
@@ -213,7 +216,13 @@ const index = ({navigation}) => {
                   <Text style={styles.buttonText}>Edit</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate('CreateBill')}
+                  onPress={() => {
+                    cartContext.dispatch({
+                      type: 'storeCustomerDetails',
+                      payload: {customerDetails: item},
+                    });
+                    navigation.navigate('CreateBill');
+                  }}
                   style={[
                     styles.cardBottomButton,
                     {
