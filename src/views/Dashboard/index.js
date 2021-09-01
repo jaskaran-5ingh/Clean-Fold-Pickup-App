@@ -1,3 +1,8 @@
+/* eslint-disable react-native/no-inline-styles */
+/* eslint-disable no-catch-shadow */
+/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable react-hooks/exhaustive-deps */
+import {useIsFocused} from '@react-navigation/native';
 import React, {useContext, useEffect, useState} from 'react';
 import {
   ActivityIndicator,
@@ -9,13 +14,11 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {useIsFocused} from '@react-navigation/native';
-import {showMessage} from 'react-native-flash-message';
 import {Icon} from 'react-native-elements/dist/icons/Icon';
-import {COLORS, FONTS, images, responsiveWidth, SIZES} from '../../constants';
-
+import {showMessage} from 'react-native-flash-message';
 import api from '../../api/services';
 import AuthContext from '../../auth/Context';
+import {COLORS, FONTS, images, responsiveWidth, SIZES} from '../../constants';
 import cache from '../../utils/cache';
 
 // Components
@@ -90,7 +93,7 @@ const index = ({navigation}) => {
   };
 
   const [dashboardData, setDashboardData] = useState(defaultDashboardData);
-  const [error, setError] = useState(false);
+
   const [loading, setLoading] = useState(false);
 
   //Use Effect Hooks
@@ -101,6 +104,7 @@ const index = ({navigation}) => {
     if (!unAmounted) {
       try {
         getDashboardData();
+        cache.store('productList', null);
       } catch (err) {
         console.error(err);
       }
@@ -126,16 +130,14 @@ const index = ({navigation}) => {
       };
     }, 20000);
     return () => {
-      {
-        clearInterval(interval);
-      }
+      clearInterval(interval);
     };
   }, []);
 
   async function getDashboardData() {
     setLoading(true);
     try {
-      if (authContext?.user?.id != undefined) {
+      if (authContext?.user?.id !== undefined) {
         const response = await api.getDashboardData(authContext?.user?.id);
         if (response.ok !== true) {
           showMessage({
@@ -150,8 +152,8 @@ const index = ({navigation}) => {
           setLoading(false);
         }
       }
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error(err);
     }
   }
 
