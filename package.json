@@ -26,12 +26,14 @@
     "react-native-elements": "^3.4.2",
     "react-native-fast-image": "^8.3.7",
     "react-native-flash-message": "^0.1.23",
+    "react-native-flipper": "^0.104.0",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-modal-datetime-picker": "^10.2.0",
     "react-native-safe-area-context": "^3.3.0",
     "react-native-screens": "^3.5.0",
     "react-native-splash-screen": "^3.2.0",
     "react-native-vector-icons": "^8.1.0",
+    "rn-async-storage-flipper": "^0.0.10",
     "typescript": "^4.3.5"
   },
   "devDependencies": {

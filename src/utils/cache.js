@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const prefix = 'cache';
+const prefix = 'cache_';
 
 const store = async (key, value) => {
   try {
@@ -19,6 +19,23 @@ const get = async key => {
   }
 };
 
+const deleteItem = async key => {
+  try {
+    console.log(await AsyncStorage.removeItem(key));
+  } catch (exception) {
+    console.error(exception);
+  }
+};
+
+const clearAll = async () => {
+  try {
+    await AsyncStorage.clear();
+    console.log('Done');
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const getDeviceToken = async () => {
   return await get('user').then(user => {
     return user.api_token;
@@ -26,6 +43,8 @@ const getDeviceToken = async () => {
 };
 
 export default {
+  clearAll,
+  deleteItem,
   store,
   get,
   getDeviceToken,
