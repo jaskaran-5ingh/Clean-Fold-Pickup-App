@@ -1,16 +1,17 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-native/no-inline-styles */
-import {createStackNavigator} from '@react-navigation/stack';
-import React, {useContext, useEffect, useRef, useState} from 'react';
-import {Alert, AppState, TouchableOpacity} from 'react-native';
-import {Badge, Icon} from 'react-native-elements';
+import { createStackNavigator } from '@react-navigation/stack';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { Alert, AppState, TouchableOpacity } from 'react-native';
+import { Badge, Icon } from 'react-native-elements';
 import AuthContext from '../auth/Context';
-import {COLORS, FONTS} from '../constants';
+import { COLORS, FONTS } from '../constants';
 import cache from '../utils/cache';
-import {CartItemsContext} from '../utils/CartContext';
+import { CartItemsContext } from '../utils/CartContext';
 //Screens
 import {
   CategoriesList,
+  CheckOut,
   CreateBill,
   CreateOrderScreen,
   Dashboard,
@@ -19,14 +20,14 @@ import {
   OrderPreviewScreen,
   Pickup,
   PickupEdit,
-  RateListScreen,
+  RateListScreen
 } from '../views';
 import navigation from './rootNavigator';
 
 //Create object for navigation
 const Stack = createStackNavigator();
 
-export default function AppStackNavigator() {
+function AppStackNavigator() {
   const authContext = useContext(AuthContext);
   const appState = useRef(AppState.currentState);
   const [appStateVisible, setAppStateVisible] = useState(appState.current);
@@ -142,6 +143,13 @@ export default function AppStackNavigator() {
       />
 
       <Stack.Screen
+        name="CheckOut"
+        component={CheckOut}
+        label="CheckOut"
+        options={{headerShown: true}}
+      />
+
+      <Stack.Screen
         name="CreateBill"
         component={CreateBill}
         label="Create Bill"
@@ -214,3 +222,5 @@ export default function AppStackNavigator() {
     </Stack.Navigator>
   );
 }
+
+export default React.memo(AppStackNavigator);

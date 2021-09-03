@@ -1,17 +1,14 @@
-import React, {useContext} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-
+import React from 'react';
 //Constants
 import {COLORS} from '../constants';
-
 //Screens
 import {SignIn} from '../views';
-import {AppStackNavigator} from '../routes';
 
 //Create object for navigation
 const Stack = createStackNavigator();
 
-export default function AuthNavigator() {
+function AuthNavigator() {
   //Deceleration Of Context
   return (
     <Stack.Navigator
@@ -36,3 +33,4 @@ export default function AuthNavigator() {
     </Stack.Navigator>
   );
 }
+export default React.memo(AuthNavigator);

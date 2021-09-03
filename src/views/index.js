@@ -1,12 +1,10 @@
-//Auth Screens
-//App Screens
 import CategoriesList from './CategoriesList';
 import CreateBill from './CreateBill';
+import CheckOut from './CreateBill/CheckOut';
 import CreateOrderScreen from './CreateOrderScreen';
 import Dashboard from './Dashboard';
 import DeliveryList from './DeliveryList';
 import DeliveryListEdit from './DeliveryList/Edit';
-//Other Screens
 import EmptyAnimation from './EmptyAnimation';
 import ErrorScreen from './ErrorScreen';
 import LoadingScreen from './LoadingScreen';
@@ -18,6 +16,7 @@ import SignIn from './SignIn';
 
 export {
   CategoriesList,
+  CheckOut,
   CreateBill,
   CreateOrderScreen,
   Dashboard,
