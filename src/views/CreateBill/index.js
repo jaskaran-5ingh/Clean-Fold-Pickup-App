@@ -1,23 +1,24 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react-native/no-inline-styles */
-import React, {useContext, useEffect, useState} from 'react';
-import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import {
   Divider,
   FAB,
   Icon,
   LinearProgress,
   ListItem,
-  Tab,
+  Tab
 } from 'react-native-elements';
 import FastImage from 'react-native-fast-image';
-import {showMessage} from 'react-native-flash-message';
+import { showMessage } from 'react-native-flash-message';
 import api from '../../api/services';
-import {COLORS, FONTS} from '../../constants';
-import {CartItemsContext} from '../../utils/CartContext';
-import {LoadingScreen} from '../index';
+import { COLORS, FONTS } from '../../constants';
+import { CartItemsContext } from '../../utils/CartContext';
+import { LoadingScreen } from '../index';
 import ProductComponent from './ProductComponent';
+
 function TabItems({data, renderItems}) {
   return (
     <FlatList
@@ -28,7 +29,7 @@ function TabItems({data, renderItems}) {
   );
 }
 
-const index = ({route}) => {
+const index = ({route, navigation}) => {
   const [loading, setLoading] = useState(true);
   const [linearLoading, setLinearLoading] = useState(true);
   const [rateList, setSetList] = useState([]);
@@ -182,7 +183,10 @@ const index = ({route}) => {
           }}
           style={{width: 60, height: 90, marginRight: 20}}
         />
-        <ProductComponent item={item} />
+        <ProductComponent
+          item={item}
+
+        />
       </ListItem>
     );
   }
@@ -199,7 +203,7 @@ const index = ({route}) => {
       ) : (
         <FlatList
           data={categoryList}
-          keyExtractor={item => `${item.id}`}
+          keyExtractor={item => `${Math.floor((Math.random() * 999999) + 1)}`}
           renderItem={renderCategory}
           refreshing={loading}
           onRefresh={() => getOrderCategory()}
@@ -249,6 +253,7 @@ const index = ({route}) => {
             placement="left"
             color={COLORS.primary}
             icon={<Icon name="shopping-cart" size={28} color="white" />}
+            onPress={() => navigation.navigate('CheckOut')}
           />
         </>
       )}

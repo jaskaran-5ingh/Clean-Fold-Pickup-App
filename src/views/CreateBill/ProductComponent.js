@@ -1,27 +1,34 @@
-import React, {useEffect, useReducer, useState} from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import {
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
-import {ListItem} from 'react-native-elements';
-import {COLORS, FONTS} from '../../constants';
+import { ListItem } from 'react-native-elements';
+import { COLORS, FONTS } from '../../constants';
 import cache from '../../utils/cache';
 
 function incrementQty(state, action) {
+  let categoryName = action.payload.categoryName;
+  let productName = action.payload.productName;
+  let productPrice = action.payload.productPrice;
   let productID = action.payload.productID;
   let productCategory = action.payload.categoryID;
   let productType = action.payload.productType;
   let productQty = action.payload.qty;
-
+  console.log(action.payload);
   let newState = {
     ...state,
+    categoryName: categoryName,
+    productName: productName,
+    productPrice: productPrice,
     productID: productID,
     productCategory: productCategory,
     productType: productType,
     qty: productQty + 1,
+    selectedItem: [],
   };
   try {
     cache.get('productList').then(products => {
@@ -42,6 +49,9 @@ function incrementQty(state, action) {
 }
 
 function decrementQty(state, action) {
+  let categoryName = action.payload.categoryName;
+  let productPrice = action.payload.productPrice;
+  let productName = action.payload.productName;
   let productID = action.payload.productID;
   let productCategory = action.payload.categoryID;
   let productType = action.payload.productType;
@@ -49,6 +59,9 @@ function decrementQty(state, action) {
 
   let newState = {
     ...state,
+    categoryName: categoryName,
+    productPrice: productPrice,
+    productName: productName,
     productID: productID,
     productType: productType,
     productCategory: productCategory,
@@ -73,6 +86,9 @@ function decrementQty(state, action) {
 }
 
 function onTextChange(state, action) {
+  let categoryName = action.payload.categoryName;
+  let productPrice = action.payload.productPrice;
+  let productName = action.payload.productName;
   let productID = action.payload.productID;
   let productCategory = action.payload.categoryID;
   let productType = action.payload.productType;
@@ -80,6 +96,9 @@ function onTextChange(state, action) {
 
   let newState = {
     ...state,
+    categoryName: categoryName,
+    productPrice: productPrice,
+    productName: productName,
     productID: productID,
     productType: productType,
     productCategory: productCategory,
@@ -120,7 +139,7 @@ function reducer(state, action) {
   }
 }
 
-const ProductComponent = ({item}) => {
+const ProductComponent = ({item, productQty}) => {
   //Component Initialize
   const initialState = {
     productID: 0,
@@ -130,6 +149,9 @@ const ProductComponent = ({item}) => {
 
   const [state, dispatch] = useReducer(reducer, initialState);
   const [oldItemDetails, setOldItemDetails] = useState([]);
+  const finalPrice =
+    Math.round(item.price) -
+    Math.round((item.price * item?.discount_product) / 100);
 
   //Item Old Quantity Checking
   useEffect(() => {
@@ -138,6 +160,7 @@ const ProductComponent = ({item}) => {
       cache.get('productList').then(products => {
         if (products !== null) {
           setOldItemDetails(products);
+          productQty(() => products);
         }
       });
     }
@@ -163,13 +186,17 @@ const ProductComponent = ({item}) => {
     : 0;
 
   //Events Handling Functions
+  console.log(item);
   const handleIncrementPress = () => {
     dispatch({
       type: 'increment',
       payload: {
-        categoryID: item.categories_id,
-        productID: item.id,
-        productType: item.product_type,
+        categoryID: item?.categories_id,
+        categoryName: item?.categories?.name,
+        productName: item?.title,
+        productID: item?.id,
+        productType: item?.product_type,
+        productPrice: finalPrice,
         qty: qtyValue,
       },
     });
@@ -178,9 +205,12 @@ const ProductComponent = ({item}) => {
     dispatch({
       type: 'decrement',
       payload: {
-        categoryID: item.categories_id,
-        productID: item.id,
-        productType: item.product_type,
+        categoryID: item?.categories_id,
+        categoryName: item?.categories?.name,
+        productName: item?.title,
+        productID: item?.id,
+        productType: item?.product_type,
+        productPrice: finalPrice,
         qty: qtyValue,
       },
     });
@@ -189,10 +219,13 @@ const ProductComponent = ({item}) => {
     dispatch({
       type: 'onTextChange',
       payload: {
-        categoryID: item.categories_id,
-        productID: item.id,
-        productType: item.product_type,
-        qty: event,
+        categoryID: item?.categories_id,
+        categoryName: item?.categories?.name,
+        productName: item?.title,
+        productID: item?.id,
+        productType: item?.product_type,
+        productPrice: finalPrice,
+        qty: qtyValue,
       },
     });
   };
@@ -205,9 +238,7 @@ const ProductComponent = ({item}) => {
           Price
         </ListItem.Subtitle>
         <ListItem.Subtitle style={styles.priceSubTitle}>
-          ₹{' '}
-          {Math.round(item.price) -
-            Math.round((item.price * item?.discount_product) / 100)}
+          ₹ {finalPrice}
         </ListItem.Subtitle>
       </ListItem.Content>
       <ListItem.Content style={styles.contentContainer}>

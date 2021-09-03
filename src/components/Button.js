@@ -1,6 +1,6 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity} from 'react-native';
-import {COLORS, responsiveHeight, responsiveWidth, SIZES,} from '../constants';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { COLORS, responsiveHeight, responsiveWidth, SIZES } from '../constants';
 
 const Button = ({
                     height = responsiveHeight(6),
