@@ -3,7 +3,14 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useContext, useEffect, useState} from 'react';
 import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {Divider, LinearProgress, ListItem, Tab} from 'react-native-elements';
+import {
+  Divider,
+  FAB,
+  Icon,
+  LinearProgress,
+  ListItem,
+  Tab,
+} from 'react-native-elements';
 import FastImage from 'react-native-fast-image';
 import {showMessage} from 'react-native-flash-message';
 import api from '../../api/services';
@@ -229,6 +236,19 @@ const index = ({route}) => {
           <TabItems
             data={rateList[tabIndex]?.products}
             renderItems={renderProducts}
+          />
+          <FAB
+            title="Checkout"
+            buttonStyle={{
+              paddingHorizontal: 122,
+            }}
+            containerStyle={{
+              shadowColor: COLORS.black,
+              elevation: 4,
+            }}
+            placement="left"
+            color={COLORS.primary}
+            icon={<Icon name="shopping-cart" size={28} color="white" />}
           />
         </>
       )}
