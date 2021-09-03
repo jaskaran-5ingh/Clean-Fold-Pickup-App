@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useReducer} from 'react';
+import React, {useEffect, useReducer, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,7 +9,6 @@ import {
 import {ListItem} from 'react-native-elements';
 import {COLORS, FONTS} from '../../constants';
 import cache from '../../utils/cache';
-import {CartItemsContext} from '../../utils/CartContext';
 
 function incrementQty(state, action) {
   let productID = action.payload.productID;
@@ -27,6 +26,7 @@ function incrementQty(state, action) {
   try {
     cache.get('productList').then(products => {
       if (products !== null) {
+        console.log(products);
         let newArray = products.filter(
           product => newState.productID !== product.productID,
         );
@@ -89,6 +89,7 @@ function onTextChange(state, action) {
 
   try {
     cache.get('productList').then(products => {
+      console.log(products);
       if (products !== null) {
         let newArray = products.filter(
           product => newState.productID !== product.productID,
@@ -127,17 +128,16 @@ const ProductComponent = ({item}) => {
     productCategory: 0,
     qty: 0,
   };
-  const [state, dispatch] = useReducer(reducer, initialState);
 
-  var oldItemDetails = [];
-  const cartContext = useContext(CartItemsContext);
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const [oldItemDetails, setOldItemDetails] = useState([]);
 
   useEffect(() => {
     let unAmounted = false;
     if (!unAmounted) {
       cache.get('productList').then(products => {
-        if (!products) {
-          oldItemDetails = products;
+        if (products !== null) {
+          setOldItemDetails(products);
         }
       });
     }
@@ -145,22 +145,6 @@ const ProductComponent = ({item}) => {
       unAmounted = true;
     };
   }, []);
-
-  useEffect(() => {
-    let unAmounted = false;
-    if (!unAmounted) {
-      cache.get('productList').then(products => {
-        cartContext?.dispatch({
-          type: 'storeSelectedItems',
-          payload: {selectedItems: products},
-        });
-      });
-    }
-    console.log('compoment re-render in product component ');
-    return () => {
-      unAmounted = true;
-    };
-  }, [state]);
 
   const productQuantity = oldItemDetails?.filter(product => {
     if (
@@ -307,4 +291,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default React.memo(ProductComponent) ;
+export default React.memo(ProductComponent);
