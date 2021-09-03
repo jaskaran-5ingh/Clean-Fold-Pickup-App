@@ -155,9 +155,9 @@ function AppStackNavigator() {
         label="Create Bill"
         options={{
           headerShown: true,
-          headerRight: ({color, size}) => {
-            return cartButton(color, size);
-          },
+          // headerRight: ({color, size}) => {
+          //   return cartButton(color, size);
+          // },
         }}
       />
 

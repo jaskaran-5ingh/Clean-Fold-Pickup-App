@@ -6,32 +6,34 @@ import {
   TouchableHighlight,
   View,
 } from 'react-native';
-import {Icon} from 'react-native-elements';
+import {FAB, Icon} from 'react-native-elements';
 import {COLORS, FONTS} from '../../constants';
 import cache from '../../utils/cache';
 import {CartItemsContext} from '../../utils/CartContext';
 const renderHeader = () => {
   return (
-    <View style={styles.thead}>
-      <View style={styles.td}>
-        <Text style={styles.heading}>Item Name</Text>
+    <>
+      <View style={styles.thead}>
+        <View style={styles.td}>
+          <Text style={styles.heading}>Item Name</Text>
+        </View>
+        <View style={styles.td}>
+          <Text style={styles.heading}>Service</Text>
+        </View>
+        <View style={[styles.td, {width: '11%', maxwidth: '11%'}]}>
+          <Text style={styles.heading}>Qty</Text>
+        </View>
+        <View style={[styles.td, {width: '14%', maxwidth: '14%'}]}>
+          <Text style={styles.heading}>Rate</Text>
+        </View>
+        <View style={[styles.td, {width: '14%', maxwidth: '14%'}]}>
+          <Text style={styles.heading}>Total</Text>
+        </View>
+        <View style={[styles.td, {width: '14%', maxwidth: '14%'}]}>
+          <Text style={styles.heading}>Action</Text>
+        </View>
       </View>
-      <View style={styles.td}>
-        <Text style={styles.heading}>Service</Text>
-      </View>
-      <View style={[styles.td, {width: '11%', maxwidth: '11%'}]}>
-        <Text style={styles.heading}>Qty</Text>
-      </View>
-      <View style={[styles.td, {width: '14%', maxwidth: '14%'}]}>
-        <Text style={styles.heading}>Rate</Text>
-      </View>
-      <View style={[styles.td, {width: '14%', maxwidth: '14%'}]}>
-        <Text style={styles.heading}>Total</Text>
-      </View>
-      <View style={[styles.td, {width: '14%', maxwidth: '14%'}]}>
-        <Text style={styles.heading}>Action</Text>
-      </View>
-    </View>
+    </>
   );
 };
 
@@ -98,6 +100,31 @@ const CheckOut = () => {
             keyExtractor={item => `${item.productID}`}
             renderItem={renderTableRow}
           />
+          <FAB
+            title="Add More"
+            containerStyle={{
+              shadowColor: COLORS.black,
+              elevation: 4,
+            }}
+            size="small"
+            placement="left"
+            color={COLORS.darkGreen}
+            icon={<Icon name="add" size={25} color="white" />}
+            onPress={() => console.log('Add cart')}
+          />
+
+          <FAB
+            title="Proceed"
+            containerStyle={{
+              shadowColor: COLORS.black,
+              elevation: 4,
+            }}
+            size="small"
+            placement="right"
+            color={COLORS.primary}
+            icon={<Icon name="arrow-right" size={25} color="white" />}
+            onPress={() => console.log('Add cart')}
+          />
         </>
       ) : (
         <Text>Loading...</Text>
@@ -140,6 +167,7 @@ const styles = StyleSheet.create({
   rowText: {
     ...FONTS.body4,
     fontSize: 11.5,
+    color: COLORS.darkTransparent,
   },
 });
 
