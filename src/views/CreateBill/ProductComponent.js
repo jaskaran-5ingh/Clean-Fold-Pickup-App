@@ -26,7 +26,6 @@ function incrementQty(state, action) {
   try {
     cache.get('productList').then(products => {
       if (products !== null) {
-        console.log(products);
         let newArray = products.filter(
           product => newState.productID !== product.productID,
         );
@@ -89,7 +88,6 @@ function onTextChange(state, action) {
 
   try {
     cache.get('productList').then(products => {
-      console.log(products);
       if (products !== null) {
         let newArray = products.filter(
           product => newState.productID !== product.productID,
@@ -123,6 +121,7 @@ function reducer(state, action) {
 }
 
 const ProductComponent = ({item}) => {
+  //Component Initialize
   const initialState = {
     productID: 0,
     productCategory: 0,
@@ -132,6 +131,7 @@ const ProductComponent = ({item}) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [oldItemDetails, setOldItemDetails] = useState([]);
 
+  //Item Old Quantity Checking
   useEffect(() => {
     let unAmounted = false;
     if (!unAmounted) {
@@ -162,6 +162,41 @@ const ProductComponent = ({item}) => {
     ? productQuantity[0].qty
     : 0;
 
+  //Events Handling Functions
+  const handleIncrementPress = () => {
+    dispatch({
+      type: 'increment',
+      payload: {
+        categoryID: item.categories_id,
+        productID: item.id,
+        productType: item.product_type,
+        qty: qtyValue,
+      },
+    });
+  };
+  const handleDecrementPress = () => {
+    dispatch({
+      type: 'decrement',
+      payload: {
+        categoryID: item.categories_id,
+        productID: item.id,
+        productType: item.product_type,
+        qty: qtyValue,
+      },
+    });
+  };
+  const handleQuantityPress = event => {
+    dispatch({
+      type: 'onTextChange',
+      payload: {
+        categoryID: item.categories_id,
+        productID: item.id,
+        productType: item.product_type,
+        qty: event,
+      },
+    });
+  };
+
   return (
     <>
       <ListItem.Content>
@@ -179,33 +214,13 @@ const ProductComponent = ({item}) => {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.decrementIcon}
-            onPress={() =>
-              dispatch({
-                type: 'decrement',
-                payload: {
-                  categoryID: item.categories_id,
-                  productID: item.id,
-                  productType: item.product_type,
-                  qty: qtyValue,
-                },
-              })
-            }>
+            onPress={() => handleDecrementPress()}>
             <Text style={styles.lightColor}>-</Text>
           </TouchableOpacity>
           <View>
             <Text style={styles.qtyLabel}>QTY</Text>
             <TextInput
-              onChangeText={event => {
-                dispatch({
-                  type: 'onTextChange',
-                  payload: {
-                    categoryID: item.categories_id,
-                    productID: item.id,
-                    productType: item.product_type,
-                    qty: event,
-                  },
-                });
-              }}
+              onChangeText={event => handleQuantityPress(event)}
               value={qtyValue.toString()}
               placeholder=""
               keyboardType="numeric"
@@ -213,17 +228,7 @@ const ProductComponent = ({item}) => {
           </View>
           <TouchableOpacity
             style={styles.incrementIcon}
-            onPress={() =>
-              dispatch({
-                type: 'increment',
-                payload: {
-                  categoryID: item.categories_id,
-                  productID: item.id,
-                  productType: item.product_type,
-                  qty: qtyValue,
-                },
-              })
-            }>
+            onPress={() => handleIncrementPress()}>
             <Text style={styles.lightColor}>+</Text>
           </TouchableOpacity>
         </View>
