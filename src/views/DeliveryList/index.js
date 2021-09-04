@@ -1,27 +1,26 @@
-import React, {useEffect, useState} from 'react';
+import { useIsFocused } from '@react-navigation/native';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Alert,
   FlatList,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
-import {Card} from 'react-native-elements';
-import {useIsFocused} from '@react-navigation/native';
-import {showMessage} from 'react-native-flash-message';
-
-import {COLORS, FONTS} from '../../constants';
+import { Card } from 'react-native-elements';
+import { showMessage } from 'react-native-flash-message';
+import { EmptyAnimation, LoadingScreen } from '..';
 import api from '../../api/services';
+import { COLORS, FONTS } from '../../constants';
 import cache from '../../utils/cache';
-
-import {EmptyAnimation, LoadingScreen} from '..';
+import { CartItemsContext } from '../../utils/CartContext';
 
 const index = ({navigation}) => {
   const [pendingOrders, setPendingOrders] = useState([]);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  const cartContext = useContext(CartItemsContext);
   const isFocused = useIsFocused();
 
   useEffect(() => {
@@ -175,7 +174,13 @@ const index = ({navigation}) => {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => {}}
+            onPress={() => {
+              cartContext.dispatch({
+                type: 'storeCustomerDetails',
+                payload: {customerDetails: item},
+              });
+              navigation.navigate('CreateBill');
+            }}
             style={[
               styles.cardBottomButton,
               {
@@ -197,7 +202,8 @@ const index = ({navigation}) => {
         <View
           style={{
             flex: 1,
-            backgroundColor: COLORS.primary,
+            backgroundColor:
+              pendingOrders?.length > 0 ? COLORS.primary : COLORS.white,
           }}>
           <FlatList
             ListHeaderComponent={() => {

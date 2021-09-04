@@ -1,16 +1,17 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, {useEffect, useReducer, useState} from 'react';
 import {
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
 } from 'react-native';
-import { ListItem } from 'react-native-elements';
-import { COLORS, FONTS } from '../../constants';
+import {ListItem} from 'react-native-elements';
+import {COLORS} from '../../constants';
 import cache from '../../utils/cache';
 
 function incrementQty(state, action) {
+  let hours = action.payload.hours;
   let categoryName = action.payload.categoryName;
   let productName = action.payload.productName;
   let productPrice = action.payload.productPrice;
@@ -20,6 +21,7 @@ function incrementQty(state, action) {
   let productQty = action.payload.qty;
   let newState = {
     ...state,
+    hours: hours,
     categoryName: categoryName,
     productName: productName,
     productPrice: productPrice,
@@ -29,25 +31,29 @@ function incrementQty(state, action) {
     qty: productQty + 1,
     selectedItem: [],
   };
-  try {
-    cache.get('productList').then(products => {
-      if (products !== null) {
-        let newArray = products.filter(
-          product => newState.productID !== product.productID && product.qty !== 0,
-        );
-        cache.store('productList', [...newArray, newState]);
-      } else {
-        cache.store('productList', [newState]);
-      }
-    });
-  } catch (error) {
-    console.error(error);
+  if (newState.qty !== 0) {
+    try {
+      cache.get('productList').then(products => {
+        if (products !== null) {
+          let newArray = products.filter(
+            product =>
+              newState.productID !== product.productID && product.qty !== 0,
+          );
+          cache.store('productList', [...newArray, newState]);
+        } else {
+          cache.store('productList', [newState]);
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return newState;
 }
 
 function decrementQty(state, action) {
+  let hours = action.payload.hours;
   let categoryName = action.payload.categoryName;
   let productPrice = action.payload.productPrice;
   let productName = action.payload.productName;
@@ -58,6 +64,7 @@ function decrementQty(state, action) {
 
   let newState = {
     ...state,
+    hours: hours,
     categoryName: categoryName,
     productPrice: productPrice,
     productName: productName,
@@ -67,24 +74,28 @@ function decrementQty(state, action) {
     qty: productQty !== 0 ? productQty - 1 : 0,
   };
 
-  try {
-    cache.get('productList').then(products => {
-      if (products !== null) {
-        let newArray = products.filter(
-          product => newState.productID !== product.productID && product.qty !== 0,
-        );
-        cache.store('productList', [...newArray, newState]);
-      } else {
-        cache.store('productList', [newState]);
-      }
-    });
-  } catch (error) {
-    console.error(error);
+  if (newState.qty !== 0) {
+    try {
+      cache.get('productList').then(products => {
+        if (products !== null) {
+          let newArray = products.filter(
+            product =>
+              newState.productID !== product.productID && product.qty !== 0,
+          );
+          cache.store('productList', [...newArray, newState]);
+        } else {
+          cache.store('productList', [newState]);
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }
   }
   return newState;
 }
 
 function onTextChange(state, action) {
+  let hours = action.payload.hours;
   let categoryName = action.payload.categoryName;
   let productPrice = action.payload.productPrice;
   let productName = action.payload.productName;
@@ -95,6 +106,7 @@ function onTextChange(state, action) {
 
   let newState = {
     ...state,
+    hours: hours,
     categoryName: categoryName,
     productPrice: productPrice,
     productName: productName,
@@ -195,6 +207,7 @@ const ProductComponent = ({item, productQty}) => {
         productID: item?.id,
         productType: item?.product_type,
         productPrice: finalPrice,
+        hours: item?.categories?.hours,
         qty: qtyValue,
       },
     });
@@ -209,6 +222,7 @@ const ProductComponent = ({item, productQty}) => {
         productID: item?.id,
         productType: item?.product_type,
         productPrice: finalPrice,
+        hours: item?.categories?.hours,
         qty: qtyValue,
       },
     });
@@ -223,7 +237,8 @@ const ProductComponent = ({item, productQty}) => {
         productID: item?.id,
         productType: item?.product_type,
         productPrice: finalPrice,
-        qty: qtyValue,
+        hours: item?.categories?.hours,
+        qty: event,
       },
     });
   };
@@ -232,7 +247,7 @@ const ProductComponent = ({item, productQty}) => {
     <>
       <ListItem.Content>
         <ListItem.Title style={styles.itemName}>{item.title}</ListItem.Title>
-        <ListItem.Subtitle style={[styles.totalTitle, {marginTop: 20}]}>
+        <ListItem.Subtitle style={[styles.totalTitle, {marginTop: 30}]}>
           Price
         </ListItem.Subtitle>
         <ListItem.Subtitle style={styles.priceSubTitle}>
@@ -318,7 +333,7 @@ const styles = StyleSheet.create({
   itemName: {
     position: 'absolute',
     color: COLORS.primary,
-    ...FONTS.h5,
+    fontSize: 13.5,
     fontWeight: 'bold',
     width: 180,
     top: -10,

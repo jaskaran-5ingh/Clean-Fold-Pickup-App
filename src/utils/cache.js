@@ -30,9 +30,8 @@ const deleteItem = async key => {
 const clearAll = async () => {
   try {
     await AsyncStorage.clear();
-    console.log('Done');
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
