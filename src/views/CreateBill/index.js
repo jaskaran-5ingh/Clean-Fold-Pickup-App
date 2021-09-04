@@ -185,7 +185,6 @@ const index = ({route, navigation}) => {
         />
         <ProductComponent
           item={item}
-
         />
       </ListItem>
     );

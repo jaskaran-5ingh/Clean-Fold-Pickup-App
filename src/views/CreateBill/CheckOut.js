@@ -7,9 +7,13 @@ import {
   View,
 } from 'react-native';
 import {FAB, Icon} from 'react-native-elements';
+import {showMessage} from 'react-native-flash-message';
+import {LoadingScreen} from '..';
+import api from '../../api/services';
 import {COLORS, FONTS} from '../../constants';
 import cache from '../../utils/cache';
 import {CartItemsContext} from '../../utils/CartContext';
+
 const renderHeader = () => {
   return (
     <>
@@ -37,11 +41,14 @@ const renderHeader = () => {
   );
 };
 
-
 const CheckOut = ({navigation}) => {
   const cartItems = useContext(CartItemsContext);
   const [orderItems, setOrderItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [grandTotal, setGrandTotal] = useState(0);
+  let total = 0;
+  let Grand = 0;
+
   useEffect(() => {
     setLoading(true);
     try {
@@ -54,51 +61,123 @@ const CheckOut = ({navigation}) => {
     }
   }, []);
 
-
   const renderTableRow = ({item}) => {
+    function deleteButtonPressHandler(productID) {
+      let newArray = orderItems.filter(
+        product => product.productID !== productID,
+      );
+      if (orderItems?.length === 1) {
+        setGrandTotal(0);
+      }
+      setOrderItems(newArray);
+      cache.store('productList', newArray);
+    }
+    total = item?.productPrice * item.qty;
+    Grand += total;
+    setGrandTotal(Grand);
+    return (
+      <View style={styles.tbody}>
+        <View style={styles.td}>
+          <Text style={styles.rowText}>{item?.productName}</Text>
+        </View>
+        <View style={styles.td}>
+          <Text style={styles.rowText}>{item?.categoryName}</Text>
+        </View>
+        <View style={[styles.td, {width: '12%', maxWidth: '12%'}]}>
+          <Text style={styles.rowText}>{item?.qty}</Text>
+        </View>
+        <View style={[styles.td, {width: '15%', maxWidth: '15%'}]}>
+          <Text style={styles.rowText}>{item?.productPrice} ₹</Text>
+        </View>
+        <View style={[styles.td, {width: '15%', maxWidth: '15%'}]}>
+          <Text style={styles.rowText}>{total} ₹ </Text>
+        </View>
+        <View style={[styles.td, {width: '15%', maxWidth: '15%'}]}>
+          <Text style={styles.rowText}>
+            <TouchableHighlight
+              activeOpacity={0.6}
+              underlayColor={COLORS.white}
+              onPress={() => deleteButtonPressHandler(item.productID)}>
+              <Icon
+                type="font-awesome"
+                name="trash"
+                size={20}
+                color={COLORS.red}
+              />
+            </TouchableHighlight>
+          </Text>
+        </View>
+      </View>
+    );
+  };
 
-  function deleteButtonPressHandler(productID){
-    let newArray = orderItems.filter(product => product.productID !== productID);
-    setOrderItems(newArray);
-    cache.store('productList',newArray);
-  }
+  const createBill = async createBillObject => {
+    try {
+      setLoading(true);
+      let response = await api.createBill(createBillObject);
+      if (response.ok !== true) {
+        showMessage({
+          message: 'Failed !',
+          description: 'Bill create failed !',
+          type: 'error',
+          icon: 'error',
+          position: 'top',
+        });
+      } else {
+        showMessage({
+          message: 'Success !',
+          description: 'Bill create Success !',
+          type: 'success',
+          icon: 'success',
+          position: 'top',
+        });
+      }
+      setLoading(false);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
-  return (
-    <View style={styles.tbody}>
-      <View style={styles.td}>
-        <Text style={styles.rowText}>{item?.productName}</Text>
-      </View>
-      <View style={styles.td}>
-        <Text style={styles.rowText}>{item?.categoryName}</Text>
-      </View>
-      <View style={[styles.td, {width: '12%', maxWidth: '12%'}]}>
-        <Text style={styles.rowText}>{item?.qty}</Text>
-      </View>
-      <View style={[styles.td, {width: '15%', maxWidth: '15%'}]}>
-        <Text style={styles.rowText}>{item?.productPrice} ₹</Text>
-      </View>
-      <View style={[styles.td, {width: '15%', maxWidth: '15%'}]}>
-        <Text style={styles.rowText}>{item?.productPrice * item.qty} ₹ </Text>
-      </View>
-      <View style={[styles.td, {width: '15%', maxWidth: '15%'}]}>
-        <Text style={styles.rowText}>
-          <TouchableHighlight
-            activeOpacity={0.6}
-            underlayColor={COLORS.white}
-            onPress={() => deleteButtonPressHandler(item.productID)}>
-            <Icon
-              type="font-awesome"
-              name="trash"
-              size={20}
-              color={COLORS.red}
-            />
-          </TouchableHighlight>
-        </Text>
-      </View>
-    </View>
-  );
-};
+  const handleFormSubmit = () => {
+    if (grandTotal < 250) {
+      alert('Minimum order is Rs. 250 !\n Please add more items.');
+      return false;
+    }
+    const {customerDetails} = cartItems.state;
+    let cartArray = [];
 
+    orderItems.forEach(element => {
+      let cartItemObject = {
+        id: element.productID,
+        qty: element.qty,
+        price: element.productPrice,
+        category_id: element.productCategory,
+        cat_hours: element.hours,
+      };
+      cartArray.push(cartItemObject);
+    });
+
+    let orderItemObject = {
+      order_details: {
+        user_id: customerDetails.user_id,
+        pickupTime: customerDetails.pickup_time,
+        pick_timeslot: customerDetails.pickup_slot,
+        deliveryTime: customerDetails.delv_time,
+        delv_timeslot: customerDetails.delv_slot,
+        city: customerDetails.city,
+        address: customerDetails.address,
+        mobile: customerDetails.user.mobile,
+        name: customerDetails.user.name,
+        cart: JSON.stringify(cartArray),
+        coupon: null,
+        id_location: customerDetails.id_location,
+        order_type: customerDetails.order_type,
+        order_by: customerDetails.order_from,
+      },
+    };
+
+    createBill(orderItemObject);
+  };
 
   return (
     <View style={styles.container}>
@@ -110,6 +189,17 @@ const CheckOut = ({navigation}) => {
             data={orderItems}
             keyExtractor={item => `${item.productID}`}
             renderItem={renderTableRow}
+            stickyHeaderIndices={[0]}
+            ListFooterComponent={() => {
+              return (
+                <View style={[styles.tbody, styles.footerContainer]}>
+                  <Text style={styles.heading}>
+                    Bill Amount(incl all taxes)
+                  </Text>
+                  <Text>{grandTotal} ₹</Text>
+                </View>
+              );
+            }}
           />
           <FAB
             title="Add More"
@@ -134,11 +224,11 @@ const CheckOut = ({navigation}) => {
             placement="right"
             color={COLORS.primary}
             icon={<Icon name="arrow-right" size={25} color="white" />}
-            onPress={() => console.log('Add cart')}
+            onPress={() => handleFormSubmit()}
           />
         </>
       ) : (
-        <Text>Loading...</Text>
+        <LoadingScreen />
       )}
     </View>
   );
@@ -179,6 +269,16 @@ const styles = StyleSheet.create({
     ...FONTS.body4,
     fontSize: 11.5,
     color: COLORS.darkTransparent,
+  },
+  footerContainer: {
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingRight: 75,
+    backgroundColor: COLORS.lightGray,
+    borderTopWidth: 2,
+    borderColor: COLORS.gray,
+    paddingVertical: 10,
   },
 });
 

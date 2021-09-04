@@ -10,13 +10,17 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+
 import {Card} from 'react-native-elements';
 import {showMessage} from 'react-native-flash-message';
-import api from '../../api/services';
-import AuthContext from '../../auth/Context';
 import {COLORS, FONTS} from '../../constants';
-import {CartItemsContext} from '../../utils/CartContext';
 import {EmptyAnimation, LoadingScreen} from '../index';
+
+import api from '../../api/services';
+
+import AuthContext from '../../auth/Context';
+import {CartItemsContext} from '../../utils/CartContext';
+
 
 function CardButton({onPress, containerStyle, title, titleStyle}) {
   return (

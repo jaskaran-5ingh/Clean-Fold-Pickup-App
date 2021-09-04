@@ -2,6 +2,7 @@ import {apiClient} from './client';
 
 //Api endPoints
 const endPoint = {
+  createBill: '/create-bill',
   createOrder: '/create-order',
   doneDeliveryOrder: '/done-delivery',
   donePendingOrder: '/done-pickup',
@@ -21,6 +22,9 @@ const endPoint = {
 
 const createOrder = saveOrderObject =>
   apiClient.post(endPoint.createOrder, saveOrderObject);
+
+const createBill = saveBillObject =>
+  apiClient.post(endPoint.createBill, saveBillObject);
 
 const getDashboardData = EmployeeID =>
   apiClient.get(endPoint.getDashboardData + '/' + EmployeeID);
@@ -61,6 +65,7 @@ const updateDeliveredOrder = jsonData =>
 
 //Export Functions
 export default {
+  createBill,
   createOrder,
   doneDeliveryOrder,
   donePendingOrder,
