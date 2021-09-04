@@ -131,6 +131,7 @@ const CheckOut = ({navigation}) => {
           icon: 'success',
           position: 'top',
         });
+        navigation.replace('Dashboard');
       }
       setLoading(false);
     } catch (err) {

@@ -1,20 +1,20 @@
-import { useIsFocused } from '@react-navigation/native';
-import React, { useContext, useEffect, useState } from 'react';
+import {useIsFocused} from '@react-navigation/native';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   Alert,
   FlatList,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from 'react-native';
-import { Card } from 'react-native-elements';
-import { showMessage } from 'react-native-flash-message';
-import { EmptyAnimation, LoadingScreen } from '..';
+import {Card} from 'react-native-elements';
+import {showMessage} from 'react-native-flash-message';
+import {EmptyAnimation, LoadingScreen} from '..';
 import api from '../../api/services';
-import { COLORS, FONTS } from '../../constants';
+import {COLORS, FONTS} from '../../constants';
 import cache from '../../utils/cache';
-import { CartItemsContext } from '../../utils/CartContext';
+import {CartItemsContext} from '../../utils/CartContext';
 
 const index = ({navigation}) => {
   const [pendingOrders, setPendingOrders] = useState([]);
@@ -90,7 +90,7 @@ const index = ({navigation}) => {
             <Text style={styles.cardTitleSmall}>Order Number</Text>
             <TouchableOpacity
               onPress={() =>
-                navigation.push('OrderPreviewScreen', {orderId: item.id})
+                navigation.replace('OrderPreviewScreen', {orderId: item.id})
               }
               style={[
                 {
@@ -162,7 +162,7 @@ const index = ({navigation}) => {
 
           <TouchableOpacity
             onPress={() =>
-              navigation.push('DeliveryListEdit', {orderId: item.id})
+              navigation.replace('DeliveryListEdit', {orderId: item.id})
             }
             style={[
               styles.cardBottomButton,

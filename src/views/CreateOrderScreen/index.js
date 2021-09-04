@@ -1,15 +1,15 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, StyleSheet, View,} from 'react-native';
-import {showMessage} from 'react-native-flash-message';
-import {LinearProgress} from 'react-native-elements';
-
-import AuthContext from '../../auth/Context';
+import React, { useContext, useEffect, useState } from 'react';
+import { KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
+import { LinearProgress } from 'react-native-elements';
+import { showMessage } from 'react-native-flash-message';
+import { ErrorScreen, LoadingScreen } from '..';
 import api from '../../api/services';
+import AuthContext from '../../auth/Context';
+import { Button, DatePicker, InputComponent, PickupComponent } from '../../components';
+import { COLORS, FONTS, responsiveHeight, SIZES } from '../../constants';
 import cache from '../../utils/cache';
 
-import {COLORS, FONTS, responsiveHeight, SIZES,} from '../../constants';
-import {Button, DatePicker, InputComponent, PickupComponent} from '../../components';
-import {ErrorScreen, LoadingScreen} from '..';
+
 
 export default function index({navigation}) {
     //Deceleration Of Context
@@ -148,7 +148,7 @@ export default function index({navigation}) {
                         icon: response.data?.status == true ? 'success' : 'danger',
                         position: 'right',
                     });
-                    navigation.push('Dashboard');
+                    navigation.replace('Dashboard');
                 }
             } catch (error) {
                 console.error(error);
