@@ -18,7 +18,6 @@ function incrementQty(state, action) {
   let productCategory = action.payload.categoryID;
   let productType = action.payload.productType;
   let productQty = action.payload.qty;
-  console.log(action.payload);
   let newState = {
     ...state,
     categoryName: categoryName,
@@ -34,7 +33,7 @@ function incrementQty(state, action) {
     cache.get('productList').then(products => {
       if (products !== null) {
         let newArray = products.filter(
-          product => newState.productID !== product.productID,
+          product => newState.productID !== product.productID && product.qty !== 0,
         );
         cache.store('productList', [...newArray, newState]);
       } else {
@@ -72,7 +71,7 @@ function decrementQty(state, action) {
     cache.get('productList').then(products => {
       if (products !== null) {
         let newArray = products.filter(
-          product => newState.productID !== product.productID,
+          product => newState.productID !== product.productID && product.qty !== 0,
         );
         cache.store('productList', [...newArray, newState]);
       } else {
@@ -186,7 +185,6 @@ const ProductComponent = ({item, productQty}) => {
     : 0;
 
   //Events Handling Functions
-  console.log(item);
   const handleIncrementPress = () => {
     dispatch({
       type: 'increment',

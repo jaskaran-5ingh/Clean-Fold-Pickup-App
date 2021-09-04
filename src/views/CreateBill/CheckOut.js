@@ -37,7 +37,32 @@ const renderHeader = () => {
   );
 };
 
-const renderTableRow = ({item}) => {
+
+const CheckOut = ({navigation}) => {
+  const cartItems = useContext(CartItemsContext);
+  const [orderItems, setOrderItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    setLoading(true);
+    try {
+      cache.get('productList').then(productsList => {
+        setOrderItems(productsList);
+        setLoading(false);
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
+
+
+  const renderTableRow = ({item}) => {
+
+  function deleteButtonPressHandler(productID){
+    let newArray = orderItems.filter(product => product.productID !== productID);
+    setOrderItems(newArray);
+    cache.store('productList',newArray);
+  }
+
   return (
     <View style={styles.tbody}>
       <View style={styles.td}>
@@ -60,7 +85,7 @@ const renderTableRow = ({item}) => {
           <TouchableHighlight
             activeOpacity={0.6}
             underlayColor={COLORS.white}
-            onPress={() => console.log('Pressed!')}>
+            onPress={() => deleteButtonPressHandler(item.productID)}>
             <Icon
               type="font-awesome"
               name="trash"
@@ -74,21 +99,7 @@ const renderTableRow = ({item}) => {
   );
 };
 
-const CheckOut = () => {
-  const cartItems = useContext(CartItemsContext);
-  const [orderItems, setOrderItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    setLoading(true);
-    try {
-      cache.get('productList').then(productsList => {
-        setOrderItems(productsList);
-        setLoading(false);
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
+
   return (
     <View style={styles.container}>
       {!loading ? (
@@ -110,7 +121,7 @@ const CheckOut = () => {
             placement="left"
             color={COLORS.darkGreen}
             icon={<Icon name="add" size={25} color="white" />}
-            onPress={() => console.log('Add cart')}
+            onPress={() => navigation.goBack()}
           />
 
           <FAB
