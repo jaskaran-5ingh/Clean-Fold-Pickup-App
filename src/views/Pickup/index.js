@@ -10,17 +10,13 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-
 import {Card} from 'react-native-elements';
 import {showMessage} from 'react-native-flash-message';
-import {COLORS, FONTS} from '../../constants';
-import {EmptyAnimation, LoadingScreen} from '../index';
-
 import api from '../../api/services';
-
 import AuthContext from '../../auth/Context';
+import {COLORS, FONTS} from '../../constants';
 import {CartItemsContext} from '../../utils/CartContext';
-
+import {EmptyAnimation, LoadingScreen} from '../index';
 
 function CardButton({onPress, containerStyle, title, titleStyle}) {
   return (
@@ -129,7 +125,7 @@ const index = ({navigation}) => {
               <Text style={styles.cardTitleSmall}>Order Number</Text>
               <CardButton
                 onPress={() =>
-                  navigation.push('OrderPreviewScreen', {orderId: item.id})
+                  navigation.replace('OrderPreviewScreen', {orderId: item.id})
                 }
                 containerStyle={[
                   {
@@ -209,7 +205,7 @@ const index = ({navigation}) => {
               <>
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.push('PickupEdit', {orderId: item.id});
+                    navigation.replace('PickupEdit', {orderId: item.id});
                   }}
                   style={[
                     styles.cardBottomButton,

@@ -8,11 +8,10 @@ import {
   View,
 } from 'react-native';
 import {showMessage} from 'react-native-flash-message';
-import api from '../../api/services';
-
-import {COLORS, FONTS, responsiveHeight, SIZES} from '../../constants';
-import {Button, InputComponent} from '../../components';
 import {ErrorScreen, LoadingScreen} from '..';
+import api from '../../api/services';
+import {Button, InputComponent} from '../../components';
+import {COLORS, FONTS, responsiveHeight, SIZES} from '../../constants';
 
 export default function index({route, navigation}) {
   const [deliveryData, setDeliveryData] = useState({});
@@ -91,7 +90,7 @@ export default function index({route, navigation}) {
         position: 'right',
       });
       setLoading(false);
-      navigation.push('DeliveryList');
+      navigation.replace('DeliveryList');
     } catch (err) {
       console.error(err);
     }
