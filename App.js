@@ -1,20 +1,21 @@
-import {useNetInfo} from '@react-native-community/netinfo';
-import {NavigationContainer} from '@react-navigation/native';
-import React, {useEffect, useState} from 'react';
-import {StatusBar, StyleSheet, View} from 'react-native';
+import { useNetInfo } from '@react-native-community/netinfo';
+import { NavigationContainer } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
+import { StatusBar, StyleSheet, View } from 'react-native';
 import FlashMessage from 'react-native-flash-message';
+import OneSignal from 'react-native-onesignal';
 import SplashScreen from 'react-native-splash-screen';
 import AuthContext from './src/auth/Context';
-import {COLORS} from './src/constants';
+import { COLORS } from './src/constants';
 import {
   AppStackNavigator,
   AuthNavigator,
   navigationRef,
-  navigationTheme,
+  navigationTheme
 } from './src/routes';
 import cache from './src/utils/cache';
 import CartContext from './src/utils/CartContext';
-import {ErrorScreen} from './src/views';
+import { ErrorScreen } from './src/views';
 
 //Debugger Configuration Start
 // To see all the requests in the chrome Dev tools in the network tab.
@@ -42,14 +43,23 @@ export default function App() {
   const [user, setUser] = useState([]);
 
   // Use Effect hooks
-
   useEffect(() => {
     let unAmounted = false;
 
     setTimeout(() => {
       try {
         if (!unAmounted) {
-          cache.get('user').then(res => setUser(res));
+          cache.get('user').then(res => {
+            let externalUserId = res?.mobile;
+            // Setting External User Id with Callback Available in SDK Version 3.9.3+
+            OneSignal.setExternalUserId(externalUserId, results => {
+              if (results.push && results.push.success) {
+                console.log('Results of setting external user id push status:');
+                console.log(results.push.success);
+              }
+            });
+            setUser(res);
+          });
         }
         SplashScreen.hide();
       } catch (err) {

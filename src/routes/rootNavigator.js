@@ -4,6 +4,11 @@ const navigate = (name, params) => {
   navigationRef.current?.navigate(name, params);
 };
 
+const replace = (name, params) => {
+  navigationRef.current?.navigate(name, params);
+};
+
 export default {
   navigate,
+  replace,
 };

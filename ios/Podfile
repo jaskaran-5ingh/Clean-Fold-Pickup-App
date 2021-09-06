@@ -22,6 +22,8 @@ target 'cleanfoldpickup' do
 
   pod 'RNDateTimePicker', :path => '../node_modules/@react-native-community/datetimepicker'
 
+  pod 'react-native-onesignal', :path => '../node_modules/react-native-onesignal'
+
   target 'cleanfoldpickupTests' do
     inherit! :complete
     # Pods for testing
