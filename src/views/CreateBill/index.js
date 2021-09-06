@@ -1,22 +1,22 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react-native/no-inline-styles */
-import React, { useContext, useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
+import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {
   Divider,
   FAB,
   Icon,
   LinearProgress,
   ListItem,
-  Tab
+  Tab,
 } from 'react-native-elements';
 import FastImage from 'react-native-fast-image';
-import { showMessage } from 'react-native-flash-message';
+import {showMessage} from 'react-native-flash-message';
 import api from '../../api/services';
-import { COLORS, FONTS } from '../../constants';
-import { CartItemsContext } from '../../utils/CartContext';
-import { LoadingScreen } from '../index';
+import {COLORS, FONTS} from '../../constants';
+import {CartItemsContext} from '../../utils/CartContext';
+import {LoadingScreen} from '../index';
 import ProductComponent from './ProductComponent';
 
 function TabItems({data, renderItems}) {
@@ -34,7 +34,7 @@ const index = ({route, navigation}) => {
   const [linearLoading, setLinearLoading] = useState(true);
   const [rateList, setSetList] = useState([]);
   const [tabIndex, setTabIndex] = useState(0);
-  const [selectedCategory, setSelectedCategory] = useState(2);
+  const [selectedCategory, setSelectedCategory] = useState(1);
   const cartContext = useContext(CartItemsContext);
 
   const PRODUCT_IMAGES_URL =
@@ -95,6 +95,16 @@ const index = ({route, navigation}) => {
       </TouchableOpacity>
     );
   }
+
+  useEffect(() => {
+    let unAmounted = false;
+    if (!unAmounted) {
+      setSelectedCategory(parseInt(route.params.categoryId));
+    }
+    return () => {
+      unAmounted = true;
+    };
+  }, []);
 
   useEffect(() => {
     let unAmounted = false;
@@ -183,9 +193,7 @@ const index = ({route, navigation}) => {
           }}
           style={{width: 60, height: 90, marginRight: 20}}
         />
-        <ProductComponent
-          item={item}
-        />
+        <ProductComponent item={item} />
       </ListItem>
     );
   }
@@ -202,7 +210,7 @@ const index = ({route, navigation}) => {
       ) : (
         <FlatList
           data={categoryList}
-          keyExtractor={item => `${Math.floor((Math.random() * 999999) + 1)}`}
+          keyExtractor={item => `${Math.floor(Math.random() * 999999 + 1)}`}
           renderItem={renderCategory}
           refreshing={loading}
           onRefresh={() => getOrderCategory()}

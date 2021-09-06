@@ -179,7 +179,9 @@ const index = ({navigation}) => {
                 type: 'storeCustomerDetails',
                 payload: {customerDetails: item},
               });
-              navigation.navigate('CreateBill');
+              navigation.navigate('CreateBill', {
+                categoryId: item.order_categories,
+              });
             }}
             style={[
               styles.cardBottomButton,

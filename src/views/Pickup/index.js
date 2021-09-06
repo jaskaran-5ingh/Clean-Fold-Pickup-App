@@ -1,22 +1,22 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react-native/no-inline-styles */
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Alert,
   FlatList,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
-import {Card} from 'react-native-elements';
-import {showMessage} from 'react-native-flash-message';
+import { Card } from 'react-native-elements';
+import { showMessage } from 'react-native-flash-message';
 import api from '../../api/services';
 import AuthContext from '../../auth/Context';
-import {COLORS, FONTS} from '../../constants';
-import {CartItemsContext} from '../../utils/CartContext';
-import {EmptyAnimation, LoadingScreen} from '../index';
+import { COLORS, FONTS } from '../../constants';
+import { CartItemsContext } from '../../utils/CartContext';
+import { EmptyAnimation, LoadingScreen } from '../index';
 
 function CardButton({onPress, containerStyle, title, titleStyle}) {
   return (
@@ -221,7 +221,9 @@ const index = ({navigation}) => {
                       type: 'storeCustomerDetails',
                       payload: {customerDetails: item},
                     });
-                    navigation.navigate('CreateBill');
+                    navigation.navigate('CreateBill', {
+                      categoryId: item.order_categories,
+                    });
                   }}
                   style={[
                     styles.cardBottomButton,
