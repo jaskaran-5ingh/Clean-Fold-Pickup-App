@@ -1,13 +1,14 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-native/no-inline-styles */
-import { createStackNavigator } from '@react-navigation/stack';
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Alert, AppState, TouchableOpacity } from 'react-native';
-import { Badge, Icon } from 'react-native-elements';
+import {createStackNavigator} from '@react-navigation/stack';
+import React, {useContext, useEffect, useRef, useState} from 'react';
+import {Alert, AppState, TouchableOpacity} from 'react-native';
+import {Badge, Icon} from 'react-native-elements';
+import OneSignal from 'react-native-onesignal';
 import AuthContext from '../auth/Context';
-import { COLORS, FONTS } from '../constants';
+import {COLORS, FONTS} from '../constants';
 import cache from '../utils/cache';
-import { CartItemsContext } from '../utils/CartContext';
+import {CartItemsContext} from '../utils/CartContext';
 //Screens
 import {
   CategoriesList,
@@ -20,7 +21,7 @@ import {
   OrderPreviewScreen,
   Pickup,
   PickupEdit,
-  RateListScreen
+  RateListScreen,
 } from '../views';
 import navigation from './rootNavigator';
 
@@ -37,7 +38,7 @@ function AppStackNavigator() {
     return (
       <TouchableOpacity
         onPress={() => {
-          Alert.alert('Are you want to logout ❓', '', [
+          Alert.alert('Are you want to logout ?', '', [
             {
               text: 'NO',
               onPress: () => {},
@@ -114,6 +115,31 @@ function AppStackNavigator() {
     }
     return null;
   }
+
+  //OneSignal Init Code
+  OneSignal.setLogLevel(6, 0);
+  OneSignal.setAppId('41432c5a-1e80-4eab-8180-16fedfdb1a3e');
+  //END OneSignal Init Code
+
+  //Method for handling notifications received while app in foreground
+  OneSignal.setNotificationWillShowInForegroundHandler(
+    notificationReceivedEvent => {
+      let notification = notificationReceivedEvent.getNotification();
+      // Complete with null means don't show a notification.
+      notificationReceivedEvent.complete(notification);
+    },
+  );
+
+  //Method for handling notifications opened
+  OneSignal.setNotificationOpenedHandler(notification => {
+    const data = notification.notification.additionalData;
+    if (data.type === 'pickup') {
+      navigation.navigate('Pickup');
+    }
+    if (data.type === 'delivery') {
+      navigation.navigate('DeliveryList');
+    }
+  });
 
   return (
     <Stack.Navigator
