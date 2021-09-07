@@ -237,11 +237,11 @@ export default function index({route, navigation}) {
 
   return (
     <SafeAreaView style={styles.container}>
-      {error == true ? (
+      {error ? (
         <ErrorScreen />
       ) : (
         <>
-          {loading == true ? (
+          {loading ? (
             <LoadingScreen />
           ) : (
             <>
