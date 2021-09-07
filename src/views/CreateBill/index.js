@@ -66,33 +66,32 @@ const index = ({route, navigation}) => {
   }
 
   function renderCategory({item}) {
-    let isSelected =
-      item.id === selectedCategory ? {backgroundColor: COLORS.primary} : null;
-
+    let isSelected = item.id === selectedCategory ? true : null;
     return (
-      <TouchableOpacity
-        onPress={() => setSelectedCategory(item.id)}
+      <View
         style={[
           {
+            flex: 1,
             padding: 10,
             height: 60,
-            shadowColor: COLORS.primary,
             minWidth: 110,
             textAlign: 'center',
             justifyContent: 'center',
             alignItems: 'center',
+            backgroundColor: isSelected ? COLORS.primary : COLORS.white,
           },
-          isSelected,
         ]}>
-        <Text
-          style={{
-            ...FONTS.h5,
-            paddingBottom: 13,
-            color: isSelected ? COLORS.white : COLORS.darkTransparent,
-          }}>
-          {item.name}
-        </Text>
-      </TouchableOpacity>
+        <TouchableOpacity onPress={() => setSelectedCategory(item.id)}>
+          <Text
+            style={{
+              ...FONTS.h5,
+              paddingBottom: 13,
+              color: isSelected ? COLORS.white : COLORS.darkTransparent,
+            }}>
+            {item.name}
+          </Text>
+        </TouchableOpacity>
+      </View>
     );
   }
 
@@ -104,7 +103,7 @@ const index = ({route, navigation}) => {
     return () => {
       unAmounted = true;
     };
-  }, []);
+  }, [route.params.categoryId]);
 
   useEffect(() => {
     let unAmounted = false;
@@ -197,26 +196,18 @@ const index = ({route, navigation}) => {
       </ListItem>
     );
   }
-
   return (
     <View style={styles.container}>
       {loading ? (
-        <View
-          style={{
-            borderBottomWidth: 4,
-            borderBottomColor: COLORS.transparent,
-          }}
-        />
+        <View />
       ) : (
         <FlatList
           data={categoryList}
-          keyExtractor={item => `${Math.floor(Math.random() * 999999 + 1)}`}
+          keyExtractor={() => `${Math.floor(Math.random() * 999999 + 1)}`}
           renderItem={renderCategory}
-          refreshing={loading}
-          onRefresh={() => getOrderCategory()}
           horizontal={true}
-          showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
         />
       )}
       {linearLoading ? (
@@ -239,8 +230,8 @@ const index = ({route, navigation}) => {
               keyExtractor={item => `${item.product_type_id}`}
               renderItem={renderTabHeaders}
               horizontal={true}
-              showsVerticalScrollIndicator={false}
               showsHorizontalScrollIndicator={false}
+              showsVerticalScrollIndicator={false}
             />
           </Tab>
           <Divider />
@@ -251,7 +242,7 @@ const index = ({route, navigation}) => {
           <FAB
             title="Checkout"
             buttonStyle={{
-              paddingHorizontal: 122,
+              paddingHorizontal: 120,
             }}
             containerStyle={{
               shadowColor: COLORS.black,
