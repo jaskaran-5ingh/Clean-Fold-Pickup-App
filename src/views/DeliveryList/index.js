@@ -119,7 +119,7 @@ const index = ({navigation}) => {
             <Text
               style={{
                 ...FONTS.body4,
-                color: COLORS.darkgray,
+                color: COLORS.darkTransparent,
                 paddingBottom: 5,
               }}>
               {item?.location?.area_name}
@@ -173,7 +173,7 @@ const index = ({navigation}) => {
             <Text style={{fontSize: 15, color: COLORS.white}}>Edit</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() => {
               cartContext.dispatch({
                 type: 'storeCustomerDetails',
@@ -190,7 +190,7 @@ const index = ({navigation}) => {
               },
             ]}>
             <Text style={{fontSize: 15, color: COLORS.white}}>Bill</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </Card>
     );
@@ -210,7 +210,16 @@ const index = ({navigation}) => {
           <FlatList
             ListHeaderComponent={() => {
               return (
-                <Text style={styles.headerTitleStyle}>
+                <Text
+                  style={[
+                    styles.headerTitleStyle,
+                    {
+                      color:
+                        pendingOrders?.length > 0
+                          ? COLORS.white
+                          : COLORS.darkTransparent,
+                    },
+                  ]}>
                   Pull down to refresh list
                 </Text>
               );
