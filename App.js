@@ -53,14 +53,10 @@ export default function App() {
             console.log(res);
             if (res === null) {
               let externalUserId = '9530654704';
-              console.log(externalUserId);
               // Setting External User Id with Callback Available in SDK Version 3.9.3+
               OneSignal.setExternalUserId(externalUserId, results => {
                 if (results.push && results.push.success) {
-                  console.log(
-                    'Results of setting external user id push status:',
-                  );
-                  console.log(results.push.success);
+                  // console.log(results.push.success);
                 }
               });
             } else {
@@ -68,10 +64,7 @@ export default function App() {
               // Setting External User Id with Callback Available in SDK Version 3.9.3+
               OneSignal.setExternalUserId(externalUserId, results => {
                 if (results.push && results.push.success) {
-                  console.log(
-                    'Results of setting external user id push status:',
-                  );
-                  console.log(results.push.success);
+                  // console.log(results.push.success);
                 }
               });
             }
