@@ -128,7 +128,7 @@ const index = ({navigation}) => {
       return () => {
         unAmounted = true;
       };
-    }, 20000);
+    }, 30000);
     return () => {
       clearInterval(interval);
     };

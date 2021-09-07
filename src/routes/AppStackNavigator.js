@@ -164,23 +164,21 @@ function AppStackNavigator() {
       <Stack.Screen
         name="CategoriesList"
         component={CategoriesList}
-        label="CategoriesList"
-        options={{headerShown: true}}
+        options={{headerShown: true, title: 'Categories'}}
       />
 
       <Stack.Screen
         name="CheckOut"
         component={CheckOut}
-        label="CheckOut"
-        options={{headerShown: true}}
+        options={{headerShown: true, title: 'CheckOut'}}
       />
 
       <Stack.Screen
         name="CreateBill"
         component={CreateBill}
-        label="Create Bill"
         options={{
           headerShown: true,
+          title: 'Create Bill',
           // headerRight: ({color, size}) => {
           //   return cartButton(color, size);
           // },
@@ -190,8 +188,7 @@ function AppStackNavigator() {
       <Stack.Screen
         name="CreateOrderScreen"
         component={CreateOrderScreen}
-        label="Create Order"
-        options={{headerShown: true}}
+        options={{headerShown: true, title: 'Create Order'}}
       />
 
       <Stack.Screen
@@ -208,42 +205,36 @@ function AppStackNavigator() {
       <Stack.Screen
         name="DeliveryList"
         component={DeliveryList}
-        label="DELIVERY"
-        options={{headerShown: true}}
+        options={{headerShown: true, title: 'Deliveries'}}
       />
 
       <Stack.Screen
         name="DeliveryListEdit"
         component={DeliveryListEdit}
-        label="DeliveryListEdit"
-        options={{headerShown: true}}
+        options={{headerShown: true, title: 'Delivery Edit'}}
       />
 
       <Stack.Screen
         name="OrderPreviewScreen"
         component={OrderPreviewScreen}
-        label="OrderPreviewScreen"
-        options={{headerShown: true}}
+        options={{headerShown: true, title: 'Order Details'}}
       />
       <Stack.Screen
         name="Pickup"
-        label="PICKUPS"
         component={Pickup}
-        options={{headerShown: true}}
+        options={{headerShown: true, title: 'Pickups'}}
       />
 
       <Stack.Screen
         name="PickupEdit"
-        label="PICKUP Edit"
         component={PickupEdit}
-        options={{headerShown: true}}
+        options={{headerShown: true, title: 'Pickup Edit'}}
       />
 
       <Stack.Screen
         name="RateListScreen"
         component={RateListScreen}
-        label="RateListScreen"
-        options={{headerShown: true}}
+        options={{headerShown: true, title: 'Rate List'}}
       />
     </Stack.Navigator>
   );
