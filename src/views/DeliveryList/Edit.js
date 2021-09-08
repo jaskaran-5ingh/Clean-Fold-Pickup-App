@@ -134,14 +134,13 @@ export default function index({route, navigation}) {
       </View>
     );
   }
-
   return (
     <SafeAreaView style={styles.container}>
-      {error ? (
+      {error === true ? (
         <ErrorScreen />
       ) : (
         <>
-          {loading ? (
+          {loading === true ? (
             <LoadingScreen />
           ) : (
             <>
