@@ -118,6 +118,7 @@ const index = ({orderItems, orderCategory, orderId}) => {
           <Text style={styles.cardTitle}>Qty</Text>
           <Text style={styles.cardTitle}>Total</Text>
         </View>
+
         <FlatList
           data={orderItems}
           keyExtractor={item => `${item.id}`}

@@ -25,6 +25,13 @@ function TabItems({data, renderItems}) {
       data={data}
       renderItem={renderItems}
       keyExtractor={item => `${item.id}`}
+      ListFooterComponent={() => (
+        <View
+          style={{
+            marginBottom: 100,
+          }}
+        />
+      )}
     />
   );
 }
