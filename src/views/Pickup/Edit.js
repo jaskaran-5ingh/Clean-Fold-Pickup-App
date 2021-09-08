@@ -35,11 +35,17 @@ export default function index({route, navigation}) {
   const [user_id, setUser_id] = useState('');
 
   useEffect(() => {
+    let unAmounted = false;
     try {
-      getOrderDetails();
+      if (!unAmounted) {
+        getOrderDetails();
+      }
     } catch (err) {
       console.error(err);
     }
+    return () => {
+      unAmounted = true;
+    };
   }, []);
 
   const dateFormatter = currentDate => {
@@ -237,11 +243,11 @@ export default function index({route, navigation}) {
 
   return (
     <SafeAreaView style={styles.container}>
-      {error ? (
+      {error === true ? (
         <ErrorScreen />
       ) : (
         <>
-          {loading ? (
+          {loading === true ? (
             <LoadingScreen />
           ) : (
             <>

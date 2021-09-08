@@ -20,11 +20,11 @@ const endPoint = {
 
 //Call Api Function
 
-const createOrder = saveOrderObject =>
-  apiClient.post(endPoint.createOrder, saveOrderObject);
-
 const createBill = saveBillObject =>
   apiClient.post(endPoint.createBill, saveBillObject);
+
+const createOrder = saveOrderObject =>
+  apiClient.post(endPoint.createOrder, saveOrderObject);
 
 const getDashboardData = EmployeeID =>
   apiClient.get(endPoint.getDashboardData + '/' + EmployeeID);

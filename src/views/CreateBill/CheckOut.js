@@ -42,10 +42,12 @@ const renderHeader = () => {
 };
 
 const CheckOut = ({navigation}) => {
+
   const cartItems = useContext(CartItemsContext);
   const [orderItems, setOrderItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [grandTotal, setGrandTotal] = useState(0);
+  
   let total = 0;
   let Grand = 0;
 
