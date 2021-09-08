@@ -42,12 +42,11 @@ const renderHeader = () => {
 };
 
 const CheckOut = ({navigation}) => {
-
   const cartItems = useContext(CartItemsContext);
   const [orderItems, setOrderItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [grandTotal, setGrandTotal] = useState(0);
-  
+
   let total = 0;
   let Grand = 0;
 
@@ -142,13 +141,8 @@ const CheckOut = ({navigation}) => {
   };
 
   const handleFormSubmit = () => {
-    if (grandTotal < 250) {
-      alert('Minimum order is Rs. 250 !\n Please add more items.');
-      return false;
-    }
     const {customerDetails} = cartItems.state;
     let cartArray = [];
-
     orderItems.forEach(element => {
       let cartItemObject = {
         id: element.productID,
@@ -162,6 +156,7 @@ const CheckOut = ({navigation}) => {
 
     let orderItemObject = {
       order_details: {
+        id: customerDetails.id,
         user_id: customerDetails.user_id,
         pickupTime: customerDetails.pickup_time,
         pick_timeslot: customerDetails.pickup_slot,
@@ -178,7 +173,6 @@ const CheckOut = ({navigation}) => {
         order_by: customerDetails.order_from,
       },
     };
-
     createBill(orderItemObject);
   };
 
@@ -282,6 +276,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 2,
     borderColor: COLORS.gray,
     paddingVertical: 10,
+    marginBottom: 100,
   },
 });
 

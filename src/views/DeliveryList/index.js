@@ -74,6 +74,13 @@ const index = ({navigation}) => {
   }
 
   function renderCardItem({item}) {
+    let timeSlots = {
+      slot1: '8:00 AM-10:00 PM',
+      slot2: '10:00 AM-12:00 PM',
+      slot3: '12:00 PM-03:00 PM',
+      slot4: '03:00 PM-05:00 PM',
+      slot5: '05:00 PM-08:00 PM',
+    };
     return (
       <Card style={{position: 'relative', width: '100%', height: 'auto'}}>
         <View
@@ -113,6 +120,22 @@ const index = ({navigation}) => {
             padding: 5,
           }}>
           <View style={{maxWidth: '50%'}}>
+            {item?.delv_slot !== null ? (
+              <>
+                <Text
+                  style={{...FONTS.h4, fontWeight: 'bold', paddingBottom: 5}}>
+                  Delivery Time
+                </Text>
+                <Text
+                  style={{
+                    ...FONTS.body4,
+                    color: COLORS.darkTransparent,
+                    paddingBottom: 15,
+                  }}>
+                  {timeSlots[`${item?.delv_slot}`]}
+                </Text>
+              </>
+            ) : null}
             <Text style={{...FONTS.h4, fontWeight: 'bold', paddingBottom: 5}}>
               {item?.user?.mobile}
             </Text>
@@ -125,8 +148,22 @@ const index = ({navigation}) => {
               {item?.location?.area_name}
             </Text>
           </View>
+
           <View style={{maxWidth: '50%'}}>
-            <Text style={{...FONTS.h4, paddingBottom: 5}}>Remarks</Text>
+            <Text style={{...FONTS.h4, fontWeight: 'bold', paddingBottom: 5}}>
+              Category
+            </Text>
+            <Text
+              style={{
+                ...FONTS.body4,
+                color: COLORS.darkTransparent,
+                paddingBottom: 15,
+              }}>
+              {item?.order_category_relation?.name}
+            </Text>
+            <Text style={{...FONTS.h4, fontWeight: 'bold', paddingBottom: 5}}>
+              Remarks
+            </Text>
             <Text
               style={{
                 ...FONTS.body4,
