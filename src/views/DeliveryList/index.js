@@ -123,28 +123,28 @@ const index = ({ navigation }) => {
             {item?.delv_slot !== null ? (
               <>
                 <Text
-                  style={{ ...FONTS.h4, fontWeight: 'bold', paddingBottom: 5 }}>
+                  style={{ ...FONTS.h4, fontWeight: 'bold', paddingBottom: 8 }}>
                   Delivery Time
                 </Text>
                 <Text
                   style={{
                     ...FONTS.h5,
                     color: COLORS.red,
-                    paddingBottom: 15,
+                    paddingBottom: 20,
                     fontWeight: 'bold'
                   }}>
                   {timeSlots[`${item?.delv_slot}`]}
                 </Text>
               </>
             ) : null}
-            <Text style={{ ...FONTS.h4, fontWeight: 'bold', paddingBottom: 5 }}>
+            <Text style={{ ...FONTS.h4, fontWeight: 'bold', paddingBottom: 8 }}>
               {item?.user?.mobile}
             </Text>
             <Text
               style={{
                 ...FONTS.body4,
                 color: COLORS.darkTransparent,
-                paddingBottom: 5,
+                paddingBottom: 8,
               }}>
               {item?.location?.area_name}
             </Text>
@@ -158,7 +158,7 @@ const index = ({ navigation }) => {
               style={{
                 ...FONTS.body4,
                 color: COLORS.darkTransparent,
-                paddingBottom: 15,
+                paddingBottom: 20,
               }}>
               {item?.order_category_relation?.name}
             </Text>
@@ -169,7 +169,6 @@ const index = ({ navigation }) => {
               style={{
                 ...FONTS.body4,
                 color: COLORS.red,
-
                 paddingBottom: 5,
               }}>
               {item.remarks}

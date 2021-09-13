@@ -264,6 +264,7 @@ const index = ({ navigation }) => {
                     });
                     navigation.navigate('CreateBill', {
                       categoryId: item.order_categories,
+                      categoryName: item?.order_category_relation?.name
                     });
                   }}
                   style={[
