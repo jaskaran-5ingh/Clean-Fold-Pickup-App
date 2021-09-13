@@ -1,6 +1,5 @@
 import { useIsFocused } from '@react-navigation/native';
 import React, { useContext, useEffect, useState } from 'react';
-
 import {
   Image,
   ImageBackground,
@@ -17,6 +16,7 @@ import AuthContext from '../../auth/Context';
 import { COLORS, FONTS, images, responsiveWidth, SIZES } from '../../constants';
 import cache from '../../utils/cache';
 import Card from './card';
+
 
 const index = ({ navigation }) => {
   const isFocused = useIsFocused();
@@ -184,7 +184,7 @@ const index = ({ navigation }) => {
               color={COLORS.red}
               title="PICKUPS"
               qty={dashboardData?.pending}
-              onPress={() => navigation.navigate('Pickup')}
+              onPress={() => (authContext?.user?.id !== undefined) ? navigation.navigate('Pickup') : null}
               loading={loading}
               fullWidth={authContext?.user?.role_id == 6}
             />
@@ -196,7 +196,7 @@ const index = ({ navigation }) => {
                   color={COLORS.darkGreen}
                   title="DELIVERY"
                   qty={dashboardData?.delivered}
-                  onPress={() => navigation.navigate('DeliveryList')}
+                  onPress={() => (authContext?.user?.id !== undefined) ? navigation.navigate('DeliveryList') : null}
                   loading={loading}
                 />
                 <Card
