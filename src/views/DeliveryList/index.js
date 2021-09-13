@@ -1,22 +1,22 @@
-import {useIsFocused} from '@react-navigation/native';
-import React, {useContext, useEffect, useState} from 'react';
+import { useIsFocused } from '@react-navigation/native';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Alert,
   FlatList,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
-import {Card} from 'react-native-elements';
-import {showMessage} from 'react-native-flash-message';
-import {EmptyAnimation, LoadingScreen} from '..';
+import { Card } from 'react-native-elements';
+import { showMessage } from 'react-native-flash-message';
+import { EmptyAnimation, LoadingScreen } from '..';
 import api from '../../api/services';
-import {COLORS, FONTS} from '../../constants';
+import { COLORS, FONTS } from '../../constants';
 import cache from '../../utils/cache';
-import {CartItemsContext} from '../../utils/CartContext';
+import { CartItemsContext } from '../../utils/CartContext';
 
-const index = ({navigation}) => {
+const index = ({ navigation }) => {
   const [pendingOrders, setPendingOrders] = useState([]);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -73,16 +73,16 @@ const index = ({navigation}) => {
     }
   }
 
-  function renderCardItem({item}) {
+  function renderCardItem({ item }) {
     let timeSlots = {
-      slot1: '8:00 AM-10:00 PM',
-      slot2: '10:00 AM-12:00 PM',
-      slot3: '12:00 PM-03:00 PM',
-      slot4: '03:00 PM-05:00 PM',
-      slot5: '05:00 PM-08:00 PM',
+      slot1: '08:00 AM - 10:00 PM',
+      slot2: '10:00 AM - 12:00 PM',
+      slot3: '12:00 PM - 03:00 PM',
+      slot4: '03:00 PM - 05:00 PM',
+      slot5: '05:00 PM - 08:00 PM',
     };
     return (
-      <Card style={{position: 'relative', width: '100%', height: 'auto'}}>
+      <Card style={{ position: 'relative', width: '100%', height: 'auto' }}>
         <View
           style={{
             flexDirection: 'row',
@@ -97,7 +97,7 @@ const index = ({navigation}) => {
             <Text style={styles.cardTitleSmall}>Order Number</Text>
             <TouchableOpacity
               onPress={() =>
-                navigation.replace('OrderPreviewScreen', {orderId: item.id})
+                navigation.replace('OrderPreviewScreen', { orderId: item.id })
               }
               style={[
                 {
@@ -107,7 +107,7 @@ const index = ({navigation}) => {
                 },
                 styles.cardBottomButton,
               ]}>
-              <Text style={{fontSize: 15, color: COLORS.white}}>{item.id}</Text>
+              <Text style={{ fontSize: 15, color: COLORS.white }}>{item.id}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -119,24 +119,25 @@ const index = ({navigation}) => {
             alignItems: 'flex-start',
             padding: 5,
           }}>
-          <View style={{maxWidth: '50%'}}>
+          <View style={{ maxWidth: '50%' }}>
             {item?.delv_slot !== null ? (
               <>
                 <Text
-                  style={{...FONTS.h4, fontWeight: 'bold', paddingBottom: 5}}>
+                  style={{ ...FONTS.h4, fontWeight: 'bold', paddingBottom: 5 }}>
                   Delivery Time
                 </Text>
                 <Text
                   style={{
-                    ...FONTS.body4,
-                    color: COLORS.darkTransparent,
+                    ...FONTS.h5,
+                    color: COLORS.red,
                     paddingBottom: 15,
+                    fontWeight: 'bold'
                   }}>
                   {timeSlots[`${item?.delv_slot}`]}
                 </Text>
               </>
             ) : null}
-            <Text style={{...FONTS.h4, fontWeight: 'bold', paddingBottom: 5}}>
+            <Text style={{ ...FONTS.h4, fontWeight: 'bold', paddingBottom: 5 }}>
               {item?.user?.mobile}
             </Text>
             <Text
@@ -149,8 +150,8 @@ const index = ({navigation}) => {
             </Text>
           </View>
 
-          <View style={{maxWidth: '50%'}}>
-            <Text style={{...FONTS.h4, fontWeight: 'bold', paddingBottom: 5}}>
+          <View style={{ maxWidth: '50%' }}>
+            <Text style={{ ...FONTS.h4, fontWeight: 'bold', paddingBottom: 5 }}>
               Category
             </Text>
             <Text
@@ -161,7 +162,7 @@ const index = ({navigation}) => {
               }}>
               {item?.order_category_relation?.name}
             </Text>
-            <Text style={{...FONTS.h4, fontWeight: 'bold', paddingBottom: 5}}>
+            <Text style={{ ...FONTS.h4, fontWeight: 'bold', paddingBottom: 5 }}>
               Remarks
             </Text>
             <Text
@@ -176,7 +177,7 @@ const index = ({navigation}) => {
           </View>
         </View>
         <Card.Divider />
-        <View style={{flexDirection: 'row'}}>
+        <View style={{ flexDirection: 'row' }}>
           <TouchableOpacity
             onPress={() => {
               Alert.alert('Alert!', 'Are you want to change status to Done ?', [
@@ -185,7 +186,7 @@ const index = ({navigation}) => {
                   onPress: () => null,
                   style: 'cancel',
                 },
-                {text: 'OK', onPress: () => doneDeliveryOrder(item.id)},
+                { text: 'OK', onPress: () => doneDeliveryOrder(item.id) },
               ]);
             }}
             style={[
@@ -194,12 +195,12 @@ const index = ({navigation}) => {
                 backgroundColor: COLORS.darkTransparent,
               },
             ]}>
-            <Text style={{fontSize: 15, color: COLORS.white}}>Done</Text>
+            <Text style={{ fontSize: 15, color: COLORS.white }}>Done</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={() =>
-              navigation.replace('DeliveryListEdit', {orderId: item.id})
+              navigation.replace('DeliveryListEdit', { orderId: item.id })
             }
             style={[
               styles.cardBottomButton,
@@ -207,7 +208,7 @@ const index = ({navigation}) => {
                 backgroundColor: COLORS.primary,
               },
             ]}>
-            <Text style={{fontSize: 15, color: COLORS.white}}>Edit</Text>
+            <Text style={{ fontSize: 15, color: COLORS.white }}>Edit</Text>
           </TouchableOpacity>
 
           {/* <TouchableOpacity
@@ -234,7 +235,7 @@ const index = ({navigation}) => {
   }
 
   return (
-    <View style={{flex: 1, backgroundColor: 'white'}}>
+    <View style={{ flex: 1, backgroundColor: 'white' }}>
       {loading == true ? (
         <LoadingScreen />
       ) : (
@@ -298,7 +299,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     elevation: 5,
   },
-  cardTitle: {...FONTS.h4, color: COLORS.primary, fontWeight: 'bold'},
+  cardTitle: { ...FONTS.h4, color: COLORS.primary, fontWeight: 'bold' },
   cardTitleSmall: {
     ...FONTS.body4,
     color: COLORS.darkTransparent,
