@@ -1,5 +1,6 @@
 import { useIsFocused } from '@react-navigation/native';
 import React, { useContext, useEffect, useState } from 'react';
+
 import {
   Image,
   ImageBackground,

@@ -1,9 +1,11 @@
 //Routes Navigators
-import AuthNavigator from './AuthNavigator';
 import AppStackNavigator from './AppStackNavigator';
+import AppTabNavigator from './AppTabNavigator';
+import AuthNavigator from './AuthNavigator';
 //Navigator Theme
 import navigationTheme from './navigationTheme';
-import {navigationRef} from './rootNavigator';
+import { navigationRef } from './rootNavigator';
 
 //Export Navigators
-export {AuthNavigator, AppStackNavigator, navigationTheme, navigationRef};
+export { AuthNavigator, AppTabNavigator, AppStackNavigator, navigationTheme, navigationRef };
+
