@@ -1,12 +1,18 @@
-import React, {useEffect, useState} from 'react';
-import {ActivityIndicator, StyleSheet, View} from 'react-native';
-import {Badge, Tab, TabView} from 'react-native-elements';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { NavigationContainer } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, SafeAreaView, StyleSheet } from 'react-native';
+import { Badge } from 'react-native-elements';
 import api from '../../api/services';
-import {COLORS} from '../../constants';
+import {
+  COLORS
+} from '../../constants';
 import OrderDetails from './OrderDetails';
 import OrderItems from './OrderItems';
 
-const index = ({route, navigation}) => {
+const Tab = createMaterialTopTabNavigator();
+
+const index = ({ route, navigation }) => {
   const [loading, setLoading] = useState(true);
   const [orderDetails, setOrderDetails] = useState();
   const [orderItemsCount, setOrderItemsCount] = useState(0);
@@ -44,119 +50,74 @@ const index = ({route, navigation}) => {
     }
   }
 
-  return (
-    <View style={styles.container}>
-      <View
-        style={{
-          margin: 15,
-          marginBottom: 0,
-        }}>
-        <Tab
-          value={index}
-          onChange={index => setIndex(index)}
-          indicatorStyle={styles.tabIndicator}
-          variant="primary">
-          <Tab.Item
-            title="order details"
-            buttonStyle={[
-              styles.tabButtonStyle,
-              index == 0
-                ? {
-                    backgroundColor: COLORS.primary,
-                    color: COLORS.white,
-                  }
-                : null,
-            ]}
-            titleStyle={[
-              styles.tabTitleStyle,
-              index == 0
-                ? {
-                    color: 'white',
-                  }
-                : null,
-            ]}
-          />
-          <Tab.Item
-            title="order items"
-            buttonStyle={[
-              styles.tabButtonStyle,
-              index == 1
-                ? {
-                    backgroundColor: COLORS.primary,
-                    color: COLORS.white,
-                  }
-                : null,
-            ]}
-            titleStyle={[
-              styles.tabTitleStyle,
-              index == 1
-                ? {
-                    color: 'white',
-                  }
-                : null,
-            ]}
-          />
-          <Badge
-            value={orderItemsCount}
-            containerStyle={{
-              position: 'absolute',
-              top: -8,
-              right: -8,
-            }}
-            badgeStyle={{
-              height: 30,
-              width: 30,
-              borderRadius: 10,
-              elevation: 6,
-              backgroundColor:
-                orderItemsCount > 0 ? COLORS.red : COLORS.primary,
-            }}
-          />
-        </Tab>
-      </View>
+  function renderOrderDetails() {
+    return (
+      <OrderDetails
+        orderData={orderDetails}
+        orderCategory={orderCategory}
+      />
+    );
+  }
 
-      <TabView value={index} onChange={setIndex}>
-        <TabView.Item style={{width: '100%', flex: 1}}>
-          <>
-            {loading ? (
-              <View
-                style={{
-                  flex: 0.8,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <ActivityIndicator color={COLORS.primary} size={50} />
-              </View>
-            ) : (
-              <OrderDetails
-                orderData={orderDetails}
-                orderCategory={orderCategory}
-              />
-            )}
-          </>
-        </TabView.Item>
-        <TabView.Item style={{width: '100%', flex: 1}}>
-          <>
-            {loading ? (
-              <View
-                style={{
-                  flex: 0.8,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <ActivityIndicator color={COLORS.primary} size={50} />
-              </View>
-            ) : (
-              <OrderItems
-                orderItems={orderItems}
-                orderCategory={orderCategory}
-                orderId={orderDetails?.id}
-              />
-            )}
-          </>
-        </TabView.Item>
-      </TabView>
-    </View>
+  function renderOrderItems() {
+    return (
+      <OrderItems
+        orderItems={orderItems}
+        orderCategory={orderCategory}
+        orderId={orderDetails?.id}
+      />
+    );
+  }
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.primaryFont }}>
+      {loading
+        ? <ActivityIndicator size="large" color={COLORS.primary} style={{ marginTop: 30 }} />
+        : <NavigationContainer independent={true}>
+          <Tab.Navigator
+            initialRouteName="OrderDetails"
+            screenOptions={{
+              tabBarLabelStyle: { fontSize: 13, fontWeight: 'bold' },
+              tabBarStyle: { backgroundColor: 'white' },
+              tabBarActiveTintColor: COLORS.primary,
+              tabBarInactiveTintColor: COLORS.darkgray,
+              tabBarAllowFontScaling: false,
+              tabBarIndicatorStyle: {
+                height: 4,
+                backgroundColor: COLORS.primary,
+              }
+            }}
+          >
+            <Tab.Screen name="OrderDetails" component={renderOrderDetails} options={{
+              title: 'Order Details'
+            }} />
+            <Tab.Screen
+              name="OrderItems"
+              component={renderOrderItems}
+              options={{
+                title: 'Order Items',
+                tabBarBadge: () => <Badge
+                  value={orderItemsCount}
+                  containerStyle={{
+                    position: 'absolute',
+                    top: 8,
+                    right: 8,
+                  }}
+                  badgeStyle={{
+                    height: 30,
+                    width: 30,
+                    borderRadius: 10,
+                    elevation: 6,
+                    backgroundColor:
+                      orderItemsCount > 0 ? COLORS.red : COLORS.primary,
+                  }}
+                />
+              }}
+
+
+            />
+          </Tab.Navigator>
+        </NavigationContainer>}
+    </SafeAreaView>
   );
 };
 

@@ -192,8 +192,8 @@ const index = ({ route, navigation }) => {
           }}>Category</Text>
           <Text style={{
             fontWeight: 'bold',
-            color: COLORS.white
-          }}> : </Text>
+            color: COLORS.lightGray
+          }}> | </Text>
           <Text style={{
             fontWeight: 'bold',
             color: COLORS.white

@@ -1,9 +1,39 @@
-import React, {useState} from 'react';
-import {FlatList, StyleSheet, Text, View} from 'react-native';
-import {Card} from 'react-native-elements';
-import {COLORS, FONTS} from '../../constants';
+import React, { useState } from 'react';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { Card } from 'react-native-elements';
+import { COLORS, FONTS } from '../../constants';
 
-const index = ({orderItems, orderCategory, orderId}) => {
+const renderListHeaderComponent = () => {
+  return (
+    <View
+      style={styles.headerStyleContainer}>
+      <Text style={styles.cardTitle}>Item</Text>
+      <Text style={styles.cardTitle}>Price</Text>
+      <Text style={styles.cardTitle}>Discount</Text>
+      <Text style={styles.cardTitle}>After Discount</Text>
+      <Text style={styles.cardTitle}>Qty</Text>
+      <Text style={styles.cardTitle}>Total</Text>
+    </View>
+  );
+};
+
+
+const renderListEmptyComponent = () => {
+  return (
+    <View
+      style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+      <Text style={{ color: COLORS.darkTransparent, paddingVertical: 30 }}>
+        Items Not Available !
+      </Text>
+    </View>
+  );
+}
+
+const index = ({ orderItems, orderCategory, orderId }) => {
   const [grandTotal, setGrandTotal] = useState(0);
 
   let total = 0;
@@ -11,7 +41,7 @@ const index = ({orderItems, orderCategory, orderId}) => {
   let discountAmount = 0;
   let itemPrice = 0;
 
-  function renderOrderItems({item, index}) {
+  function renderOrderItems({ item, index }) {
     itemPrice = Math.round(item?.price) || 0;
     discountAmount =
       Math.round((item?.product?.discount_product * itemPrice) / 100) || 0;
@@ -22,13 +52,7 @@ const index = ({orderItems, orderCategory, orderId}) => {
     return (
       <>
         <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            padding: 6,
-            width: '100%',
-            marginTop: 6,
-          }}>
+          style={styles.listItemsContainer}>
           <Text style={styles.cardTitleSmall}>{item?.product?.title}</Text>
           <Text style={styles.cardTitleSmall}>{itemPrice} ₹</Text>
           <Text style={styles.cardTitleSmall}>{discountAmount} ₹</Text>
@@ -41,18 +65,18 @@ const index = ({orderItems, orderCategory, orderId}) => {
         <Card.Divider />
       </>
     );
-  }
+  };
 
-  const renderListEmptyComponent = () => {
+  const renderListFooterComponent = () => {
     return (
       <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <Text style={{color: COLORS.darkTransparent, paddingVertical: 30}}>
-          Items Not Available !
+        style={styles.listFooterContainer}>
+        <Text
+          style={styles.listFooterText}>
+          Grand Total :{' '}
+        </Text>
+        <Text style={styles.listFooterAmountText}>
+          {grandTotal} ₹
         </Text>
       </View>
     );
@@ -61,25 +85,11 @@ const index = ({orderItems, orderCategory, orderId}) => {
   return (
     <View style={styles.container}>
       <View
-        style={{
-          position: 'relative',
-          width: '100%',
-          height: 'auto',
-          paddingVertical: 3,
-          paddingHorizontal: 4,
-        }}>
+        style={styles.innerContainer}>
         <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            paddingHorizontal: 10,
-            paddingVertical: 8,
-            backgroundColor: COLORS.lightGray,
-            marginBottom: 10,
-          }}>
+          style={styles.headerContainer}>
           <View>
-            <Text style={{color: COLORS.darkTransparent}}>Order Id</Text>
+            <Text style={{ color: COLORS.darkTransparent }}>Order Id</Text>
             <Text
               style={{
                 fontWeight: 'bold',
@@ -91,7 +101,7 @@ const index = ({orderItems, orderCategory, orderId}) => {
           </View>
 
           <View>
-            <Text style={{color: COLORS.darkTransparent}}>Order Category</Text>
+            <Text style={{ color: COLORS.darkTransparent }}>Order Category</Text>
             <Text
               style={{
                 fontWeight: 'bold',
@@ -103,52 +113,16 @@ const index = ({orderItems, orderCategory, orderId}) => {
           </View>
         </View>
 
-        <View
-          style={{
-            flexDirection: 'row',
-            paddingHorizontal: 10,
-            backgroundColor: COLORS.primary,
-            paddingVertical: 10,
-            color: COLORS.white,
-          }}>
-          <Text style={styles.cardTitle}>Item</Text>
-          <Text style={styles.cardTitle}>Price</Text>
-          <Text style={styles.cardTitle}>Discount</Text>
-          <Text style={styles.cardTitle}>After Discount</Text>
-          <Text style={styles.cardTitle}>Qty</Text>
-          <Text style={styles.cardTitle}>Total</Text>
-        </View>
-
+        {/* Render List of Items */}
         <FlatList
           data={orderItems}
           keyExtractor={item => `${item.id}`}
           renderItem={renderOrderItems}
+          stickyHeaderIndices={[0]}
           ListEmptyComponent={renderListEmptyComponent}
+          ListHeaderComponent={renderListHeaderComponent}
+          ListFooterComponent={renderListFooterComponent}
         />
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            paddingHorizontal: 10,
-            marginTop: 10,
-          }}>
-          <Text></Text>
-          <Text></Text>
-          <Text></Text>
-          <Text></Text>
-          <Text></Text>
-          <Text
-            style={{
-              color: COLORS.darkTransparent,
-              fontWeight: 'bold',
-              color: COLORS.primary,
-            }}>
-            Grand Total :{' '}
-          </Text>
-          <Text style={{color: COLORS.darkTransparent, fontWeight: 'bold'}}>
-            {grandTotal} ₹
-          </Text>
-        </View>
       </View>
     </View>
   );
@@ -158,9 +132,10 @@ const styles = StyleSheet.create({
   container: {
     padding: 3,
     flex: 1,
+    backgroundColor: COLORS.white
   },
   cardTitle: {
-    ...FONTS.h5,
+    fontSize: 12,
     color: COLORS.white,
     fontWeight: 'bold',
     width: '17%',
@@ -185,6 +160,49 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   tabTitleStyle: {},
+  listFooterContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    marginTop: 10,
+    marginBottom: 150,
+  },
+  listFooterText: {
+    color: COLORS.darkTransparent,
+    fontWeight: 'bold',
+    color: COLORS.primary,
+  },
+  listFooterAmountText: { color: COLORS.darkTransparent, fontWeight: 'bold' },
+  innerContainer: {
+    position: 'relative',
+    width: '100%',
+    height: 'auto',
+    paddingVertical: 3,
+    paddingHorizontal: 4,
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    backgroundColor: COLORS.lightGray,
+    marginBottom: 10,
+  },
+  listItemsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 6,
+    width: '100%',
+    marginTop: 6,
+  },
+  headerStyleContainer: {
+    flexDirection: 'row',
+    paddingHorizontal: 10,
+    backgroundColor: COLORS.primary,
+    paddingVertical: 10,
+    color: COLORS.white,
+  }
 });
 
 export default index;
