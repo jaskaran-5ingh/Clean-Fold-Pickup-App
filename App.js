@@ -1,21 +1,22 @@
-import {useNetInfo} from '@react-native-community/netinfo';
-import {NavigationContainer} from '@react-navigation/native';
-import React, {useEffect, useState} from 'react';
-import {StatusBar, StyleSheet, View} from 'react-native';
+import { useNetInfo } from '@react-native-community/netinfo';
+import { NavigationContainer } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
+import { StatusBar, StyleSheet, View } from 'react-native';
 import FlashMessage from 'react-native-flash-message';
 import OneSignal from 'react-native-onesignal';
 import SplashScreen from 'react-native-splash-screen';
 import AuthContext from './src/auth/Context';
-import {COLORS} from './src/constants';
+import { COLORS } from './src/constants';
 import {
   AppStackNavigator,
   AuthNavigator,
   navigationRef,
-  navigationTheme,
+  navigationTheme
 } from './src/routes';
 import cache from './src/utils/cache';
 import CartContext from './src/utils/CartContext';
-import {ErrorScreen} from './src/views';
+import { ErrorScreen } from './src/views';
+
 
 //Debugger Configuration Start
 // To see all the requests in the chrome Dev tools in the network tab.
@@ -50,7 +51,6 @@ export default function App() {
       try {
         if (!unAmounted) {
           cache.get('user').then(res => {
-            console.log(res);
             if (res === null) {
               let externalUserId = '9530654704';
               // Setting External User Id with Callback Available in SDK Version 3.9.3+
@@ -95,7 +95,7 @@ export default function App() {
   //Render Component
   return (
     <View style={styles.container}>
-      <AuthContext.Provider value={{user, setUser}}>
+      <AuthContext.Provider value={{ user, setUser }}>
         <CartContext>
           <StatusBar backgroundColor={COLORS.primary} />
           {internetStatus == true ? (

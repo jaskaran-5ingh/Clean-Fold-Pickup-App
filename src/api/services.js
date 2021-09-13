@@ -1,10 +1,11 @@
-import {apiClient} from './client';
+import { apiClient } from './client';
 
 //Api endPoints
 const endPoint = {
   createBill: '/create-bill',
   createOrder: '/create-order',
   doneDeliveryOrder: '/done-delivery',
+  getEmployeeDetails: '/get-employee-by-id',
   donePendingOrder: '/done-pickup',
   getCategoryProduct: '/getCategoryProduct/1',
   getDashboardData: '/get/dashboard',
@@ -40,6 +41,9 @@ const getCategoryProduct = () => apiClient.get(endPoint.getCategoryProduct);
 const getDeliveredOrdersList = EmployeeID =>
   apiClient.get(endPoint.getOrdersList + '/' + EmployeeID + '/2');
 
+const getEmployeeDetails = id =>
+  apiClient.get(endPoint.getEmployeeDetails + '/' + id);
+
 const getOrderDetailsById = orderId =>
   apiClient.get(endPoint.getOrderDetailsById + '/' + orderId);
 
@@ -68,6 +72,7 @@ export default {
   createBill,
   createOrder,
   doneDeliveryOrder,
+  getEmployeeDetails,
   donePendingOrder,
   getDashboardData,
   getDeliveredOrdersList,
