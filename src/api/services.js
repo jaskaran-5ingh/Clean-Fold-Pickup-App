@@ -16,6 +16,7 @@ const endPoint = {
   getUserByMobile: '/get/user',
   updateDeliveredOrder: '/edit-order',
   getRateList: '/getCategoryProduct',
+  setDeviceNotificationToken: 'update-device-token',
   getSofaBoyPickups: 'get/Sofaorders/list',
 };
 
@@ -64,6 +65,9 @@ const getSofaBoyPickups = EmployeeID =>
 const getUserByMobile = mobileNumber =>
   apiClient.get(endPoint.getUserByMobile + '/' + mobileNumber);
 
+const setDeviceNotificationToken = postData =>
+  apiClient.post(endPoint.setDeviceNotificationToken, postData);
+
 const updateDeliveredOrder = jsonData =>
   apiClient.post(endPoint.updateDeliveredOrder, jsonData);
 
@@ -84,5 +88,6 @@ export default {
   getRateList,
   getSofaBoyPickups,
   getUserByMobile,
+  setDeviceNotificationToken,
   updateDeliveredOrder,
 };

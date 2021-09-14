@@ -3,7 +3,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { StatusBar, StyleSheet, View } from 'react-native';
 import FlashMessage from 'react-native-flash-message';
-import OneSignal from 'react-native-onesignal';
 import SplashScreen from 'react-native-splash-screen';
 import AuthContext from './src/auth/Context';
 import { COLORS } from './src/constants';
@@ -46,28 +45,10 @@ export default function App() {
   // Use Effect hooks
   useEffect(() => {
     let unAmounted = false;
-
     setTimeout(() => {
       try {
         if (!unAmounted) {
           cache.get('user').then(res => {
-            if (res === null) {
-              let externalUserId = '9530654704';
-              // Setting External User Id with Callback Available in SDK Version 3.9.3+
-              OneSignal.setExternalUserId(externalUserId, results => {
-                if (results.push && results.push.success) {
-                  // console.log(results.push.success);
-                }
-              });
-            } else {
-              let externalUserId = res?.mobile;
-              // Setting External User Id with Callback Available in SDK Version 3.9.3+
-              OneSignal.setExternalUserId(externalUserId, results => {
-                if (results.push && results.push.success) {
-                  // console.log(results.push.success);
-                }
-              });
-            }
             setUser(res);
           });
         }
