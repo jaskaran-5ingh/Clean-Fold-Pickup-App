@@ -146,7 +146,7 @@ const index = ({ navigation }) => {
                 color: COLORS.darkTransparent,
                 paddingBottom: 8,
               }}>
-              {item?.location?.area_name}
+              {item?.address}
             </Text>
           </View>
 

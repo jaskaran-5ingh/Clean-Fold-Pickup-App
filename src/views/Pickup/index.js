@@ -186,7 +186,7 @@ const index = ({ navigation }) => {
                   color: COLORS.darkTransparent,
                   paddingBottom: 20,
                 }}>
-                {item?.location?.area_name}
+                {item?.address}
               </Text>
             </View>
             <View style={{ maxWidth: '50%' }}>
