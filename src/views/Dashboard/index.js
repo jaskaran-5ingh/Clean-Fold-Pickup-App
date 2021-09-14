@@ -11,11 +11,13 @@ import {
 } from 'react-native';
 import { Icon } from 'react-native-elements/dist/icons/Icon';
 import { showMessage } from 'react-native-flash-message';
+import OneSignal from 'react-native-onesignal';
 import api from '../../api/services';
 import AuthContext from '../../auth/Context';
 import { COLORS, FONTS, images, responsiveWidth, SIZES } from '../../constants';
 import cache from '../../utils/cache';
 import Card from './card';
+
 
 
 const index = ({ navigation }) => {
@@ -42,6 +44,7 @@ const index = ({ navigation }) => {
       try {
         getDashboardData();
         getEmployeeDetails();
+        setDeviceNotificationToken();
         cache.store('productList', null);
       } catch (err) {
         console.error(err);
@@ -72,6 +75,21 @@ const index = ({ navigation }) => {
     };
   }, []);
 
+  async function setDeviceNotificationToken() {
+    try {
+      if (authContext?.user?.id !== undefined) {
+        let deviceState = await OneSignal.getDeviceState();
+        const response = await api.setDeviceNotificationToken({
+          id: (authContext.user.id),
+          notification_token: (deviceState.userId)
+        });
+        console.log(response, deviceState)
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   async function getEmployeeDetails() {
     try {
       if (authContext?.user?.id !== undefined) {
@@ -85,7 +103,7 @@ const index = ({ navigation }) => {
             icon: 'danger',
           });
         } else {
-          if (JSON.stringify(authContext.user) !== JSON.stringify(response.data.user)) {
+          if (JSON.stringify(authContext.user.password) !== JSON.stringify(response.data.user)) {
             showMessage({
               message: 'Employee Details Updated !',
               description: 'Please login again',
