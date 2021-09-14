@@ -49,71 +49,23 @@ const index = ({ route, navigation }) => {
   var ICON_URL = 'https://cleanfold.in/backend/clean_fold/public/product_icon/';
 
   //Api Function Declaration
-  async function getOrderCategory() {
-    try {
-      setLoading(true);
-      const response = await api.getOrderCategory();
-      if (response.ok !== true) {
-        showMessage({
-          message: response?.problem + ' !',
-          description: 'Please try again latter',
-          backgroundColor: COLORS.red,
-          type: 'danger',
-          icon: 'danger',
-        });
-      } else {
-        setCategoryList(response?.data?.categories);
-      }
-      setLoading(false);
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
-
 
   useEffect(() => {
     let unAmounted = false;
     if (!unAmounted) {
-      setSelectedCategory(parseInt(route.params.categoryId));
+      getRateList(parseInt(route.params.categoryId));
     }
     return () => {
       unAmounted = true;
     };
   }, [route.params.categoryId]);
 
-  useEffect(() => {
-    let unAmounted = false;
-    try {
-      if (!unAmounted) {
-        getRateList(selectedCategory);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-    return () => {
-      unAmounted = true;
-    };
-  }, [selectedCategory]);
-
-  useEffect(() => {
-    let unAmounted = false;
-    try {
-      if (!unAmounted) {
-        getOrderCategory();
-      }
-    } catch (err) {
-      console.error(err);
-    }
-    return () => {
-      unAmounted = true;
-    };
-  }, []);
 
   async function getRateList(id) {
     try {
-      setLinearLoading(true);
+      setLoading(true);
       const response = await api.getRateList(id);
+      console.log(response.data.data)
       if (response.ok !== true) {
         showMessage({
           message: response?.problem + ' !',
@@ -125,7 +77,7 @@ const index = ({ route, navigation }) => {
       } else {
         setSetList(response?.data?.data);
       }
-      setLinearLoading(false);
+      setLoading(false);
     } catch (err) {
       console.error(err);
     }
@@ -137,7 +89,7 @@ const index = ({ route, navigation }) => {
     borderBottomColor: COLORS.primary,
     borderBottomWidth: 3,
   };
-  // eslint-disable-next-line no-shadow
+
   function renderTabHeaders({ index, item }) {
     const isTabActive = tabIndex === index;
     return (

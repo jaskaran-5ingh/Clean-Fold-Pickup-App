@@ -1,13 +1,13 @@
-import React, {useEffect, useReducer, useState} from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import {
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
-import {ListItem} from 'react-native-elements';
-import {COLORS} from '../../constants';
+import { ListItem } from 'react-native-elements';
+import { COLORS } from '../../constants';
 import cache from '../../utils/cache';
 
 function incrementQty(state, action) {
@@ -150,7 +150,7 @@ function reducer(state, action) {
   }
 }
 
-const ProductComponent = ({item, productQty}) => {
+const ProductComponent = ({ item }) => {
   //Component Initialize
   const initialState = {
     productID: 0,
@@ -171,7 +171,6 @@ const ProductComponent = ({item, productQty}) => {
       cache.get('productList').then(products => {
         if (products !== null) {
           setOldItemDetails(products);
-          productQty(() => products);
         }
       });
     }
@@ -193,8 +192,8 @@ const ProductComponent = ({item, productQty}) => {
   const qtyValue = state?.qty
     ? state?.qty
     : productQuantity?.length > 0
-    ? productQuantity[0].qty
-    : 0;
+      ? productQuantity[0].qty
+      : 0;
 
   //Events Handling Functions
   const handleIncrementPress = () => {
@@ -247,7 +246,7 @@ const ProductComponent = ({item, productQty}) => {
     <>
       <ListItem.Content>
         <ListItem.Title style={styles.itemName}>{item.title}</ListItem.Title>
-        <ListItem.Subtitle style={[styles.totalTitle, {marginTop: 30}]}>
+        <ListItem.Subtitle style={[styles.totalTitle, { marginTop: 30 }]}>
           Price
         </ListItem.Subtitle>
         <ListItem.Subtitle style={styles.priceSubTitle}>
