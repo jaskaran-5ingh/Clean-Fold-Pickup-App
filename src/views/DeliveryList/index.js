@@ -68,6 +68,7 @@ const index = ({ navigation }) => {
         });
       }
       setLoading(false);
+      navigation.replace('Dashboard');
     } catch (err) {
       console.error(err);
     }
