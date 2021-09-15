@@ -234,10 +234,7 @@ const index = ({ navigation }) => {
               style={[
                 styles.cardBottomButton,
                 {
-                  backgroundColor:
-                    authContext?.user?.role_id === 6
-                      ? 'green'
-                      : COLORS.darkTransparent,
+                  backgroundColor: COLORS.darkTransparent,
                 },
               ]}>
               <Text style={styles.buttonText}>Done</Text>
@@ -256,27 +253,27 @@ const index = ({ navigation }) => {
                   ]}>
                   <Text style={styles.buttonText}>Edit</Text>
                 </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    cartContext.dispatch({
-                      type: 'storeCustomerDetails',
-                      payload: { customerDetails: item },
-                    });
-                    navigation.navigate('CreateBill', {
-                      categoryId: item.order_categories,
-                      categoryName: item?.order_category_relation?.name
-                    });
-                  }}
-                  style={[
-                    styles.cardBottomButton,
-                    {
-                      backgroundColor: COLORS.orange,
-                    },
-                  ]}>
-                  <Text style={styles.buttonText}>Bill</Text>
-                </TouchableOpacity>
               </>
             ) : null}
+            <TouchableOpacity
+              onPress={() => {
+                cartContext.dispatch({
+                  type: 'storeCustomerDetails',
+                  payload: { customerDetails: item },
+                });
+                navigation.navigate('CreateBill', {
+                  categoryId: item.order_categories,
+                  categoryName: item?.order_category_relation?.name
+                });
+              }}
+              style={[
+                styles.cardBottomButton,
+                {
+                  backgroundColor: COLORS.orange,
+                },
+              ]}>
+              <Text style={styles.buttonText}>Bill</Text>
+            </TouchableOpacity>
           </View>
         </Card>
       </View>
