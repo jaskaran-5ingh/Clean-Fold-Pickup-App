@@ -31,10 +31,7 @@ export default function index({navigation}) {
   const authContext = useContext(AuthContext);
 
   //Component State Declarations
-  const [userDetails, setUserDetails] = useState({
-    email: 'testdummy@gmail.com',
-    password: 'secret',
-  });
+  const [userDetails, setUserDetails] = useState({});
 
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -46,10 +43,6 @@ export default function index({navigation}) {
       setError(false);
       setUserValid(true);
       setLoading(false);
-      setUserDetails({
-        email: 'testdummy@gmail.com',
-        password: 'secret',
-      });
     };
   }, []);
 
