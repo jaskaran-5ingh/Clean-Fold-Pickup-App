@@ -76,7 +76,7 @@ const index = ({ navigation }) => {
       setPendingOrders(newOrders);
       const response =
         authContext?.user?.role_id !== 6
-          ? await api.donePendingOrder(orderId)
+          ? await api.sofaOrderDone(orderId)
           : await api.doneDeliveryOrder(orderId);
 
       setLoading(false);
@@ -227,7 +227,7 @@ const index = ({ navigation }) => {
                       onPress: () => null,
                       style: 'cancel',
                     },
-                    { text: 'OK', onPress: () => donePickupOrder(item.id) },
+                    { text: 'OK', onPress: () => donePickupOrder(item.id) }
                   ],
                 );
               }}

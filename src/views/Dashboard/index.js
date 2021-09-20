@@ -44,7 +44,7 @@ const index = ({ navigation }) => {
       try {
         getDashboardData();
         getEmployeeDetails();
-        setDeviceNotificationToken();
+        setTimeout(() => setDeviceNotificationToken(), 1400)
         cache.store('productList', null);
       } catch (err) {
         console.error(err);

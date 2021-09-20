@@ -18,6 +18,7 @@ const endPoint = {
   getRateList: '/getCategoryProduct',
   setDeviceNotificationToken: 'update-device-token',
   getSofaBoyPickups: 'get/Sofaorders/list',
+  sofaOrderDone: 'sofa-order-done'
 };
 
 //Call Api Function
@@ -33,6 +34,9 @@ const getDashboardData = EmployeeID =>
 
 const doneDeliveryOrder = orderId =>
   apiClient.get(endPoint.doneDeliveryOrder + '/' + orderId);
+
+const sofaOrderDone = orderId =>
+  apiClient.get(endPoint.sofaOrderDone + '/' + orderId);
 
 const donePendingOrder = orderId =>
   apiClient.get(endPoint.donePendingOrder + '/' + orderId);
@@ -89,5 +93,6 @@ export default {
   getSofaBoyPickups,
   getUserByMobile,
   setDeviceNotificationToken,
+  sofaOrderDone,
   updateDeliveredOrder,
 };
