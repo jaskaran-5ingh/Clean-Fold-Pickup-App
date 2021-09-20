@@ -76,8 +76,8 @@ const index = ({ navigation }) => {
       setPendingOrders(newOrders);
       const response =
         authContext?.user?.role_id !== 6
-          ? await api.sofaOrderDone(orderId)
-          : await api.doneDeliveryOrder(orderId);
+          ? await api.donePendingOrder(orderId)
+          : await api.sofaOrderDone(orderId);
 
       setLoading(false);
       if (response.ok !== true) {
