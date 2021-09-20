@@ -180,6 +180,7 @@ export default function index({navigation}) {
           icon: 'danger',
         });
       } else {
+        console.log(response)
         if (response?.data?.user_detail.length > 0) {
           setName(response?.data?.user_detail[0]?.name);
           setUserId(response?.data?.user_detail[0]?.id);
