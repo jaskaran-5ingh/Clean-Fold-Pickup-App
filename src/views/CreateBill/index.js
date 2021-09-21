@@ -65,7 +65,6 @@ const index = ({ route, navigation }) => {
     try {
       setLoading(true);
       const response = await api.getRateList(id);
-      console.log(response.data.data)
       if (response.ok !== true) {
         showMessage({
           message: response?.problem + ' !',

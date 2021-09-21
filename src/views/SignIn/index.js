@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Image,
   KeyboardAvoidingView,
@@ -7,31 +7,34 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  View,
+  View
 } from 'react-native';
-
-import {showMessage} from 'react-native-flash-message';
-import AuthContext from '../../auth/Context';
+import { showMessage } from 'react-native-flash-message';
+import { ErrorScreen, LoadingScreen } from '..';
 import api from '../../api/auth';
-import cache from '../../utils/cache';
-
+import AuthContext from '../../auth/Context';
+import { Button, InputComponent } from '../../components';
 import {
   COLORS,
   FONTS,
   images,
   responsiveHeight,
   responsiveWidth,
-  SIZES,
+  SIZES
 } from '../../constants';
-import {Button, InputComponent} from '../../components';
-import {ErrorScreen, LoadingScreen} from '..';
+import cache from '../../utils/cache';
 
-export default function index({navigation}) {
+
+
+export default function index({ navigation }) {
   //Deceleration Of Context
   const authContext = useContext(AuthContext);
 
   //Component State Declarations
-  const [userDetails, setUserDetails] = useState({});
+  const [userDetails, setUserDetails] = useState({
+    email: '',
+    password: ''
+  });
 
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -48,9 +51,11 @@ export default function index({navigation}) {
 
   // states handling functions
 
-  function handleInputStateChanges({name, value}) {
-    let newUserDetails = {};
-
+  function handleInputStateChanges({ name, value }) {
+    let newUserDetails = {
+      email: '',
+      password: ''
+    };
     if (name == 'email') {
       newUserDetails.email = value;
       newUserDetails.password = userDetails.password;
@@ -63,7 +68,7 @@ export default function index({navigation}) {
 
   async function handleFormSubmit(userDetails) {
     try {
-      if (Object.keys(userDetails).length == 0) {
+      if (userDetails.email == '' || userDetails.password == '') {
         showMessage({
           message: 'Error',
           description: 'Please fill details !',
@@ -159,7 +164,7 @@ export default function index({navigation}) {
 
   function renderInputFields() {
     return (
-      <View behavior="position" style={{paddingBottom: SIZES.padding * 2}}>
+      <View behavior="position" style={{ paddingBottom: SIZES.padding * 2 }}>
         {/* Email */}
         <InputComponent
           placeholder="example@email.com"

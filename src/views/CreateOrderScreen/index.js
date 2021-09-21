@@ -1,24 +1,24 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
   ScrollView,
   StyleSheet,
-  View,
+  View
 } from 'react-native';
-import {LinearProgress} from 'react-native-elements';
-import {showMessage} from 'react-native-flash-message';
-import {ErrorScreen, LoadingScreen} from '..';
+import { LinearProgress } from 'react-native-elements';
+import { showMessage } from 'react-native-flash-message';
+import { ErrorScreen, LoadingScreen } from '..';
 import api from '../../api/services';
 import AuthContext from '../../auth/Context';
 import {
   Button,
   DatePicker,
   InputComponent,
-  PickupComponent,
+  PickupComponent
 } from '../../components';
-import {COLORS, FONTS, responsiveHeight, SIZES} from '../../constants';
+import { COLORS, FONTS, responsiveHeight, SIZES } from '../../constants';
 import cache from '../../utils/cache';
 
 export default function index({navigation}) {
@@ -180,7 +180,6 @@ export default function index({navigation}) {
           icon: 'danger',
         });
       } else {
-        console.log(response)
         if (response?.data?.user_detail.length > 0) {
           setName(response?.data?.user_detail[0]?.name);
           setUserId(response?.data?.user_detail[0]?.id);
