@@ -44,7 +44,7 @@ const index = ({ navigation }) => {
       try {
         getDashboardData();
         getEmployeeDetails();
-        setTimeout(() => setDeviceNotificationToken(), 1400)
+        setTimeout(() => setDeviceNotificationToken(), 1500)
         cache.store('productList', null);
       } catch (err) {
         console.error(err);
@@ -69,7 +69,7 @@ const index = ({ navigation }) => {
       return () => {
         unAmounted = true;
       };
-    }, 60000);
+    }, 20000);
     return () => {
       clearInterval(interval);
     };
@@ -83,7 +83,6 @@ const index = ({ navigation }) => {
           id: (authContext.user.id),
           notification_token: (deviceState.userId)
         });
-        console.log(response, deviceState)
       }
     } catch (err) {
       console.error(err);
