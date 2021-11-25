@@ -1,6 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react-hooks/rules-of-hooks */
-/* eslint-disable react-native/no-inline-styles */
 import React, { useContext, useEffect, useState } from 'react';
 import {
   Alert,
@@ -18,7 +15,7 @@ import { COLORS, FONTS } from '../../constants';
 import { CartItemsContext } from '../../utils/CartContext';
 import { EmptyAnimation, LoadingScreen } from '../index';
 
-function CardButton({ onPress, containerStyle, title, titleStyle }) {
+function CardButton({onPress, containerStyle, title, titleStyle}) {
   return (
     <TouchableOpacity onPress={onPress} style={containerStyle}>
       <Text style={titleStyle}>{title}</Text>
@@ -26,9 +23,8 @@ function CardButton({ onPress, containerStyle, title, titleStyle }) {
   );
 }
 
-const index = ({ navigation }) => {
+const index = ({navigation}) => {
   const [pendingOrders, setPendingOrders] = useState([]);
-  const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
   const authContext = useContext(AuthContext);
   const cartContext = useContext(CartItemsContext);
@@ -41,12 +37,21 @@ const index = ({ navigation }) => {
     }
   }, []);
 
+  function displayErrorMessage(){
+    showMessage({
+      message: 'Something went wrong please try again!',
+      type: 'danger',
+      icon: 'danger',
+      position: 'top',
+    });
+  }
+
   async function getSofaBoyPickups() {
     try {
       setLoading(true);
       const response = await api.getSofaBoyPickups(authContext?.user?.id);
       if (response.ok !== true) {
-        setError(false);
+        displayErrorMessage();
       }
       setPendingOrders(response?.data?.order_list);
       setLoading(false);
@@ -60,9 +65,10 @@ const index = ({ navigation }) => {
       setLoading(true);
       const response = await api.getPendingOrdersList(authContext?.user?.id);
       if (response.ok !== true) {
-        setError(false);
+        displayErrorMessage();
+      }else{
+        setPendingOrders(response?.data?.order_list);
       }
-      setPendingOrders(response?.data?.order_list);
       setLoading(false);
     } catch (err) {
       console.error(err);
@@ -72,38 +78,32 @@ const index = ({ navigation }) => {
   async function donePickupOrder(orderId) {
     try {
       setLoading(true);
-      let newOrders = pendingOrders.filter(item => item.id !== orderId);
-      setPendingOrders(newOrders);
       const response =
         authContext?.user?.role_id !== 6
           ? await api.donePendingOrder(orderId)
           : await api.sofaOrderDone(orderId);
 
-      setLoading(false);
       if (response.ok !== true) {
-        showMessage({
-          message: 'Failed !',
-          description: 'Order Pickup Failed !',
-          type: 'error',
-          icon: 'error',
-          position: 'top',
-        });
+        displayErrorMessage();
       } else {
         showMessage({
-          message: 'Success !',
-          description: 'Order Pickup Success !',
-          type: 'success',
-          icon: 'success',
-          position: 'top',
+          message:
+            response.data?.status == true
+              ? response.data?.message
+              : 'Order Pickup Failed !',
+          type: response.data?.status == true ? 'success' : 'danger',
+          icon: response.data?.status == true ? 'success' : 'danger',
+          position: 'right',
         });
-        navigation.replace('Dashboard');
       }
+      setLoading(false);
+      navigation.replace('Dashboard');
     } catch (err) {
       console.error(err);
     }
   }
 
-  function renderCardItem({ item }) {
+  function renderCardItem({item}) {
     let timeSlots = {
       slot1: '08:00 AM - 10:00 PM',
       slot2: '10:00 AM - 12:00 PM',
@@ -136,7 +136,7 @@ const index = ({ navigation }) => {
               <Text style={styles.cardTitleSmall}>Order Number</Text>
               <CardButton
                 onPress={() =>
-                  navigation.replace('OrderPreviewScreen', { orderId: item.id })
+                  navigation.replace('OrderPreviewScreen', {orderId: item.id})
                 }
                 containerStyle={[
                   {
@@ -147,7 +147,7 @@ const index = ({ navigation }) => {
                   styles.cardBottomButton,
                 ]}
                 title={item.id}
-                titleStyle={{ fontSize: 15, color: COLORS.white }}
+                titleStyle={{fontSize: 15, color: COLORS.white}}
               />
             </View>
           </View>
@@ -159,11 +159,11 @@ const index = ({ navigation }) => {
               alignItems: 'flex-start',
               padding: 5,
             }}>
-            <View style={{ maxWidth: '50%' }}>
+            <View style={{maxWidth: '50%'}}>
               {item?.pickup_slot !== null ? (
                 <>
                   <Text
-                    style={{ ...FONTS.h4, fontWeight: 'bold', paddingBottom: 8 }}>
+                    style={{...FONTS.h4, fontWeight: 'bold', paddingBottom: 8}}>
                     Pickup Time
                   </Text>
                   <Text
@@ -171,13 +171,13 @@ const index = ({ navigation }) => {
                       ...FONTS.h5,
                       color: COLORS.red,
                       paddingBottom: 20,
-                      fontWeight: 'bold'
+                      fontWeight: 'bold',
                     }}>
                     {timeSlots[`${item?.pickup_slot}`]}
                   </Text>
                 </>
               ) : null}
-              <Text style={{ ...FONTS.h4, fontWeight: 'bold', paddingBottom: 8 }}>
+              <Text style={{...FONTS.h4, fontWeight: 'bold', paddingBottom: 8}}>
                 {item?.user?.mobile}
               </Text>
               <Text
@@ -189,8 +189,8 @@ const index = ({ navigation }) => {
                 {item?.address}
               </Text>
             </View>
-            <View style={{ maxWidth: '50%' }}>
-              <Text style={{ ...FONTS.h4, fontWeight: 'bold', paddingBottom: 5 }}>
+            <View style={{maxWidth: '50%'}}>
+              <Text style={{...FONTS.h4, fontWeight: 'bold', paddingBottom: 5}}>
                 Category
               </Text>
               <Text
@@ -201,7 +201,7 @@ const index = ({ navigation }) => {
                 }}>
                 {item?.order_category_relation?.name}
               </Text>
-              <Text style={{ ...FONTS.h4, fontWeight: 'bold', paddingBottom: 5 }}>
+              <Text style={{...FONTS.h4, fontWeight: 'bold', paddingBottom: 5}}>
                 Remarks
               </Text>
               <Text
@@ -215,7 +215,7 @@ const index = ({ navigation }) => {
             </View>
           </View>
           <Card.Divider />
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{flexDirection: 'row'}}>
             <TouchableOpacity
               onPress={() => {
                 Alert.alert(
@@ -227,7 +227,7 @@ const index = ({ navigation }) => {
                       onPress: () => null,
                       style: 'cancel',
                     },
-                    { text: 'OK', onPress: () => donePickupOrder(item.id) }
+                    {text: 'OK', onPress: () => donePickupOrder(item.id)},
                   ],
                 );
               }}
@@ -243,7 +243,7 @@ const index = ({ navigation }) => {
               <>
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.replace('PickupEdit', { orderId: item.id });
+                    navigation.replace('PickupEdit', {orderId: item.id});
                   }}
                   style={[
                     styles.cardBottomButton,
@@ -259,11 +259,11 @@ const index = ({ navigation }) => {
               onPress={() => {
                 cartContext.dispatch({
                   type: 'storeCustomerDetails',
-                  payload: { customerDetails: item },
+                  payload: {customerDetails: item},
                 });
                 navigation.navigate('CreateBill', {
                   categoryId: item.order_categories,
-                  categoryName: item?.order_category_relation?.name
+                  categoryName: item?.order_category_relation?.name,
                 });
               }}
               style={[
@@ -281,7 +281,7 @@ const index = ({ navigation }) => {
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: COLORS.white }}>
+    <View style={{flex: 1, backgroundColor: COLORS.white}}>
       {loading === true ? (
         <LoadingScreen />
       ) : (
@@ -334,7 +334,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     elevation: 5,
   },
-  cardTitle: { ...FONTS.h4, color: COLORS.primary, fontWeight: 'bold' },
+  cardTitle: {...FONTS.h4, color: COLORS.primary, fontWeight: 'bold'},
   cardTitleSmall: {
     ...FONTS.body4,
     color: COLORS.darkTransparent,
@@ -351,7 +351,7 @@ const styles = StyleSheet.create({
   cardContainerStyle: {
     backgroundColor: COLORS.white,
   },
-  buttonText: { fontSize: 15, color: COLORS.white },
+  buttonText: {fontSize: 15, color: COLORS.white},
 });
 
 export default index;
