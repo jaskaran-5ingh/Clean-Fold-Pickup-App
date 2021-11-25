@@ -1,5 +1,5 @@
 import { useIsFocused } from '@react-navigation/native';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Alert,
   FlatList,
@@ -14,18 +14,24 @@ import { EmptyAnimation, LoadingScreen } from '..';
 import api from '../../api/services';
 import { COLORS, FONTS } from '../../constants';
 import cache from '../../utils/cache';
-import { CartItemsContext } from '../../utils/CartContext';
 
-const index = ({ navigation }) => {
+const index = ({navigation}) => {
   const [pendingOrders, setPendingOrders] = useState([]);
-  const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
-  const cartContext = useContext(CartItemsContext);
   const isFocused = useIsFocused();
 
   useEffect(() => {
     getDeliveryList();
   }, [isFocused]);
+
+  function displayErrorMessage() {
+  showMessage({
+    message: 'Something went wrong please try again!',
+    type: 'danger',
+    icon: 'danger',
+    position: 'top',
+  });
+}
 
   async function getDeliveryList() {
     try {
@@ -33,8 +39,11 @@ const index = ({ navigation }) => {
       cache.get('user').then(async user => {
         if (user != null) {
           const response = await api.getDeliveredOrdersList(user.id);
-          if (response.ok !== true) setError(false);
-          setPendingOrders(response?.data?.order_list);
+          if (response.ok !== true) {
+            displayErrorMessage();
+          } else {
+            setPendingOrders(response?.data?.order_list);
+          }
           setLoading(false);
         }
       });
@@ -48,24 +57,18 @@ const index = ({ navigation }) => {
       setLoading(true);
       const response = await api.doneDeliveryOrder(orderId);
       if (response.ok !== true) {
-        setError(false);
-        showMessage({
-          message: 'Something went wrong please try again',
-          type: 'danger',
-          icon: 'danger',
-          position: 'top',
-        });
+        displayErrorMessage();
       } else {
-        getDeliveryList();
         showMessage({
           message:
-            response.data?.status == true
-              ? response.data?.message
-              : 'Order Pickup Failed !',
+          response.data?.status == true
+          ? response.data?.message
+          : 'Order Pickup Failed !',
           type: response.data?.status == true ? 'success' : 'danger',
           icon: response.data?.status == true ? 'success' : 'danger',
           position: 'right',
         });
+        getDeliveryList();
       }
       setLoading(false);
       navigation.replace('Dashboard');
@@ -74,7 +77,7 @@ const index = ({ navigation }) => {
     }
   }
 
-  function renderCardItem({ item }) {
+  function renderCardItem({item}) {
     let timeSlots = {
       slot1: '08:00 AM - 10:00 PM',
       slot2: '10:00 AM - 12:00 PM',
@@ -83,7 +86,7 @@ const index = ({ navigation }) => {
       slot5: '05:00 PM - 08:00 PM',
     };
     return (
-      <Card style={{ position: 'relative', width: '100%', height: 'auto' }}>
+      <Card style={{position: 'relative', width: '100%', height: 'auto'}}>
         <View
           style={{
             flexDirection: 'row',
@@ -98,7 +101,7 @@ const index = ({ navigation }) => {
             <Text style={styles.cardTitleSmall}>Order Number</Text>
             <TouchableOpacity
               onPress={() =>
-                navigation.replace('OrderPreviewScreen', { orderId: item.id })
+                navigation.replace('OrderPreviewScreen', {orderId: item.id})
               }
               style={[
                 {
@@ -108,7 +111,7 @@ const index = ({ navigation }) => {
                 },
                 styles.cardBottomButton,
               ]}>
-              <Text style={{ fontSize: 15, color: COLORS.white }}>{item.id}</Text>
+              <Text style={{fontSize: 15, color: COLORS.white}}>{item.id}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -120,11 +123,11 @@ const index = ({ navigation }) => {
             alignItems: 'flex-start',
             padding: 5,
           }}>
-          <View style={{ maxWidth: '50%' }}>
+          <View style={{maxWidth: '50%'}}>
             {item?.delv_slot !== null ? (
               <>
                 <Text
-                  style={{ ...FONTS.h4, fontWeight: 'bold', paddingBottom: 8 }}>
+                  style={{...FONTS.h4, fontWeight: 'bold', paddingBottom: 8}}>
                   Delivery Time
                 </Text>
                 <Text
@@ -132,13 +135,13 @@ const index = ({ navigation }) => {
                     ...FONTS.h5,
                     color: COLORS.red,
                     paddingBottom: 20,
-                    fontWeight: 'bold'
+                    fontWeight: 'bold',
                   }}>
                   {timeSlots[`${item?.delv_slot}`]}
                 </Text>
               </>
             ) : null}
-            <Text style={{ ...FONTS.h4, fontWeight: 'bold', paddingBottom: 8 }}>
+            <Text style={{...FONTS.h4, fontWeight: 'bold', paddingBottom: 8}}>
               {item?.user?.mobile}
             </Text>
             <Text
@@ -151,8 +154,8 @@ const index = ({ navigation }) => {
             </Text>
           </View>
 
-          <View style={{ maxWidth: '50%' }}>
-            <Text style={{ ...FONTS.h4, fontWeight: 'bold', paddingBottom: 5 }}>
+          <View style={{maxWidth: '50%'}}>
+            <Text style={{...FONTS.h4, fontWeight: 'bold', paddingBottom: 5}}>
               Category
             </Text>
             <Text
@@ -163,7 +166,7 @@ const index = ({ navigation }) => {
               }}>
               {item?.order_category_relation?.name}
             </Text>
-            <Text style={{ ...FONTS.h4, fontWeight: 'bold', paddingBottom: 5 }}>
+            <Text style={{...FONTS.h4, fontWeight: 'bold', paddingBottom: 5}}>
               Remarks
             </Text>
             <Text
@@ -177,7 +180,7 @@ const index = ({ navigation }) => {
           </View>
         </View>
         <Card.Divider />
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{flexDirection: 'row'}}>
           <TouchableOpacity
             onPress={() => {
               Alert.alert('Alert!', 'Are you want to change status to Done ?', [
@@ -186,7 +189,7 @@ const index = ({ navigation }) => {
                   onPress: () => null,
                   style: 'cancel',
                 },
-                { text: 'OK', onPress: () => doneDeliveryOrder(item.id) },
+                {text: 'OK', onPress: () => doneDeliveryOrder(item.id)},
               ]);
             }}
             style={[
@@ -195,12 +198,12 @@ const index = ({ navigation }) => {
                 backgroundColor: COLORS.darkTransparent,
               },
             ]}>
-            <Text style={{ fontSize: 15, color: COLORS.white }}>Done</Text>
+            <Text style={{fontSize: 15, color: COLORS.white}}>Done</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={() =>
-              navigation.replace('DeliveryListEdit', { orderId: item.id })
+              navigation.replace('DeliveryListEdit', {orderId: item.id})
             }
             style={[
               styles.cardBottomButton,
@@ -208,34 +211,15 @@ const index = ({ navigation }) => {
                 backgroundColor: COLORS.primary,
               },
             ]}>
-            <Text style={{ fontSize: 15, color: COLORS.white }}>Edit</Text>
+            <Text style={{fontSize: 15, color: COLORS.white}}>Edit</Text>
           </TouchableOpacity>
-
-          {/* <TouchableOpacity
-            onPress={() => {
-              cartContext.dispatch({
-                type: 'storeCustomerDetails',
-                payload: {customerDetails: item},
-              });
-              navigation.navigate('CreateBill', {
-                categoryId: item.order_categories,
-              });
-            }}
-            style={[
-              styles.cardBottomButton,
-              {
-                backgroundColor: COLORS.orange,
-              },
-            ]}>
-            <Text style={{fontSize: 15, color: COLORS.white}}>Bill</Text>
-          </TouchableOpacity> */}
         </View>
       </Card>
     );
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: 'white' }}>
+    <View style={{flex: 1, backgroundColor: 'white'}}>
       {loading == true ? (
         <LoadingScreen />
       ) : (
@@ -299,7 +283,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     elevation: 5,
   },
-  cardTitle: { ...FONTS.h4, color: COLORS.primary, fontWeight: 'bold' },
+  cardTitle: {...FONTS.h4, color: COLORS.primary, fontWeight: 'bold'},
   cardTitleSmall: {
     ...FONTS.body4,
     color: COLORS.darkTransparent,
