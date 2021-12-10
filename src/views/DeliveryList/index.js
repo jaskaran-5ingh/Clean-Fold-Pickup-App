@@ -26,7 +26,8 @@ const index = ({navigation}) => {
 
   function displayErrorMessage() {
   showMessage({
-    message: 'Something went wrong please try again!',
+    message: 'Server Error!',
+    description: 'Something went wrong please try again latter!',
     type: 'danger',
     icon: 'danger',
     position: 'top',
@@ -56,22 +57,32 @@ const index = ({navigation}) => {
     try {
       setLoading(true);
       const response = await api.doneDeliveryOrder(orderId);
+      console.log(response)
       if (response.ok !== true) {
-        displayErrorMessage();
+        Alert.alert(
+          'Failed!',
+          'Order delivery done failed \n\ntry again later!',
+          [
+            {
+              text: 'OK', onPress: () => null,
+            },
+          ],
+        );
       } else {
-        showMessage({
-          message:
-          response.data?.status == true
-          ? response.data?.message
-          : 'Order Pickup Failed !',
-          type: response.data?.status == true ? 'success' : 'danger',
-          icon: response.data?.status == true ? 'success' : 'danger',
-          position: 'right',
-        });
+        Alert.alert(
+          'Success!',
+          'Order delivery done success !',
+          [
+            {
+              text: 'OK', onPress: () => {
+                navigation.replace('Dashboard');
+              }
+            },
+          ],
+        );
         getDeliveryList();
       }
       setLoading(false);
-      navigation.replace('Dashboard');
     } catch (err) {
       console.error(err);
     }

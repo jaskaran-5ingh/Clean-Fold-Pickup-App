@@ -1,5 +1,5 @@
-import { apiClient } from './client';
-
+import axios from 'axios';
+import { apiClient, BASE_URL } from './client';
 //Api endPoints
 const endPoint = {
   createBill: '/create-bill',
@@ -29,8 +29,30 @@ const createBill = saveBillObject =>
 const createOrder = saveOrderObject =>
   apiClient.post(endPoint.createOrder, saveOrderObject);
 
-const getDashboardData = EmployeeID =>
-  apiClient.get(endPoint.getDashboardData + '/' + EmployeeID);
+  let cancelToken;
+const getDashboardData = async (EmployeeID) => {
+
+
+  //Check if there are any previous pending requests
+  if (typeof cancelToken != typeof undefined) {
+    cancelToken.cancel("Operation canceled due to new request.")
+  }
+
+  //Save the cancel token for the current request
+  cancelToken = axios.CancelToken.source()
+
+  return axios.get(
+    BASE_URL + endPoint.getDashboardData + '/' + EmployeeID,
+    { cancelToken: cancelToken.token } //Pass the cancel token to the current request
+  );
+
+  // const newSource = CancelToken.source();
+  // console.log(newSource);
+  // let response = await apiClient.get(endPoint.getDashboardData + '/' + EmployeeID, { EmployeeID: EmployeeID }, { cancelToken: newSource.token });
+  // newSource.cancel();
+  // console.log(response);
+  // return response;
+}
 
 const doneDeliveryOrder = orderId =>
   apiClient.get(endPoint.doneDeliveryOrder + '/' + orderId);

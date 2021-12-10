@@ -20,11 +20,13 @@ import Card from './card';
 
 
 
+
+
 const index = ({ navigation }) => {
+
   const isFocused = useIsFocused();
 
   //Use State Hooks
-
   const defaultDashboardData = {
     status: true,
     pending: 0,
@@ -44,7 +46,7 @@ const index = ({ navigation }) => {
       try {
         getDashboardData();
         getEmployeeDetails();
-        setTimeout(() => setDeviceNotificationToken(), 1500)
+        setTimeout(() => setDeviceNotificationToken(), 2500)
         cache.store('productList', null);
       } catch (err) {
         console.error(err);
@@ -53,27 +55,22 @@ const index = ({ navigation }) => {
     return () => {
       unAmounted = true;
     };
-  }, [isFocused, authContext?.user?.id]);
+  }, [ authContext?.user?.id]);
 
-  // Call Api After 2 Minutes
   useEffect(() => {
-    const interval = setInterval(() => {
-      let unAmounted = false;
-      if (!unAmounted) {
-        try {
-          getDashboardData();
-        } catch (err) {
-          console.error(err);
-        }
+    let unAmounted = false;
+    if (!unAmounted) {
+      try {
+        getDashboardData();
+        cache.store('productList', null);
+      } catch (err) {
+        console.error(err);
       }
-      return () => {
-        unAmounted = true;
-      };
-    }, 20000);
+    }
     return () => {
-      clearInterval(interval);
+      unAmounted = true;
     };
-  }, []);
+  }, [isFocused]);
 
   async function setDeviceNotificationToken() {
     try {
@@ -103,15 +100,16 @@ const index = ({ navigation }) => {
           });
         } else {
           if (JSON.stringify(authContext.user.password) !== JSON.stringify(response.data.user)) {
-            showMessage({
-              message: 'Employee Details Updated !',
-              description: 'Please login again',
-              backgroundColor: COLORS.red,
-              type: 'danger',
-              icon: 'danger',
-            });
-            authContext.setUser(null);
-            cache.store('user', null);
+            Alert.alert(
+              'Warning!',
+              'Employee Details Updated ! \n Please login again',
+              [
+                { text: 'OK', onPress: () => {
+                  authContext.setUser(null);
+                  cache.store('user', null);
+                } },
+              ],
+            );
           }
         }
       }
@@ -125,21 +123,14 @@ const index = ({ navigation }) => {
     try {
       if (authContext?.user?.id !== undefined) {
         const response = await api.getDashboardData(authContext?.user?.id);
-        if (response.ok !== true) {
-          showMessage({
-            message: response?.problem + ' !',
-            description: 'Please try again latter',
-            backgroundColor: COLORS.red,
-            type: 'danger',
-            icon: 'danger',
-          });
+        if (response.status === 200) {
+            setDashboardData(response?.data);
+            setLoading(false);
         } else {
-          setDashboardData(response?.data);
-          setLoading(false);
         }
       }
     } catch (err) {
-      console.error(err);
+      console.log(err);
     }
   }
 
