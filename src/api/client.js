@@ -1,12 +1,15 @@
-import {create} from 'apisauce';
+import { create } from 'apisauce';
 
+//const BASE_URL = 'https://cleanfold.ripungupta.com/public/api';
+const BASE_URL = 'https://cleanfold.in/backend/clean_fold/public/api';
 // define the api
 const apiClient = create({
-  baseURL: 'https://cleanfold.ripungupta.com/public/api',
+  baseURL: BASE_URL,
   headers: {
     Authorization:
       'Bearer $2y$10$5OmYFG9clk67v8g2VO.YXOwSqVyX9MzPdtXhyQ4lHVjdpm62wuLMK',
   },
 });
 
-export {apiClient};
+export { apiClient, BASE_URL };
+
