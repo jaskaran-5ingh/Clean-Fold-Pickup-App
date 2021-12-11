@@ -135,6 +135,8 @@ const index = ({ navigation }) => {
   }
 
   return (
+    <>
+
     <ScrollView style={{ backgroundColor: 'white' }}>
       <ImageBackground
         source={images.backgroundImage}
@@ -229,6 +231,17 @@ const index = ({ navigation }) => {
         </View>
       </ImageBackground>
     </ScrollView>
+    
+    {/* Footer */}
+      <View style={{ 
+        justifyContent:'center',
+        alignItems:'center',
+        backgroundColor: COLORS.lightGray,
+        height:30
+      }}>
+        <Text style={{ color:COLORS.darkgray}}>App Version ➡️ 11.12.21</Text>
+      </View>
+    </>
   );
 };
 
