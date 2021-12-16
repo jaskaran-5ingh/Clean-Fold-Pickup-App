@@ -18,10 +18,6 @@ import { COLORS, FONTS, images, responsiveWidth, SIZES } from '../../constants';
 import cache from '../../utils/cache';
 import Card from './card';
 
-
-
-
-
 const index = ({ navigation }) => {
 
   const isFocused = useIsFocused();
