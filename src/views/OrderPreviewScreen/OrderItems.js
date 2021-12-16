@@ -39,7 +39,7 @@ const index = ({ orderCategory, orderId, orderDetails }) => {
   
   const [grandTotal, setGrandTotal] = useState(0);
 
-  let payableAmount = 0;
+  let payableAmount =  grandTotal || 0;
   let total  = 0;
   let Grand = 0;
   let discountAmount = 0;
