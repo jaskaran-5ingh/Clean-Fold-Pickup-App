@@ -239,7 +239,7 @@ const index = ({ navigation }) => {
         backgroundColor: COLORS.lightGray,
         height:30
       }}>
-        <Text style={{ color:COLORS.darkgray}}>App Version ➡️ 11.12.21</Text>
+        <Text style={{ color:COLORS.darkgray}}>App Version ➡️ 16.12.21</Text>
       </View>
     </>
   );
