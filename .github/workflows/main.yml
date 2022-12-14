@@ -22,9 +22,6 @@ jobs:
       - name: Gradle Permissions
         run: |
           cd android && chmod +x ./gradlew
-      - name: React Native Link
-        run: |
-          npx react-native link
       - name: Clean GradLew
         run: |
           cd android && ./gradlew clean
