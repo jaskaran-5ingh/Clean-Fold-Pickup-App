@@ -2,7 +2,7 @@ name: Build Android
 on:
   push:
     branches:
-      - main, updates
+      - main
 jobs:
   install-and-test:
     runs-on: ubuntu-latest
