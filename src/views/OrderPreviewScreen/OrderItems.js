@@ -33,13 +33,26 @@ const renderListEmptyComponent = () => {
   );
 }
 
-const index = ({ orderItems, orderCategory, orderId }) => {
+const index = ({ orderCategory, orderId, orderDetails }) => {
+
+  const orderItems = orderDetails['order_item'];
+  
   const [grandTotal, setGrandTotal] = useState(0);
 
-  let total = 0;
+  let payableAmount =  grandTotal || 0;
+  let total  = 0;
   let Grand = 0;
   let discountAmount = 0;
   let itemPrice = 0;
+  let discountType = orderDetails.discount_type;
+  let discount = orderDetails.discount_percentage;
+  let discountTypeIcon = discountType === 'Rs' ? '₹' : '%';
+  
+  if (discountType == "Rs") {
+    payableAmount = parseInt(grandTotal) - parseInt(discount);
+  } else if (discountType == "Percent") {
+    payableAmount = Math.round(parseInt(grandTotal) - (parseInt(discount) * parseInt(grandTotal)) / 100);
+  }
 
   function renderOrderItems({ item, index }) {
     itemPrice = Math.round(item?.price) || 0;
@@ -69,15 +82,46 @@ const index = ({ orderItems, orderCategory, orderId }) => {
 
   const renderListFooterComponent = () => {
     return (
-      <View
-        style={styles.listFooterContainer}>
-        <Text
-          style={styles.listFooterText}>
-          Grand Total :{' '}
-        </Text>
-        <Text style={styles.listFooterAmountText}>
-          {grandTotal} ₹
-        </Text>
+      <View style={{
+        marginBottom:150,
+        borderBottomHeight:'1px',
+        borderBottomColor : COLORS.gray,
+        backgroundColor:COLORS.lightGray,
+        paddingTop:15
+      }}>
+        <View
+          style={[styles.listFooterContainer,{
+            borderBottomHeight: 1,
+            borderBottomColor: COLORS.gray
+          }]}>
+          <Text
+            style={styles.listFooterText}>
+            Total :{' '}
+          </Text>
+          <Text style={styles.listFooterAmountText}>
+            {grandTotal} ₹
+          </Text>
+        </View>
+        <View
+          style={styles.listFooterContainer}>
+          <Text
+            style={styles.listFooterText}>
+            Discount :{' '}
+          </Text>
+          <Text style={styles.listFooterAmountText}>
+            {discount} {discountTypeIcon}
+          </Text>
+        </View>
+        <View
+          style={styles.listFooterContainer}>
+          <Text
+            style={styles.listFooterText}>
+            Payable Amount :{' '}
+          </Text>
+          <Text style={styles.listFooterAmountText}>
+            {payableAmount} ₹
+          </Text>
+        </View>
       </View>
     );
   };
@@ -164,8 +208,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 20,
-    marginTop: 10,
-    marginBottom: 150,
+    marginBottom: 15,
   },
   listFooterText: {
     color: COLORS.darkTransparent,
@@ -205,4 +248,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default index;
+export default React.memo(index);
