@@ -2,7 +2,10 @@ name: Build Android
 on:
   push:
     branches:
+      - working
       - main
+      - Fetaures/react-query
+      - master
 jobs:
   install-and-test:
     runs-on: ubuntu-latest
@@ -22,9 +25,6 @@ jobs:
       - name: Gradle Permissions
         run: |
           cd android && chmod +x ./gradlew
-      - name: React Native Link
-        run: |
-          npx react-native link
       - name: Clean GradLew
         run: |
           cd android && ./gradlew clean
@@ -34,7 +34,7 @@ jobs:
       - name: Clear artifacts
         uses: kolpav/purge-artifacts-action@v1
         with:
-          token: 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
+          token: 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
           expire-in: 2days
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
