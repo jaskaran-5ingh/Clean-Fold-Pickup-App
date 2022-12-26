@@ -34,7 +34,7 @@ jobs:
       - name: Remove Artifact
         uses: remagpie/gha-remove-artifact@v1
         with:
-          max-age: 2 * 24 * 60 * 60
+          max-age: 7 * 24 * 60 * 60
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
