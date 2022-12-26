@@ -1,0 +1,43 @@
+name: Build Android
+on:
+  push:
+    branches:
+      - main
+jobs:
+  install-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install yarn dependencies
+        run: |
+          yarn
+  build-android:
+    needs: install-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Yarn dependencies
+        run: |
+          yarn
+      - name: Gradle Permissions
+        run: |
+          cd android && chmod +x ./gradlew
+      - name: React Native Link
+        run: |
+          npx react-native link
+      - name: Clean GradLew
+        run: |
+          cd android && ./gradlew clean
+      - name: Build Android Release
+        run: |
+          cd android && ./gradlew assembleRelease      
+      - name: Clear artifacts
+        uses: kolpav/purge-artifacts-action@v1
+        with:
+          token: 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
+          expire-in: 2days
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: clean-fold-pickup-release.apk
+          path: android/app/build/outputs/apk/release/
