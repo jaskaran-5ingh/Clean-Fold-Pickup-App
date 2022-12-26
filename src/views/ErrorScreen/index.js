@@ -5,15 +5,22 @@ import {useNetInfo} from '@react-native-community/netinfo';
 
 import {Button} from '../../components';
 import {LoadingScreen} from '..';
-import {animations, COLORS, FONTS, responsiveHeight, responsiveWidth,} from '../../constants';
+import {
+  animations,
+  COLORS,
+  FONTS,
+  responsiveHeight,
+  responsiveWidth,
+} from '../../constants';
 
 const index = ({getAlerts}) => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
     const [loading, setLoading] = useState(false);
     const netInfo = useNetInfo();
     return (
         <View style={styles.container}>
             {loading == true ? (
-                <LoadingScreen/>
+        <LoadingScreen />
             ) : (
                 <>
                     <Text style={{...FONTS.h3, color: COLORS.secondary, padding: 10}}>

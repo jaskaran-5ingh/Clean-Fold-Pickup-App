@@ -1,35 +1,34 @@
-import { useNetInfo } from '@react-native-community/netinfo';
-import { NavigationContainer } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
-import { StatusBar, StyleSheet, View } from 'react-native';
+import {useNetInfo} from '@react-native-community/netinfo';
+import {NavigationContainer} from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
+import {StatusBar, StyleSheet, View} from 'react-native';
 import FlashMessage from 'react-native-flash-message';
 import SplashScreen from 'react-native-splash-screen';
 import AuthContext from './src/auth/Context';
-import { COLORS } from './src/constants';
+import {COLORS} from './src/constants';
 import {
   AppStackNavigator,
   AuthNavigator,
   navigationRef,
-  navigationTheme
+  navigationTheme,
 } from './src/routes';
 import cache from './src/utils/cache';
 import CartContext from './src/utils/CartContext';
-import { ErrorScreen } from './src/views';
-
+import {ErrorScreen} from './src/views';
 
 //Debugger Configuration Start
 // To see all the requests in the chrome Dev tools in the network tab.
-XMLHttpRequest = GLOBAL.originalXMLHttpRequest
-  ? GLOBAL.originalXMLHttpRequest
-  : GLOBAL.XMLHttpRequest;
+// XMLHttpRequest = GLOBAL.originalXMLHttpRequest
+//   ? GLOBAL.originalXMLHttpRequest
+//   : GLOBAL.XMLHttpRequest;
 
 // fetch logger
-global._fetch = fetch;
-global.fetch = function (uri, options, ...args) {
-  return global._fetch(uri, options, ...args).then(response => {
-    return response;
-  });
-};
+// global._fetch = fetch;
+// global.fetch = function (uri, options, ...args) {
+//   return global._fetch(uri, options, ...args).then(response => {
+//     return response;
+//   });
+// };
 
 //Debugger Configuration End
 
@@ -76,10 +75,10 @@ export default function App() {
   //Render Component
   return (
     <View style={styles.container}>
-      <AuthContext.Provider value={{ user, setUser }}>
+      <AuthContext.Provider value={{user, setUser}}>
         <CartContext>
           <StatusBar backgroundColor={COLORS.primary} />
-          {internetStatus == true ? (
+          {internetStatus === true ? (
             <NavigationContainer theme={navigationTheme} ref={navigationRef}>
               {user ? <AppStackNavigator /> : <AuthNavigator />}
             </NavigationContainer>
