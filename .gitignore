@@ -61,13 +61,9 @@ buck-out/
 
 # Ruby / CocoaPods
 /ios/Pods/
-<<<<<<< HEAD
+/vendor/bundle/
 /package-lock.json
 !/yarn.lock
 !/package-lock.json
 !/cleanFoldRelease.keystore
 !/android/file.jks
-!/android/.idea/
-=======
-/vendor/bundle/
->>>>>>> Fetaures/react-query
