@@ -34,7 +34,7 @@ jobs:
       - name: Clear artifacts
         uses: kolpav/purge-artifacts-action@v1
         with:
-          token: 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
+          token: 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
           expire-in: 2days
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
