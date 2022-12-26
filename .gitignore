@@ -67,4 +67,3 @@ buck-out/
 !/package-lock.json
 !/cleanFoldRelease.keystore
 !/android/file.jks
-!/android/.idea/
