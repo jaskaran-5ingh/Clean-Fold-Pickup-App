@@ -2,7 +2,10 @@ name: Build Android
 on:
   push:
     branches:
+      - working
       - main
+      - Fetaures/react-query
+      - master
 jobs:
   install-and-test:
     runs-on: ubuntu-latest
@@ -22,15 +25,16 @@ jobs:
       - name: Gradle Permissions
         run: |
           cd android && chmod +x ./gradlew
-      - name: React Native Link
-        run: |
-          npx react-native link
       - name: Clean GradLew
         run: |
           cd android && ./gradlew clean
       - name: Build Android Release
         run: |
-          cd android && ./gradlew assembleRelease      
+          cd android && ./gradlew assembleRelease
+      - name: Remove Artifact
+        uses: remagpie/gha-remove-artifact@v1
+        with:
+          max-age: 7 * 24 * 60 * 60
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
