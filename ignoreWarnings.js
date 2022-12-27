@@ -19,7 +19,7 @@ if (__DEV__) {
         return;
       }
     }
-    warn(...arg);
+    // warn(...arg);
   };
 
   LogBox.ignoreLogs(ignoreWarns);

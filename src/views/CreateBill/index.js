@@ -1,23 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react-native/no-inline-styles */
-import React, { useContext, useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
-import {
-  Divider,
-  FAB,
-  Icon, ListItem,
-  Tab
-} from 'react-native-elements';
+import React, {useContext, useEffect, useState} from 'react';
+import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {Divider, FAB, Icon, ListItem, Tab} from 'react-native-elements';
 import FastImage from 'react-native-fast-image';
-import { showMessage } from 'react-native-flash-message';
+import {showMessage} from 'react-native-flash-message';
 import api from '../../api/services';
-import { COLORS } from '../../constants';
-import { CartItemsContext } from '../../utils/CartContext';
-import { LoadingScreen } from '../index';
+import {COLORS} from '../../constants';
+import {CartItemsContext} from '../../utils/CartContext';
+import {LoadingScreen} from '../index';
 import ProductComponent from './ProductComponent';
 
-function TabItems({ data, renderItems }) {
+function TabItems({data, renderItems}) {
   return (
     <FlatList
       data={data}
@@ -34,7 +29,7 @@ function TabItems({ data, renderItems }) {
   );
 }
 
-const index = ({ route, navigation }) => {
+const index = ({route, navigation}) => {
   const [loading, setLoading] = useState(true);
   const [linearLoading, setLinearLoading] = useState(true);
   const [rateList, setSetList] = useState([]);
@@ -59,7 +54,6 @@ const index = ({ route, navigation }) => {
       unAmounted = true;
     };
   }, [route.params.categoryId]);
-
 
   async function getRateList(id) {
     try {
@@ -89,7 +83,7 @@ const index = ({ route, navigation }) => {
     borderBottomWidth: 3,
   };
 
-  function renderTabHeaders({ index, item }) {
+  function renderTabHeaders({index, item}) {
     const isTabActive = tabIndex === index;
     return (
       <Tab.Item
@@ -98,7 +92,7 @@ const index = ({ route, navigation }) => {
         titleStyle={[styles.tabTitleStyle]}
         icon={
           <FastImage
-            source={{ uri: item.icon, priority: FastImage.priority.high }}
+            source={{uri: item.icon, priority: FastImage.priority.high}}
             resizeMethod="scale"
             style={styles.imageStyle}
           />
@@ -110,7 +104,7 @@ const index = ({ route, navigation }) => {
     );
   }
 
-  function renderProducts({ item }) {
+  function renderProducts({item}) {
     return (
       <ListItem key={item.id} bottomDivider>
         <FastImage
@@ -118,7 +112,7 @@ const index = ({ route, navigation }) => {
             uri: PRODUCT_IMAGES_URL + item.image,
             priority: FastImage.priority.high,
           }}
-          style={{ width: 60, height: 90, marginRight: 20 }}
+          style={{width: 60, height: 90, marginRight: 20}}
         />
         <ProductComponent item={item} />
       </ListItem>
@@ -129,26 +123,37 @@ const index = ({ route, navigation }) => {
       {loading ? (
         <View />
       ) : (
-        <View style={{
-          height: 50,
-          flexDirection: 'row',
-          justifyContent: 'space-evenly',
-          alignItems: 'center',
-          backgroundColor: COLORS.darkTransparent,
-          elevation: 4
-        }}>
-          <Text style={{
-            fontWeight: 'bold',
-            color: COLORS.white
-          }}>Category</Text>
-          <Text style={{
-            fontWeight: 'bold',
-            color: COLORS.lightGray
-          }}> | </Text>
-          <Text style={{
-            fontWeight: 'bold',
-            color: COLORS.white
-          }}>{route.params.categoryName}</Text>
+        <View
+          style={{
+            height: 50,
+            flexDirection: 'row',
+            justifyContent: 'space-evenly',
+            alignItems: 'center',
+            backgroundColor: COLORS.darkTransparent,
+            elevation: 4,
+          }}>
+          <Text
+            style={{
+              fontWeight: 'bold',
+              color: COLORS.white,
+            }}>
+            Category
+          </Text>
+          <Text
+            style={{
+              fontWeight: 'bold',
+              color: COLORS.lightGray,
+            }}>
+            {' '}
+            |{' '}
+          </Text>
+          <Text
+            style={{
+              fontWeight: 'bold',
+              color: COLORS.white,
+            }}>
+            {route.params.categoryName}
+          </Text>
         </View>
       )}
       {loading ? (
@@ -225,7 +230,7 @@ const styles = StyleSheet.create({
     height: 35,
     marginVertical: 2,
   },
-  iconStyle: { width: 60, height: 60, marginRight: 20 },
+  iconStyle: {width: 60, height: 60, marginRight: 20},
 });
 
 export default index;

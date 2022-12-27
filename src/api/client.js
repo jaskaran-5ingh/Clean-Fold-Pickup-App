@@ -1,6 +1,6 @@
 import { create } from 'apisauce';
 
-const BASE_URL = 'https://www.abisyscorp.com/apps/api/public/api';
+const BASE_URL = 'https://www.abisyscorp.com/apps/apis/public/api';
 //const BASE_URL = 'https://cleanfold.in/backend/clean_fold/public/api';
 // define the api
 const apiClient = create({

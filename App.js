@@ -2,7 +2,7 @@ import {useNetInfo} from '@react-native-community/netinfo';
 import {NavigationContainer} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {StatusBar, StyleSheet, View} from 'react-native';
-import FlashMessage from 'react-native-flash-message';
+import FlashMessage, {showMessage} from 'react-native-flash-message';
 import SplashScreen from 'react-native-splash-screen';
 import AuthContext from './src/auth/Context';
 import {COLORS} from './src/constants';
@@ -14,7 +14,6 @@ import {
 } from './src/routes';
 import cache from './src/utils/cache';
 import CartContext from './src/utils/CartContext';
-import {ErrorScreen} from './src/views';
 
 //Debugger Configuration Start
 // To see all the requests in the chrome Dev tools in the network tab.
@@ -37,8 +36,6 @@ export default function App() {
   const netInfo = useNetInfo();
 
   //State Declarations
-
-  const [internetStatus, setInternetStatus] = useState(false);
   const [user, setUser] = useState([]);
 
   // Use Effect hooks
@@ -64,8 +61,30 @@ export default function App() {
   //Check Internet Connectivity
   useEffect(() => {
     let unAmounted = false;
+    console.log(netInfo);
     if (!unAmounted) {
-      setInternetStatus(netInfo.isConnected);
+      if (netInfo.isConnected !== null) {
+        if (!netInfo.isConnected) {
+          showMessage({
+            message: 'Please check your internet connection!',
+            description: '',
+            backgroundColor: COLORS.red,
+            type: 'danger',
+            icon: 'danger',
+            floating: true,
+            animated: true,
+          });
+        } else {
+          showMessage({
+            message: 'Connected with internet!',
+            backgroundColor: COLORS.black,
+            type: 'info',
+            icon: 'info',
+            floating: true,
+            animated: true,
+          });
+        }
+      }
     }
     return () => {
       unAmounted = true;
@@ -78,13 +97,9 @@ export default function App() {
       <AuthContext.Provider value={{user, setUser}}>
         <CartContext>
           <StatusBar backgroundColor={COLORS.primary} />
-          {internetStatus === true ? (
-            <NavigationContainer theme={navigationTheme} ref={navigationRef}>
-              {user ? <AppStackNavigator /> : <AuthNavigator />}
-            </NavigationContainer>
-          ) : (
-            <ErrorScreen getAlerts={() => setInternetStatus(internetStatus)} />
-          )}
+          <NavigationContainer theme={navigationTheme} ref={navigationRef}>
+            {user ? <AppStackNavigator /> : <AuthNavigator />}
+          </NavigationContainer>
           <FlashMessage position="top" />
         </CartContext>
       </AuthContext.Provider>
