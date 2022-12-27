@@ -30,12 +30,11 @@ jobs:
           cd android && ./gradlew clean
       - name: Build Android Release
         run: |
-          cd android && ./gradlew assembleRelease      
-      - name: Clear artifacts
-        uses: kolpav/purge-artifacts-action@v1
+          cd android && ./gradlew assembleRelease
+      - name: Remove Artifact
+        uses: remagpie/gha-remove-artifact@v1
         with:
-          token: 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
-          expire-in: 2days
+          max-age: 7 * 24 * 60 * 60
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
