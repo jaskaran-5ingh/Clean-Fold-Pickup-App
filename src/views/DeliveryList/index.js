@@ -16,7 +16,10 @@ import { COLORS, FONTS } from '../../constants';
 import cache from '../../utils/cache';
 
 const index = ({navigation}) => {
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7f9d0fa780949cae4b27befca36d31dd48bf82b1
   const [pendingOrders, setPendingOrders] = useState([]);
   const [loading, setLoading] = useState(false);
   const isFocused = useIsFocused();
@@ -27,7 +30,12 @@ const index = ({navigation}) => {
 
   function displayErrorMessage() {
   showMessage({
+<<<<<<< HEAD
     message: 'Something went wrong please try again!',
+=======
+    message: 'Server Error!',
+    description: 'Something went wrong please try again latter!',
+>>>>>>> 7f9d0fa780949cae4b27befca36d31dd48bf82b1
     type: 'danger',
     icon: 'danger',
     position: 'top',
@@ -57,7 +65,9 @@ const index = ({navigation}) => {
     try {
       setLoading(true);
       const response = await api.doneDeliveryOrder(orderId);
+      console.log(response)
       if (response.ok !== true) {
+<<<<<<< HEAD
         displayErrorMessage();
       } else {
         showMessage({
@@ -71,6 +81,30 @@ const index = ({navigation}) => {
         });
         getDeliveryList();
         navigation.replace('Dashboard');
+=======
+        Alert.alert(
+          'Failed!',
+          'Order delivery done failed \n\ntry again later!',
+          [
+            {
+              text: 'OK', onPress: () => null,
+            },
+          ],
+        );
+      } else {
+        Alert.alert(
+          'Success!',
+          'Order delivery done success !',
+          [
+            {
+              text: 'OK', onPress: () => {
+                navigation.replace('Dashboard');
+              }
+            },
+          ],
+        );
+        getDeliveryList();
+>>>>>>> 7f9d0fa780949cae4b27befca36d31dd48bf82b1
       }
       setLoading(false);
     } catch (err) {

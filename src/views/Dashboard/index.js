@@ -18,10 +18,12 @@ import { COLORS, FONTS, images, responsiveWidth, SIZES } from '../../constants';
 import cache from '../../utils/cache';
 import Card from './card';
 
-
-
 const index = ({ navigation }) => {
+<<<<<<< HEAD
   console.log('app dashboard')
+=======
+
+>>>>>>> 7f9d0fa780949cae4b27befca36d31dd48bf82b1
   const isFocused = useIsFocused();
 
   //Use State Hooks
@@ -48,6 +50,10 @@ const index = ({ navigation }) => {
       try {
         getDashboardData();
         getEmployeeDetails();
+<<<<<<< HEAD
+=======
+        setTimeout(() => setDeviceNotificationToken(), 2500)
+>>>>>>> 7f9d0fa780949cae4b27befca36d31dd48bf82b1
         cache.store('productList', null);
       } catch (err) {
         console.error(err);
@@ -56,7 +62,26 @@ const index = ({ navigation }) => {
     return () => {
       unAmounted = true;
     };
+<<<<<<< HEAD
   }, [ isFocused,authContext?.user?.id]);
+=======
+  }, [ authContext?.user?.id]);
+
+  useEffect(() => {
+    let unAmounted = false;
+    if (!unAmounted) {
+      try {
+        getDashboardData();
+        cache.store('productList', null);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    return () => {
+      unAmounted = true;
+    };
+  }, [isFocused]);
+>>>>>>> 7f9d0fa780949cae4b27befca36d31dd48bf82b1
 
   async function setDeviceNotificationToken() {
     try {
@@ -86,15 +111,16 @@ const index = ({ navigation }) => {
           });
         } else {
           if (JSON.stringify(authContext.user.password) !== JSON.stringify(response.data.user)) {
-            showMessage({
-              message: 'Employee Details Updated !',
-              description: 'Please login again',
-              backgroundColor: COLORS.red,
-              type: 'danger',
-              icon: 'danger',
-            });
-            authContext.setUser(null);
-            cache.store('user', null);
+            Alert.alert(
+              'Warning!',
+              'Employee Details Updated ! \n Please login again',
+              [
+                { text: 'OK', onPress: () => {
+                  authContext.setUser(null);
+                  cache.store('user', null);
+                } },
+              ],
+            );
           }
         }
       }
@@ -107,6 +133,7 @@ const index = ({ navigation }) => {
     try {
       if (authContext?.user?.id !== undefined) {
         const response = await api.getDashboardData(authContext?.user?.id);
+<<<<<<< HEAD
         setLoading(true);
         if (response.ok !== true) {
           showMessage({
@@ -118,15 +145,23 @@ const index = ({ navigation }) => {
           });
         } else {
           setDashboardData(response?.data);
+=======
+        if (response.status === 200) {
+            setDashboardData(response?.data);
+            setLoading(false);
+        } else {
+>>>>>>> 7f9d0fa780949cae4b27befca36d31dd48bf82b1
         }
       }
       setLoading(false);
     } catch (err) {
-      console.error(err);
+      console.log(err);
     }
   }
 
   return (
+    <>
+
     <ScrollView style={{ backgroundColor: 'white' }}>
       <ImageBackground
         source={images.backgroundImage}
@@ -221,6 +256,17 @@ const index = ({ navigation }) => {
         </View>
       </ImageBackground>
     </ScrollView>
+    
+    {/* Footer */}
+      <View style={{ 
+        justifyContent:'center',
+        alignItems:'center',
+        backgroundColor: COLORS.lightGray,
+        height:30
+      }}>
+        <Text style={{ color:COLORS.darkgray}}>App Version ➡️ 16.12.21</Text>
+      </View>
+    </>
   );
 };
 

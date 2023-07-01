@@ -39,7 +39,12 @@ const index = ({navigation}) => {
 
   function displayErrorMessage(){
     showMessage({
+<<<<<<< HEAD
       message: 'Something went wrong please try again!',
+=======
+      message: 'Server Error!',
+      description:'Something went wrong please try again latter!',
+>>>>>>> 7f9d0fa780949cae4b27befca36d31dd48bf82b1
       type: 'danger',
       icon: 'danger',
       position: 'top',
@@ -86,6 +91,7 @@ const index = ({navigation}) => {
       if (response.ok !== true) {
         displayErrorMessage();
       } else {
+<<<<<<< HEAD
         showMessage({
           message:
             response.data?.status == true
@@ -96,6 +102,32 @@ const index = ({navigation}) => {
           position: 'top',
         });
         navigation.replace('Dashboard');
+=======
+        if (response.data.status == true){
+          Alert.alert(
+            'Success!',
+            'Order Pickup Success !',
+            [
+              { text: 'OK', onPress: () => {
+                navigation.replace('Dashboard');
+              }},
+            ],
+          );
+        }else{
+          Alert.alert(
+            'Failed!',
+            'Order Pickup Failed ! \n\n Please try again later.',
+            [
+              {
+                text: 'Cancel',
+                onPress: () => null,
+                style: 'cancel',
+              },
+              { text: 'OK', onPress: () => null },
+            ],
+          );
+        }
+>>>>>>> 7f9d0fa780949cae4b27befca36d31dd48bf82b1
       }
       setLoading(false);
     } catch (err) {

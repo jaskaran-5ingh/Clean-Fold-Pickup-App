@@ -19,7 +19,6 @@ const index = ({ route, navigation }) => {
   const [orderItems, setOrderItems] = useState([]);
   const [orderCategory, setOrderCategory] = useState('');
   const [index, setIndex] = useState(0);
-
   useEffect(() => {
     let unAmounted = false;
     try {
@@ -65,6 +64,7 @@ const index = ({ route, navigation }) => {
         orderItems={orderItems}
         orderCategory={orderCategory}
         orderId={orderDetails?.id}
+        orderDetails={orderDetails}
       />
     );
   }
