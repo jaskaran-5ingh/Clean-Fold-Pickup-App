@@ -93,11 +93,11 @@ const index = ({navigation}) => {
               : 'Order Pickup Failed !',
           type: response.data?.status == true ? 'success' : 'danger',
           icon: response.data?.status == true ? 'success' : 'danger',
-          position: 'right',
+          position: 'top',
         });
+        navigation.replace('Dashboard');
       }
       setLoading(false);
-      navigation.replace('Dashboard');
     } catch (err) {
       console.error(err);
     }

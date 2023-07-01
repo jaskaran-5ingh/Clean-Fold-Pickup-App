@@ -1,4 +1,6 @@
-import {create} from 'apisauce';
+import {create, CancelToken} from 'apisauce';
+
+const source = CancelToken.source()
 
 // define the api
 const apiClient = create({
@@ -9,4 +11,4 @@ const apiClient = create({
   },
 });
 
-export {apiClient};
+export {apiClient, source};

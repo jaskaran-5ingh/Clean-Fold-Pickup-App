@@ -16,6 +16,7 @@ import { COLORS, FONTS } from '../../constants';
 import cache from '../../utils/cache';
 
 const index = ({navigation}) => {
+
   const [pendingOrders, setPendingOrders] = useState([]);
   const [loading, setLoading] = useState(false);
   const isFocused = useIsFocused();
@@ -66,12 +67,12 @@ const index = ({navigation}) => {
           : 'Order Pickup Failed !',
           type: response.data?.status == true ? 'success' : 'danger',
           icon: response.data?.status == true ? 'success' : 'danger',
-          position: 'right',
+          position: 'top',
         });
         getDeliveryList();
+        navigation.replace('Dashboard');
       }
       setLoading(false);
-      navigation.replace('Dashboard');
     } catch (err) {
       console.error(err);
     }

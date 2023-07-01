@@ -21,10 +21,10 @@ import Card from './card';
 
 
 const index = ({ navigation }) => {
+  console.log('app dashboard')
   const isFocused = useIsFocused();
 
   //Use State Hooks
-
   const defaultDashboardData = {
     status: true,
     pending: 0,
@@ -32,19 +32,22 @@ const index = ({ navigation }) => {
   };
 
   const [dashboardData, setDashboardData] = useState(defaultDashboardData);
-
   const [loading, setLoading] = useState(false);
 
   //Use Effect Hooks
   const authContext = useContext(AuthContext);
-
+  
+  useEffect(()=>{
+    console.log('UseEffect');
+    //setDeviceNotificationToken();
+  });
+  
   useEffect(() => {
     let unAmounted = false;
     if (!unAmounted) {
       try {
         getDashboardData();
         getEmployeeDetails();
-        setTimeout(() => setDeviceNotificationToken(), 1500)
         cache.store('productList', null);
       } catch (err) {
         console.error(err);
@@ -53,27 +56,7 @@ const index = ({ navigation }) => {
     return () => {
       unAmounted = true;
     };
-  }, [isFocused, authContext?.user?.id]);
-
-  // Call Api After 2 Minutes
-  useEffect(() => {
-    const interval = setInterval(() => {
-      let unAmounted = false;
-      if (!unAmounted) {
-        try {
-          getDashboardData();
-        } catch (err) {
-          console.error(err);
-        }
-      }
-      return () => {
-        unAmounted = true;
-      };
-    }, 20000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
+  }, [ isFocused,authContext?.user?.id]);
 
   async function setDeviceNotificationToken() {
     try {
@@ -121,10 +104,10 @@ const index = ({ navigation }) => {
   }
 
   async function getDashboardData() {
-    setLoading(true);
     try {
       if (authContext?.user?.id !== undefined) {
         const response = await api.getDashboardData(authContext?.user?.id);
+        setLoading(true);
         if (response.ok !== true) {
           showMessage({
             message: response?.problem + ' !',
@@ -135,9 +118,9 @@ const index = ({ navigation }) => {
           });
         } else {
           setDashboardData(response?.data);
-          setLoading(false);
         }
       }
+      setLoading(false);
     } catch (err) {
       console.error(err);
     }
@@ -201,7 +184,7 @@ const index = ({ navigation }) => {
               color={COLORS.red}
               title="PICKUPS"
               qty={dashboardData?.pending}
-              onPress={() => (authContext?.user?.id !== undefined) ? navigation.navigate('Pickup') : null}
+              onPress={() => (authContext?.user?.id !== undefined) ? navigation.push('Pickup') : null}
               loading={loading}
               fullWidth={authContext?.user?.role_id == 6}
             />
@@ -213,7 +196,7 @@ const index = ({ navigation }) => {
                   color={COLORS.darkGreen}
                   title="DELIVERY"
                   qty={dashboardData?.delivered}
-                  onPress={() => (authContext?.user?.id !== undefined) ? navigation.navigate('DeliveryList') : null}
+                  onPress={() => (authContext?.user?.id !== undefined) ? navigation.push('DeliveryList') : null}
                   loading={loading}
                 />
                 <Card
@@ -221,7 +204,7 @@ const index = ({ navigation }) => {
                   icon="rupee"
                   color={COLORS.primary}
                   title="RATE LIST"
-                  onPress={() => navigation.navigate('CategoriesList')}
+                  onPress={() => navigation.push('CategoriesList')}
                   qtyAvailable={false}
                 />
                 <Card
@@ -229,7 +212,7 @@ const index = ({ navigation }) => {
                   icon="plus"
                   color={COLORS.orange}
                   title="CREATE ORDER"
-                  onPress={() => navigation.navigate('CreateOrderScreen')}
+                  onPress={() => navigation.push('CreateOrderScreen')}
                   qtyAvailable={false}
                 />
               </>
@@ -279,4 +262,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default index;
+export default React.memo(index);
