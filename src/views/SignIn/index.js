@@ -67,6 +67,7 @@ export default function index({ navigation }) {
   }
 
   async function handleFormSubmit(userDetails) {
+	console.log(userDetails);
     try {
       if (userDetails.email == '' || userDetails.password == '') {
         showMessage({
@@ -79,7 +80,8 @@ export default function index({ navigation }) {
       } else {
         setLoading(true);
         const response = await api.signIn(userDetails);
-        if (response.ok !== true) {
+		console.log(response);
+        if (response.ok != true) {
           showMessage({
             message: 'Something went wrong !',
             description: 'Please try again latter',
@@ -214,7 +216,7 @@ export default function index({ navigation }) {
                 {renderSignText()}
 
                 <KeyboardAvoidingView
-                  behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+                  behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
                   {/* Text InputComponent */}
                   {renderInputFields()}
                   {renderButtons()}

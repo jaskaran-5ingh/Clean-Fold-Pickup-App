@@ -72,7 +72,7 @@ export default function index({route, navigation}) {
   async function getOrderCategory(functionVarCategory) {
     try {
       const response = await api.getOrderCategory();
-      if (response.ok !== true) {
+      if (response.ok != true) {
         showMessage({
           message: 'Something went wrong !',
           description: 'Please try again latter',
@@ -96,7 +96,7 @@ export default function index({route, navigation}) {
     try {
       setLoading(true);
       const response = await api.getOrderDetailsById(route.params.orderId);
-      if (response.ok !== true) setError(false);
+      if (response.ok != true) setError(false);
 
       setRemarks(response?.data?.orderDetails?.remarks || '');
       setAddress(response?.data?.orderDetails?.address || '');
@@ -138,7 +138,7 @@ export default function index({route, navigation}) {
         user_id: user_id,
       };
       const response = await api.updateDeliveredOrder(data);
-      if (response.ok !== true) setError(false);
+      if (response.ok != true) setError(false);
       showMessage({
         message: response.data?.status == true ? 'Success !' : 'Failed !',
         description:
@@ -243,17 +243,17 @@ export default function index({route, navigation}) {
 
   return (
     <SafeAreaView style={styles.container}>
-      {error === true ? (
+      {error == true ? (
         <ErrorScreen />
       ) : (
         <>
-          {loading === true ? (
+          {loading == true ? (
             <LoadingScreen />
           ) : (
             <>
               <ScrollView>
                 <KeyboardAvoidingView
-                  behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+                  behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
                   {/* Text InputComponent */}
                   {renderInputFields()}
                   {renderButtons()}

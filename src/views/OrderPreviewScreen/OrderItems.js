@@ -46,7 +46,7 @@ const index = ({ orderCategory, orderId, orderDetails }) => {
   let itemPrice = 0;
   let discountType = orderDetails.discount_type;
   let discount = orderDetails.discount_percentage;
-  let discountTypeIcon = discountType === 'Rs' ? '₹' : '%';
+  let discountTypeIcon = discountType == 'Rs' ? '₹' : '%';
   
   if (discountType == "Rs") {
     payableAmount = parseInt(grandTotal) - parseInt(discount);

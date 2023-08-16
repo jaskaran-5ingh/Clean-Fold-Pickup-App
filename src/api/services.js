@@ -2,23 +2,23 @@ import axios from 'axios';
 import { apiClient, BASE_URL } from './client';
 //Api endPoints
 const endPoint = {
-  createBill: '/create-bill',
-  createOrder: '/create-order',
-  doneDeliveryOrder: '/done-delivery',
-  getEmployeeDetails: '/get-employee-by-id',
-  donePendingOrder: '/done-pickup',
-  getCategoryProduct: '/getCategoryProduct/1',
-  getDashboardData: '/get/dashboard',
-  getOrdersList: '/get/orders/list',
-  getOrderCategory: '/get/OrderCategory',
-  getOrderDetailsById: '/get/order-detail',
-  getOrderDetailsByOrderId: '/get/order-detailById',
-  getUserByMobile: '/get/user',
-  updateDeliveredOrder: '/edit-order',
-  getRateList: '/getCategoryProduct',
-  setDeviceNotificationToken: 'update-device-token',
-  getSofaBoyPickups: 'get/Sofaorders/list',
-  sofaOrderDone: 'sofa-order-done'
+	createBill: '/create-bill',
+	createOrder: '/create-order',
+	doneDeliveryOrder: '/done-delivery',
+	getEmployeeDetails: '/get-employee-by-id',
+	donePendingOrder: '/done-pickup',
+	getCategoryProduct: '/getCategoryProduct/1',
+	getDashboardData: '/get/dashboard',
+	getOrdersList: '/get/orders/list',
+	getOrderCategory: '/get/OrderCategory',
+	getOrderDetailsById: '/get/order-detail',
+	getOrderDetailsByOrderId: '/get/order-detailById',
+	getUserByMobile: '/get/user',
+	updateDeliveredOrder: '/edit-order',
+	getRateList: '/getCategoryProduct',
+	setDeviceNotificationToken: 'update-device-token',
+	getSofaBoyPickups: 'get/Sofaorders/list',
+	sofaOrderDone: 'sofa-order-done'
 };
 
 //Call Api Function

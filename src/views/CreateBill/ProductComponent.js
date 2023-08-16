@@ -31,13 +31,13 @@ function incrementQty(state, action) {
     qty: productQty + 1,
     selectedItem: [],
   };
-  if (newState.qty !== 0) {
+  if (newState.qty != 0) {
     try {
       cache.get('productList').then(products => {
-        if (products !== null) {
+        if (products != null) {
           let newArray = products.filter(
             product =>
-              newState.productID !== product.productID && product.qty !== 0,
+              newState.productID != product.productID && product.qty != 0,
           );
           cache.store('productList', [...newArray, newState]);
         } else {
@@ -71,16 +71,16 @@ function decrementQty(state, action) {
     productID: productID,
     productType: productType,
     productCategory: productCategory,
-    qty: productQty !== 0 ? productQty - 1 : 0,
+    qty: productQty != 0 ? productQty - 1 : 0,
   };
 
-  if (newState.qty !== 0) {
+  if (newState.qty != 0) {
     try {
       cache.get('productList').then(products => {
-        if (products !== null) {
+        if (products != null) {
           let newArray = products.filter(
             product =>
-              newState.productID !== product.productID && product.qty !== 0,
+              newState.productID != product.productID && product.qty != 0,
           );
           cache.store('productList', [...newArray, newState]);
         } else {
@@ -118,9 +118,9 @@ function onTextChange(state, action) {
 
   try {
     cache.get('productList').then(products => {
-      if (products !== null) {
+      if (products != null) {
         let newArray = products.filter(
-          product => newState.productID !== product.productID,
+          product => newState.productID != product.productID,
         );
         cache.store('productList', [...newArray, newState]);
       } else {
@@ -169,7 +169,7 @@ const ProductComponent = ({ item }) => {
     let unAmounted = false;
     if (!unAmounted) {
       cache.get('productList').then(products => {
-        if (products !== null) {
+        if (products != null) {
           setOldItemDetails(products);
         }
       });
@@ -181,9 +181,9 @@ const ProductComponent = ({ item }) => {
 
   const productQuantity = oldItemDetails?.filter(product => {
     if (
-      product.productID === item.id &&
-      product.productType === item.product_type &&
-      product.productCategory === item.categories_id
+      product.productID == item.id &&
+      product.productType == item.product_type &&
+      product.productCategory == item.categories_id
     ) {
       return product.qty;
     }

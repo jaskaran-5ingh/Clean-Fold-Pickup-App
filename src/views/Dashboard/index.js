@@ -70,7 +70,7 @@ const index = ({ navigation }) => {
 
   async function setDeviceNotificationToken() {
     try {
-      if (authContext?.user?.id !== undefined) {
+      if (authContext?.user?.id != undefined) {
         let deviceState = await OneSignal.getDeviceState();
         const response = await api.setDeviceNotificationToken({
           id: (authContext.user.id),
@@ -84,9 +84,9 @@ const index = ({ navigation }) => {
 
   async function getEmployeeDetails() {
     try {
-      if (authContext?.user?.id !== undefined) {
+      if (authContext?.user?.id != undefined) {
         const response = await api.getEmployeeDetails(authContext.user.id);
-        if (response.ok !== true) {
+        if (response.ok != true) {
           showMessage({
             message: response?.problem + ' !',
             description: 'Please try again latter',
@@ -95,7 +95,7 @@ const index = ({ navigation }) => {
             icon: 'danger',
           });
         } else {
-          if (JSON.stringify(authContext.user.password) !== JSON.stringify(response.data.user)) {
+          if (JSON.stringify(authContext.user.password) != JSON.stringify(response.data.user)) {
             Alert.alert(
               'Warning!',
               'Employee Details Updated ! \n Please login again',
@@ -117,9 +117,9 @@ const index = ({ navigation }) => {
   async function getDashboardData() {
     setLoading(true);
     try {
-      if (authContext?.user?.id !== undefined) {
+      if (authContext?.user?.id != undefined) {
         const response = await api.getDashboardData(authContext?.user?.id);
-        if (response.status === 200) {
+        if (response.status == 200) {
             setDashboardData(response?.data);
             setLoading(false);
         } else {
@@ -190,11 +190,11 @@ const index = ({ navigation }) => {
               color={COLORS.red}
               title="PICKUPS"
               qty={dashboardData?.pending}
-              onPress={() => (authContext?.user?.id !== undefined) ? navigation.navigate('Pickup') : null}
+              onPress={() => (authContext?.user?.id != undefined) ? navigation.navigate('Pickup') : null}
               loading={loading}
               fullWidth={authContext?.user?.role_id == 6}
             />
-            {authContext?.user?.role_id !== 6 ? (
+            {authContext?.user?.role_id != 6 ? (
               <>
                 <Card
                   backgroundColor={COLORS.lightGreen}
@@ -202,7 +202,7 @@ const index = ({ navigation }) => {
                   color={COLORS.darkGreen}
                   title="DELIVERY"
                   qty={dashboardData?.delivered}
-                  onPress={() => (authContext?.user?.id !== undefined) ? navigation.navigate('DeliveryList') : null}
+                  onPress={() => (authContext?.user?.id != undefined) ? navigation.navigate('DeliveryList') : null}
                   loading={loading}
                 />
                 <Card

@@ -40,7 +40,7 @@ const index = ({navigation}) => {
       cache.get('user').then(async user => {
         if (user != null) {
           const response = await api.getDeliveredOrdersList(user.id);
-          if (response.ok !== true) {
+          if (response.ok != true) {
             displayErrorMessage();
           } else {
             setPendingOrders(response?.data?.order_list);
@@ -58,7 +58,7 @@ const index = ({navigation}) => {
       setLoading(true);
       const response = await api.doneDeliveryOrder(orderId);
       console.log(response)
-      if (response.ok !== true) {
+      if (response.ok != true) {
         Alert.alert(
           'Failed!',
           'Order delivery done failed \n\ntry again later!',
@@ -135,7 +135,7 @@ const index = ({navigation}) => {
             padding: 5,
           }}>
           <View style={{maxWidth: '50%'}}>
-            {item?.delv_slot !== null ? (
+            {item?.delv_slot != null ? (
               <>
                 <Text
                   style={{...FONTS.h4, fontWeight: 'bold', paddingBottom: 8}}>

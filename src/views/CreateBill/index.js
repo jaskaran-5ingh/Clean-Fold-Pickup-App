@@ -65,7 +65,7 @@ const index = ({ route, navigation }) => {
     try {
       setLoading(true);
       const response = await api.getRateList(id);
-      if (response.ok !== true) {
+      if (response.ok != true) {
         showMessage({
           message: response?.problem + ' !',
           description: 'Please try again latter',
@@ -90,7 +90,7 @@ const index = ({ route, navigation }) => {
   };
 
   function renderTabHeaders({ index, item }) {
-    const isTabActive = tabIndex === index;
+    const isTabActive = tabIndex == index;
     return (
       <Tab.Item
         title={item.product_type_name}

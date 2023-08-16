@@ -91,7 +91,7 @@ export default function index({navigation}) {
   async function getOrderCategory() {
     try {
       const response = await api.getOrderCategory();
-      if (response.ok !== true) {
+      if (response.ok != true) {
         showMessage({
           message: 'Something went wrong !',
           description: 'Please try again latter',
@@ -140,7 +140,7 @@ export default function index({navigation}) {
     } else {
       try {
         let response = await api.createOrder(saveOrderObject);
-        if (response.ok !== true) {
+        if (response.ok != true) {
           showMessage({
             message: 'Something went wrong !',
             description: 'Please try again latter',
@@ -171,7 +171,7 @@ export default function index({navigation}) {
     try {
       setUserDetails(true);
       const response = await api.getUserByMobile(mobile);
-      if (response.ok !== true) {
+      if (response.ok != true) {
         showMessage({
           message: 'Something went wrong !',
           description: 'Please try again latter',
@@ -328,7 +328,7 @@ export default function index({navigation}) {
               <>
                 <ScrollView>
                   <KeyboardAvoidingView
-                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+                    behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
                     {/* Text InputComponent */}
                     {renderInputFields()}
                     {renderButtons()}

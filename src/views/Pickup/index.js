@@ -30,8 +30,9 @@ const index = ({navigation}) => {
   const cartContext = useContext(CartItemsContext);
 
   useEffect(() => {
+    console.log('authContext?' + typeof(authContext?.user?.role_id));
     try {
-      authContext?.user?.role_id === 6 ? getSofaBoyPickups() : getPickups();
+      authContext?.user?.role_id == 6 ? getSofaBoyPickups() : getPickups();
     } catch (err) {
       console.error(err);
     }
@@ -51,7 +52,7 @@ const index = ({navigation}) => {
     try {
       setLoading(true);
       const response = await api.getSofaBoyPickups(authContext?.user?.id);
-      if (response.ok !== true) {
+      if (response.ok != true) {
         displayErrorMessage();
       }
       setPendingOrders(response?.data?.order_list);
@@ -65,7 +66,7 @@ const index = ({navigation}) => {
     try {
       setLoading(true);
       const response = await api.getPendingOrdersList(authContext?.user?.id);
-      if (response.ok !== true) {
+      if (response.ok != true) {
         displayErrorMessage();
       }else{
         setPendingOrders(response?.data?.order_list);
@@ -77,14 +78,15 @@ const index = ({navigation}) => {
   }
 
   async function donePickupOrder(orderId) {
+    console.log("donepickuos"+authContext?.user?.role_id);
     try {
       setLoading(true);
       const response =
-        authContext?.user?.role_id !== 6
+        authContext?.user?.role_id != 6
           ? await api.donePendingOrder(orderId)
           : await api.sofaOrderDone(orderId);
 
-      if (response.ok !== true) {
+      if (response.ok != true) {
         displayErrorMessage();
       } else {
         if (response.data.status == true){
@@ -136,7 +138,7 @@ const index = ({navigation}) => {
               justifyContent: 'space-between',
               padding: 10,
             }}>
-            {authContext?.user?.role_id !== 6 ? (
+            {authContext?.user?.role_id != 6 ? (
               <View>
                 <Text style={styles.cardTitleSmall}>Pickup Date</Text>
                 <Text style={styles.cardTitle}>{item?.pickup_time}</Text>
@@ -175,7 +177,7 @@ const index = ({navigation}) => {
               padding: 5,
             }}>
             <View style={{maxWidth: '50%'}}>
-              {item?.pickup_slot !== null ? (
+              {item?.pickup_slot != null ? (
                 <>
                   <Text
                     style={{...FONTS.h4, fontWeight: 'bold', paddingBottom: 8}}>
@@ -254,7 +256,7 @@ const index = ({navigation}) => {
               ]}>
               <Text style={styles.buttonText}>Done</Text>
             </TouchableOpacity>
-            {authContext?.user?.role_id !== 6 ? (
+            {authContext?.user?.role_id != 6 ? (
               <>
                 <TouchableOpacity
                   onPress={() => {
@@ -297,7 +299,7 @@ const index = ({navigation}) => {
 
   return (
     <View style={{flex: 1, backgroundColor: COLORS.white}}>
-      {loading === true ? (
+      {loading == true ? (
         <LoadingScreen />
       ) : (
         <View
@@ -319,7 +321,7 @@ const index = ({navigation}) => {
             keyExtractor={item => `${item.id}`}
             refreshing={loading}
             onRefresh={() => {
-              authContext?.user?.role_id !== 6
+              authContext?.user?.role_id != 6
                 ? getPickups()
                 : getSofaBoyPickups();
             }}

@@ -2,7 +2,7 @@ import {Linking, Alert, Platform} from 'react-native';
 
 export default function usePhoneCall(phone) {
   let phoneNumber = phone;
-  if (Platform.OS !== 'android') {
+  if (Platform.OS != 'android') {
     phoneNumber = `telprompt:${phone}`;
   } else {
     phoneNumber = `tel:${phone}`;

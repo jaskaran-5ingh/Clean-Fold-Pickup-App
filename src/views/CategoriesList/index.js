@@ -20,7 +20,7 @@ const index = ({navigation}) => {
     try {
       setLoading(true);
       const response = await api.getOrderCategory();
-      if (response.ok !== true) {
+      if (response.ok != true) {
         showMessage({
           message: response?.problem + ' !',
           description: 'Please try again latter',

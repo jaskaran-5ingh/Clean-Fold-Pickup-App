@@ -42,7 +42,7 @@ export default function index({route, navigation}) {
     try {
       setLoading(true);
       const response = await api.getOrderDetailsById(route.params.orderId);
-      if (response.ok !== true) setError(false);
+      if (response.ok != true) setError(false);
 
       setRemarks(response?.data?.orderDetails?.remarks);
       setDeliveryData(response?.data?.orderDetails);
@@ -79,7 +79,7 @@ export default function index({route, navigation}) {
       };
 
       const response = await api.updateDeliveredOrder(data);
-      if (response.ok !== true) setError(false);
+      if (response.ok != true) setError(false);
       showMessage({
         message:
           response.data?.status == true
@@ -136,17 +136,17 @@ export default function index({route, navigation}) {
   }
   return (
     <SafeAreaView style={styles.container}>
-      {error === true ? (
+      {error == true ? (
         <ErrorScreen />
       ) : (
         <>
-          {loading === true ? (
+          {loading == true ? (
             <LoadingScreen />
           ) : (
             <>
               <ScrollView>
                 <KeyboardAvoidingView
-                  behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+                  behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
                   {/* Text InputComponent */}
                   {renderInputFields()}
                   {renderButtons()}

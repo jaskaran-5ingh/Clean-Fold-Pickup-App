@@ -133,10 +133,10 @@ function AppStackNavigator() {
   //Method for handling notifications opened
   OneSignal.setNotificationOpenedHandler(notification => {
     const data = notification.notification.additionalData;
-    if (data.type === 'pickup') {
+    if (data.type == 'pickup') {
       navigation.navigate('Pickup');
     }
-    if (data.type === 'delivery') {
+    if (data.type == 'delivery') {
       navigation.navigate('DeliveryList');
     }
   });

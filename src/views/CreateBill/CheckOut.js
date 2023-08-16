@@ -65,9 +65,9 @@ const CheckOut = ({navigation}) => {
   const renderTableRow = ({item}) => {
     function deleteButtonPressHandler(productID) {
       let newArray = orderItems.filter(
-        product => product.productID !== productID,
+        product => product.productID != productID,
       );
-      if (orderItems?.length === 1) {
+      if (orderItems?.length == 1) {
         setGrandTotal(0);
       }
       setOrderItems(newArray);
@@ -116,7 +116,7 @@ const CheckOut = ({navigation}) => {
     try {
       setLoading(true);
       let response = await api.createBill(createBillObject);
-      if (response.ok !== true) {
+      if (response.ok != true) {
         showMessage({
           message: 'Failed !',
           description: 'Bill create failed !',
